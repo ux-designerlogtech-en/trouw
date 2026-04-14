@@ -1,44 +1,62 @@
-# Torre de Controle — Cadastro de Cliente · DS v17
+# Trouw · Monorepo
 
-Vitrine técnica do **Trouw Design System v17** e do fluxo de **Cadastro de Cliente**.
-HTML estático, sem build, sem dependências locais — pronto pra GitHub + Vercel.
-
----
-
-## O que tem aqui
-
-| Rota | Arquivo | Descrição |
-|---|---|---|
-| `/` | `index.html` | Hub com links pras páginas |
-| `/cadastro/step-1-identificacao` | `cadastro/step-1-identificacao.html` | Wizard passo 1 — identificação, contrato, SLA, contato, filiais |
-| `/cadastro/step-2-usuarios` | `cadastro/step-2-usuarios.html` | Wizard passo 2 — usuários, funções, permissões |
-| `/docs/showcase-v17` | `docs/showcase-v17.html` | Showcase dos componentes novos (form patterns) |
-| `/docs/showcase-v16` | `docs/showcase-v16.html` | Showcase v16 histórico (referência) |
-| `/tokens/tokens-v17.json` | `tokens/tokens-v17.json` | Fonte canônica DTCG W3C 1.0 |
-| `/styles/ds-v17-primitives.css` | `styles/ds-v17-primitives.css` | CSS Custom Properties (primitivos + semânticos) |
-| `/styles/ds-v17-legacy-aliases.css` | `styles/ds-v17-legacy-aliases.css` | Bridge v16 → v17 |
+Plataforma Trouw de logística B2B. Design System + módulos de produto, HTML estático, sem build-step, pronto pra GitHub + Vercel.
 
 ---
 
 ## Estrutura
 
 ```
-torre-cadastro-v17/
-├── index.html
+trouw/
+├── index.html                     ← hub do monorepo
+├── ds/
+│   └── v17/
+│       ├── tokens-v17.json        ← fonte canônica DTCG W3C 1.0
+│       └── styles/
+│           ├── ds-v17-primitives.css
+│           └── ds-v17-legacy-aliases.css   ← bridge v16 → v17
 ├── cadastro/
-│   ├── step-1-identificacao.html
-│   └── step-2-usuarios.html
-├── docs/
-│   ├── showcase-v17.html
-│   └── showcase-v16.html
-├── styles/
-│   ├── ds-v17-primitives.css
-│   └── ds-v17-legacy-aliases.css
-├── tokens/
-│   └── tokens-v17.json
+│   ├── README.md
+│   └── cliente/                   ← módulo ativo
+│       ├── index.html             ← hub do cadastro cliente
+│       ├── steps/
+│       │   ├── step-1-identificacao.html
+│       │   └── step-2-usuarios.html
+│       └── docs/
+│           ├── showcase-v17.html  ← showcase dos componentes v17
+│           └── showcase-v16.html  ← showcase v16 histórico
+├── torre-de-controle/             ← placeholder (roadmap)
+│   └── README.md
+├── frota/                         ← placeholder (roadmap)
+│   └── README.md
 ├── vercel.json
 └── README.md
 ```
+
+---
+
+## Rotas principais
+
+| Rota | Descrição |
+|---|---|
+| `/` | Hub do monorepo — 4 cards de produtos Trouw |
+| `/cadastro/cliente/` | Hub do cadastro de cliente |
+| `/cadastro/cliente/steps/step-1-identificacao` | Wizard passo 1 — identificação, contrato, SLA, contato, filiais |
+| `/cadastro/cliente/steps/step-2-usuarios` | Wizard passo 2 — usuários, funções, permissões |
+| `/cadastro/cliente/docs/showcase-v17` | Showcase dos componentes v17 (form patterns) |
+| `/cadastro/cliente/docs/showcase-v16` | Showcase v16 histórico (referência) |
+| `/ds/v17/tokens-v17.json` | Fonte canônica DTCG W3C 1.0 |
+| `/ds/v17/styles/ds-v17-primitives.css` | CSS Custom Properties (primitivos + semânticos) |
+| `/ds/v17/styles/ds-v17-legacy-aliases.css` | Bridge v16 → v17 |
+
+---
+
+## Módulos
+
+- **`/cadastro/cliente/`** — ativo. Wizard de onboarding + showcase DS v17.
+- **`/torre-de-controle/`** — placeholder. Cockpit operacional (ref: v2_85). Migração para v17 pendente.
+- **`/frota/`** — placeholder. Gestão de veículos/motoristas. Não iniciado.
+- **`/ds/v17/`** — tokens e CSSs compartilhados por todos os módulos.
 
 ---
 
@@ -58,14 +76,14 @@ torre-cadastro-v17/
 Qualquer servidor estático serve. Dois atalhos:
 
 ```bash
+# Node
+npx serve . --listen 4317
+
 # Python 3
 python -m http.server 3000
-
-# Node (http-server)
-npx http-server . -p 3000 --cors
 ```
 
-Abra `http://localhost:3000`.
+Abra `http://localhost:4317` (ou a porta que escolher).
 
 ---
 
@@ -80,21 +98,23 @@ Abra `http://localhost:3000`.
 
 `vercel.json` já aplica:
 - `cleanUrls: true` → rotas sem `.html`
-- Cache de `/styles/` e `/tokens/` por 1h
+- Cache de `/ds/v17/styles/` e `/ds/v17/tokens-v17.json` por 1h
 
 ### GitHub Pages
 
-Funciona, mas as rotas usarão `.html` no fim (cleanUrls é feature do Vercel). Se migrar pra Pages, ajuste os `<a href>` do `index.html` adicionando `.html`.
+Funciona, mas as rotas usarão `.html` no fim (cleanUrls é feature do Vercel). Se migrar pra Pages, ajuste os `<a href>` adicionando `.html`.
 
 ---
 
 ## Backlog
 
-- Steps 3–6 do wizard (Operação, Integração, SLAs, Revisão)
+- Steps 3–6 do wizard de cadastro (Operação, Integração, SLAs, Revisão)
+- Migração da Torre de Controle v2_85 para v17
+- Início do módulo Frota
 - Auditoria de contraste automatizada em CI (`axe-core` ou Pa11y)
 - Pipeline Tokens Studio → Style Dictionary (quando houver codebase consumidor)
 
 ---
 
-**Stack:** HTML/CSS/JS puro · Plus Jakarta Sans · Font Awesome 6 · Zero build-step
-**Versão:** 17.0.0 · 2026-04-14
+**Stack:** HTML/CSS/JS puro · Plus Jakarta Sans · Font Awesome 6 · Zero build-step  
+**DS:** v17.0.0 · 2026-04-14

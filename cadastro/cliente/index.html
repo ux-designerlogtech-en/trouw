@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trouw · Monorepo</title>
-<meta name="description" content="Monorepo Trouw — Design System v17, Cadastro, Torre de Controle e Frota.">
+<title>Torre de Controle · Cadastro & DS v17</title>
+<meta name="description" content="Vitrine do Trouw Design System v17 — fluxo de cadastro de cliente e showcase de componentes.">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,7 +63,6 @@
     display:flex;flex-direction:column;gap:var(--s-4);
     text-decoration:none;color:inherit;
     transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease;
-    position:relative;
   }
   .card:hover{
     transform:translateY(-2px);
@@ -97,26 +96,13 @@
   .card-cta i{transition:transform .15s ease}
   .card:hover .card-cta i{transform:translateX(4px)}
 
-  .card.variant-ds .card-ico{
+  .card.variant-docs .card-ico{
     background:rgba(124,58,237,.10);color:#7C3AED;
   }
-  .card.variant-soon{
-    opacity:.72;
-  }
-  .card.variant-soon .card-ico{
+  .card.variant-archive .card-ico{
     background:var(--bg-subtle);color:var(--text-muted);
   }
-  .card.variant-soon:hover{border-color:var(--border-strong);transform:none;box-shadow:var(--sh-1)}
-  .card.variant-soon .card-cta{color:var(--text-muted)}
-  .card.variant-soon .card-cta i{display:none}
-  .badge-soon{
-    position:absolute;top:var(--s-5);right:var(--s-5);
-    font-size:var(--fs-xs);font-weight:var(--fw-semibold);
-    background:var(--bg-subtle);color:var(--text-muted);
-    padding:var(--s-1) var(--s-3);border-radius:var(--r-pill);
-    text-transform:uppercase;letter-spacing:.06em;
-    border:1px solid var(--border-default);
-  }
+  .card.variant-archive:hover{border-color:var(--border-strong)}
 
   footer{
     margin-top:64px;padding-top:var(--s-6);
@@ -140,68 +126,67 @@
 
 <div class="wrap">
   <header>
-    <span class="eyebrow"><i class="fas fa-layer-group"></i> Trouw · Monorepo</span>
-    <h1>Plataforma Trouw <em>— Logística B2B</em></h1>
+    <span class="eyebrow"><i class="fas fa-bolt"></i> Trouw DS v17 · Vitrine Técnica</span>
+    <h1>Torre de Controle — Cadastro de Cliente <em>+ Design System</em></h1>
     <p class="lede">
-      Hub central dos produtos Trouw. Design System v17, módulo de cadastro de cliente,
-      Torre de Controle operacional e gestão de frota. Tudo sob o mesmo Design System —
-      Plus Jakarta Sans canônica, tokens DTCG-W3C, WCAG 2.2 AA.
+      Fluxo de onboarding de cliente e documentação viva do Trouw Design System v17.
+      Reconciliação DTCG-W3C dos tokens do DS v16 (Torre Operacional) com os
+      componentes do cadastro-cliente-v7. Dois modos de densidade (<code>form</code>/<code>ops</code>),
+      Plus Jakarta Sans canônica, WCAG 2.2 AA.
     </p>
   </header>
 
   <main class="grid">
 
-    <a href="/cadastro/cliente/" class="card">
-      <div class="card-ico"><i class="fas fa-user-plus"></i></div>
-      <div class="card-kind">Módulo · Ativo</div>
-      <div class="card-title">Cadastro de Cliente</div>
+    <a href="/cadastro/cliente/steps/step-1-identificacao" class="card">
+      <div class="card-ico"><i class="fas fa-id-card"></i></div>
+      <div class="card-kind">Wizard · Passo 1 / 6</div>
+      <div class="card-title">Identificação do cliente</div>
       <p class="card-desc">
-        Wizard de onboarding (6 passos) e showcase de componentes v17.
-        Identificação, usuários, permissões, contrato, SLAs, filiais.
+        Dados cadastrais, contrato, SLAs, contato comercial e filiais.
+        Demonstra Form Grid, Accordion, Radio Card, Unit Input, Callout.
       </p>
-      <span class="card-cta">Abrir cadastro <i class="fas fa-arrow-right"></i></span>
+      <span class="card-cta">Abrir tela <i class="fas fa-arrow-right"></i></span>
     </a>
 
-    <a href="/cadastro/cliente/docs/showcase-v17" class="card variant-ds">
-      <div class="card-ico"><i class="fas fa-cube"></i></div>
-      <div class="card-kind">Design System · v17</div>
-      <div class="card-title">Trouw DS v17</div>
+    <a href="/cadastro/cliente/steps/step-2-usuarios" class="card">
+      <div class="card-ico"><i class="fas fa-users"></i></div>
+      <div class="card-kind">Wizard · Passo 2 / 6</div>
+      <div class="card-title">Usuários do cliente</div>
       <p class="card-desc">
-        Tokens DTCG-W3C, primitivos, semânticos, dois modos de densidade
-        (form/ops). Fonte canônica: Plus Jakarta Sans.
+        Convite de usuários, funções, chips de filial e matriz de permissões.
+        Demonstra Data Table, Role Badge, Modal, Perm Matrix, Chip Multi.
+      </p>
+      <span class="card-cta">Abrir tela <i class="fas fa-arrow-right"></i></span>
+    </a>
+
+    <a href="/cadastro/cliente/docs/showcase-v17" class="card variant-docs">
+      <div class="card-ico"><i class="fas fa-book-open"></i></div>
+      <div class="card-kind">Documentação · v17</div>
+      <div class="card-title">Showcase Form Patterns v17</div>
+      <p class="card-desc">
+        Componentes promovidos do cadastro: Stepper, Accordion, Form Field,
+        Data Table, Modal, Chip Multi, Role Badge, Status Dot, Callout, Avatar.
       </p>
       <span class="card-cta">Abrir showcase <i class="fas fa-arrow-right"></i></span>
     </a>
 
-    <div class="card variant-soon" aria-disabled="true">
-      <span class="badge-soon">em breve</span>
-      <div class="card-ico"><i class="fas fa-satellite-dish"></i></div>
-      <div class="card-kind">Módulo · Roadmap</div>
-      <div class="card-title">Torre de Controle</div>
+    <a href="/cadastro/cliente/docs/showcase-v16" class="card variant-archive">
+      <div class="card-ico"><i class="fas fa-clock-rotate-left"></i></div>
+      <div class="card-kind">Arquivo · v16</div>
+      <div class="card-title">Showcase DS v16 (histórico)</div>
       <p class="card-desc">
-        Cockpit operacional da logística — SLAs, ocorrências, embarques em tempo real.
-        Migração da Torre Operacional v2_85 para tokens v17.
+        Versão anterior derivada da Torre Operacional v2_85. Mantido como
+        referência durante a migração. Tokens <code>--neutral-*</code>.
       </p>
-      <span class="card-cta">Placeholder</span>
-    </div>
-
-    <div class="card variant-soon" aria-disabled="true">
-      <span class="badge-soon">em breve</span>
-      <div class="card-ico"><i class="fas fa-truck"></i></div>
-      <div class="card-kind">Módulo · Roadmap</div>
-      <div class="card-title">Frota</div>
-      <p class="card-desc">
-        Gestão de veículos, motoristas, documentação, manutenção e rastreabilidade.
-        Construído sobre DS v17.
-      </p>
-      <span class="card-cta">Placeholder</span>
-    </div>
+      <span class="card-cta">Abrir histórico <i class="fas fa-arrow-right"></i></span>
+    </a>
 
   </main>
 
   <footer>
     <div>
-      <span class="pill-tech"><i class="fas fa-circle"></i> monorepo · DS v17.0.0 · 2026-04-14</span>
+      <span class="pill-tech"><i class="fas fa-circle"></i> v17.0.0 · 2026-04-14</span>
     </div>
     <div>
       <a href="/ds/v17/tokens-v17.json" target="_blank">tokens-v17.json</a>

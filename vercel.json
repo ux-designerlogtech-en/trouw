@@ -3,14 +3,14 @@
   "trailingSlash": false,
   "headers": [
     {
-      "source": "/styles/(.*)",
+      "source": "/ds/v17/styles/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" },
         { "key": "Content-Type", "value": "text/css; charset=utf-8" }
       ]
     },
     {
-      "source": "/tokens/(.*)",
+      "source": "/ds/v17/tokens-v17.json",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" },
         { "key": "Content-Type", "value": "application/json; charset=utf-8" }
