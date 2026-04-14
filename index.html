@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Torre de Controle · Cadastro & DS v17</title>
+<meta name="description" content="Vitrine do Trouw Design System v17 — fluxo de cadastro de cliente e showcase de componentes.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/ds-v17-primitives.css">
+<link rel="stylesheet" href="/styles/ds-v17-legacy-aliases.css">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{min-height:100%}
+  body{
+    font-family:var(--font-sans);
+    background:
+      radial-gradient(1200px 600px at 12% -10%, rgba(46,91,255,.10), transparent 60%),
+      radial-gradient(900px 500px at 100% 100%, rgba(124,58,237,.06), transparent 55%),
+      var(--bg-app);
+    color:var(--text-default);
+    display:flex;flex-direction:column;align-items:center;
+    padding:72px 24px 48px;
+  }
+  .wrap{width:100%;max-width:1080px}
+
+  header{margin-bottom:48px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:var(--s-2);
+    background:var(--primary-soft);
+    color:var(--primary-hover);
+    padding:var(--s-2h) var(--s-4);
+    border-radius:var(--r-pill);
+    font-size:var(--fs-xs);font-weight:var(--fw-semibold);
+    letter-spacing:.02em;text-transform:uppercase;
+    margin-bottom:var(--s-5);
+  }
+  h1{
+    font-size:var(--fs-3xl);font-weight:var(--fw-extrabold);
+    letter-spacing:-.02em;line-height:var(--lh-tight);
+    margin-bottom:var(--s-4);
+  }
+  h1 em{font-style:normal;color:var(--primary)}
+  .lede{
+    font-size:var(--fs-lg);color:var(--text-muted);
+    max-width:720px;line-height:var(--lh-default);
+  }
+
+  .grid{
+    display:grid;grid-template-columns:repeat(2,1fr);
+    gap:var(--s-5);margin-top:var(--s-10);
+  }
+  @media (max-width:720px){ .grid{grid-template-columns:1fr} }
+
+  .card{
+    background:var(--bg-surface);
+    border:1px solid var(--border-default);
+    border-radius:var(--r-xl);
+    padding:var(--s-8);
+    box-shadow:var(--sh-1);
+    display:flex;flex-direction:column;gap:var(--s-4);
+    text-decoration:none;color:inherit;
+    transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+  }
+  .card:hover{
+    transform:translateY(-2px);
+    border-color:var(--border-focus);
+    box-shadow:var(--sh-2);
+  }
+  .card:focus-visible{
+    outline:2px solid var(--border-focus);outline-offset:3px;
+  }
+  .card-ico{
+    width:44px;height:44px;border-radius:var(--r-base);
+    background:var(--primary-soft);color:var(--primary);
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;
+  }
+  .card-kind{
+    font-size:var(--fs-xs);color:var(--text-muted);
+    text-transform:uppercase;letter-spacing:.06em;font-weight:var(--fw-semibold);
+  }
+  .card-title{
+    font-size:var(--fs-xl);font-weight:var(--fw-bold);
+    color:var(--text-default);letter-spacing:-.01em;
+  }
+  .card-desc{
+    font-size:var(--fs-sm);color:var(--text-muted);line-height:var(--lh-default);
+  }
+  .card-cta{
+    margin-top:var(--s-3);display:inline-flex;align-items:center;gap:var(--s-2);
+    color:var(--primary);font-weight:var(--fw-semibold);font-size:var(--fs-sm);
+  }
+  .card-cta i{transition:transform .15s ease}
+  .card:hover .card-cta i{transform:translateX(4px)}
+
+  .card.variant-docs .card-ico{
+    background:rgba(124,58,237,.10);color:#7C3AED;
+  }
+  .card.variant-archive .card-ico{
+    background:var(--bg-subtle);color:var(--text-muted);
+  }
+  .card.variant-archive:hover{border-color:var(--border-strong)}
+
+  footer{
+    margin-top:64px;padding-top:var(--s-6);
+    border-top:1px solid var(--border-subtle);
+    font-size:var(--fs-xs);color:var(--text-subtle);
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:var(--s-3);
+  }
+  footer a{color:var(--text-muted);text-decoration:none}
+  footer a:hover{color:var(--primary)}
+  .pill-tech{
+    display:inline-flex;align-items:center;gap:var(--s-2);
+    background:var(--bg-subtle);border:1px solid var(--border-default);
+    border-radius:var(--r-pill);padding:var(--s-1) var(--s-3);
+    font-size:var(--fs-xs);color:var(--text-muted);
+  }
+  .pill-tech i{color:var(--primary);font-size:10px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow"><i class="fas fa-bolt"></i> Trouw DS v17 · Vitrine Técnica</span>
+    <h1>Torre de Controle — Cadastro de Cliente <em>+ Design System</em></h1>
+    <p class="lede">
+      Fluxo de onboarding de cliente e documentação viva do Trouw Design System v17.
+      Reconciliação DTCG-W3C dos tokens do DS v16 (Torre Operacional) com os
+      componentes do cadastro-cliente-v7. Dois modos de densidade (<code>form</code>/<code>ops</code>),
+      Plus Jakarta Sans canônica, WCAG 2.2 AA.
+    </p>
+  </header>
+
+  <main class="grid">
+
+    <a href="/cadastro/step-1-identificacao" class="card">
+      <div class="card-ico"><i class="fas fa-id-card"></i></div>
+      <div class="card-kind">Wizard · Passo 1 / 6</div>
+      <div class="card-title">Identificação do cliente</div>
+      <p class="card-desc">
+        Dados cadastrais, contrato, SLAs, contato comercial e filiais.
+        Demonstra Form Grid, Accordion, Radio Card, Unit Input, Callout.
+      </p>
+      <span class="card-cta">Abrir tela <i class="fas fa-arrow-right"></i></span>
+    </a>
+
+    <a href="/cadastro/step-2-usuarios" class="card">
+      <div class="card-ico"><i class="fas fa-users"></i></div>
+      <div class="card-kind">Wizard · Passo 2 / 6</div>
+      <div class="card-title">Usuários do cliente</div>
+      <p class="card-desc">
+        Convite de usuários, funções, chips de filial e matriz de permissões.
+        Demonstra Data Table, Role Badge, Modal, Perm Matrix, Chip Multi.
+      </p>
+      <span class="card-cta">Abrir tela <i class="fas fa-arrow-right"></i></span>
+    </a>
+
+    <a href="/docs/showcase-v17" class="card variant-docs">
+      <div class="card-ico"><i class="fas fa-book-open"></i></div>
+      <div class="card-kind">Documentação · v17</div>
+      <div class="card-title">Showcase Form Patterns v17</div>
+      <p class="card-desc">
+        Componentes promovidos do cadastro: Stepper, Accordion, Form Field,
+        Data Table, Modal, Chip Multi, Role Badge, Status Dot, Callout, Avatar.
+      </p>
+      <span class="card-cta">Abrir showcase <i class="fas fa-arrow-right"></i></span>
+    </a>
+
+    <a href="/docs/showcase-v16" class="card variant-archive">
+      <div class="card-ico"><i class="fas fa-clock-rotate-left"></i></div>
+      <div class="card-kind">Arquivo · v16</div>
+      <div class="card-title">Showcase DS v16 (histórico)</div>
+      <p class="card-desc">
+        Versão anterior derivada da Torre Operacional v2_85. Mantido como
+        referência durante a migração. Tokens <code>--neutral-*</code>.
+      </p>
+      <span class="card-cta">Abrir histórico <i class="fas fa-arrow-right"></i></span>
+    </a>
+
+  </main>
+
+  <footer>
+    <div>
+      <span class="pill-tech"><i class="fas fa-circle"></i> v17.0.0 · 2026-04-14</span>
+    </div>
+    <div>
+      <a href="/tokens/tokens-v17.json" target="_blank">tokens-v17.json</a>
+      &nbsp;·&nbsp;
+      <a href="/styles/ds-v17-primitives.css" target="_blank">primitives.css</a>
+      &nbsp;·&nbsp;
+      <a href="/styles/ds-v17-legacy-aliases.css" target="_blank">legacy-aliases.css</a>
+    </div>
+  </footer>
+</div>
+
+</body>
+</html>

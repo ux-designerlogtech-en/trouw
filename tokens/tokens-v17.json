@@ -1,0 +1,234 @@
+{
+  "$schema": "https://design-tokens.org/schemas/dtcg-1.0.json",
+  "$description": "Trouw Design System v17 — DTCG W3C 1.0. Reconciliação de DS v16 (Torre Operacional) + cadastro-cliente-v7. Default: Plus Jakarta Sans com tabular-nums.",
+
+  "color": {
+    "$description": "Camada 1 — primitivos. Nunca consumir diretamente em produto. Use semantic.*.",
+
+    "gray": {
+      "0":   { "$value": "#FFFFFF", "$type": "color", "$description": "Base neutra máxima (branco puro)" },
+      "50":  { "$value": "#FAFBFC", "$type": "color", "$description": "Surface subtle — branco-quente" },
+      "100": { "$value": "#F4F5F7", "$type": "color", "$description": "App canvas / sunken bg" },
+      "150": { "$value": "#ECEEF1", "$type": "color", "$description": "Novo v17 — gap entre 100 e 200 pra hover states" },
+      "200": { "$value": "#E2E5EA", "$type": "color", "$description": "Border default" },
+      "300": { "$value": "#CBD0D9", "$type": "color", "$description": "Border strong" },
+      "400": { "$value": "#9AA2AE", "$type": "color", "$description": "Text subtle" },
+      "500": { "$value": "#6C7480", "$type": "color", "$description": "Text muted — AA em todos os bg" },
+      "600": { "$value": "#4A5160", "$type": "color" },
+      "700": { "$value": "#333A47", "$type": "color" },
+      "800": { "$value": "#1F242E", "$type": "color" },
+      "900": { "$value": "#10131A", "$type": "color", "$description": "Text default" },
+      "950": { "$value": "#0B0E14", "$type": "color", "$description": "Dark mode deepest" }
+    },
+
+    "trouw": {
+      "$description": "Brand primary — azul Trouw. Usar via semantic.primary.",
+      "50":  { "$value": "#F0F4FF", "$type": "color", "$description": "Soft bg primário (novo v17)" },
+      "100": { "$value": "#E6ECFF", "$type": "color" },
+      "400": { "$value": "#5A7DFF", "$type": "color", "$description": "Hover em dark mode" },
+      "500": { "$value": "#2E5BFF", "$type": "color", "$description": "Brand primary" },
+      "600": { "$value": "#1E45D9", "$type": "color", "$description": "Primary hover" }
+    },
+
+    "ok": {
+      "100": { "$value": "#DEF3E7", "$type": "color" },
+      "500": { "$value": "#1F9E5C", "$type": "color" }
+    },
+
+    "warn": {
+      "100": { "$value": "#FCF1DD", "$type": "color" },
+      "500": { "$value": "#E89A1A", "$type": "color" },
+      "700": { "$value": "#92400E", "$type": "color", "$description": "Warn text sobre warn-soft bg" }
+    },
+
+    "danger": {
+      "100": { "$value": "#FCE7E5", "$type": "color" },
+      "500": { "$value": "#D9342B", "$type": "color" },
+      "600": { "$value": "#B82820", "$type": "color", "$description": "Destructive hover" }
+    },
+
+    "info": {
+      "100": { "$value": "#DEEBF6", "$type": "color" },
+      "500": { "$value": "#2E7DC1", "$type": "color", "$description": "Info feedback (≠ primary)" }
+    },
+
+    "sev": {
+      "$description": "Severidade — escala oficial v17 pra eventos, alertas e prioridade de SM.",
+      "info": { "$value": "{color.gray.500}",  "$type": "color", "$description": "Eventos informativos" },
+      "low":  { "$value": "{color.info.500}",  "$type": "color", "$description": "Atraso <30min" },
+      "med":  { "$value": "{color.warn.500}",  "$type": "color", "$description": "Atraso 30min–1h" },
+      "high": { "$value": "#E85D1A",           "$type": "color", "$description": "Atraso 1h–2h / fora da rota" },
+      "crit": { "$value": "{color.danger.500}","$type": "color", "$description": "Atraso >2h / emergência" }
+    },
+
+    "op": {
+      "$description": "Cores de identificação visual por operação (contrato). Renomeado de 'cliente' pra 'operação'.",
+      "kellux":  { "$value": "#7C3AED", "$type": "color" },
+      "bombril": { "$value": "#0891B2", "$type": "color" },
+      "fenza":   { "$value": "#65A30D", "$type": "color" }
+    },
+
+    "ai": {
+      "600": { "$value": "#7C3AED", "$type": "color", "$description": "AI accent — sugestões geradas por agente" }
+    }
+  },
+
+  "spacing": {
+    "$description": "Base 4pt. Nomenclatura --s-N (v7 style).",
+    "1":  { "$value": "2px",  "$type": "dimension", "$description": "Gap entre ícones que quase tocam" },
+    "2h": { "$value": "4px",  "$type": "dimension", "$description": "Half-step (base 4pt)" },
+    "2":  { "$value": "6px",  "$type": "dimension" },
+    "3":  { "$value": "8px",  "$type": "dimension" },
+    "4":  { "$value": "12px", "$type": "dimension" },
+    "5":  { "$value": "16px", "$type": "dimension" },
+    "6":  { "$value": "20px", "$type": "dimension" },
+    "8":  { "$value": "24px", "$type": "dimension" },
+    "9":  { "$value": "28px", "$type": "dimension" },
+    "10": { "$value": "32px", "$type": "dimension" },
+    "12": { "$value": "48px", "$type": "dimension", "$description": "Novo v17 — landing/onboarding" }
+  },
+
+  "fontFamily": {
+    "sans": { "$value": "Plus Jakarta Sans, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif", "$type": "fontFamily", "$description": "Fonte canônica única; usa tabular-nums em números/códigos" },
+    "mono": { "$value": "JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace", "$type": "fontFamily", "$description": "Só para <code>/<pre>/logs/API docs" }
+  },
+
+  "fontWeight": {
+    "light":     { "$value": "300", "$type": "fontWeight" },
+    "regular":   { "$value": "400", "$type": "fontWeight" },
+    "medium":    { "$value": "500", "$type": "fontWeight" },
+    "semibold":  { "$value": "600", "$type": "fontWeight" },
+    "bold":      { "$value": "700", "$type": "fontWeight" },
+    "extrabold": { "$value": "800", "$type": "fontWeight" }
+  },
+
+  "fontSize": {
+    "$description": "Dois modos de densidade. Default: form. Alternar para ops via [data-density='ops'].",
+    "form": {
+      "xs":  { "$value": "11px", "$type": "dimension" },
+      "sm":  { "$value": "12px", "$type": "dimension" },
+      "base":{ "$value": "13px", "$type": "dimension" },
+      "md":  { "$value": "14px", "$type": "dimension" },
+      "lg":  { "$value": "15px", "$type": "dimension" },
+      "xl":  { "$value": "17px", "$type": "dimension" },
+      "2xl": { "$value": "20px", "$type": "dimension" },
+      "3xl": { "$value": "24px", "$type": "dimension" }
+    },
+    "ops": {
+      "3xs": { "$value": "8px",  "$type": "dimension" },
+      "2xs": { "$value": "9px",  "$type": "dimension" },
+      "xs":  { "$value": "10px", "$type": "dimension" },
+      "sm":  { "$value": "11px", "$type": "dimension" },
+      "base":{ "$value": "12px", "$type": "dimension" },
+      "md":  { "$value": "13px", "$type": "dimension" },
+      "lg":  { "$value": "14px", "$type": "dimension" },
+      "xl":  { "$value": "16px", "$type": "dimension" },
+      "2xl": { "$value": "18px", "$type": "dimension" },
+      "3xl": { "$value": "21px", "$type": "dimension" }
+    }
+  },
+
+  "lineHeight": {
+    "tight":   { "$value": "1.2",  "$type": "number" },
+    "snug":    { "$value": "1.35", "$type": "number" },
+    "default": { "$value": "1.5",  "$type": "number" },
+    "relaxed": { "$value": "1.65", "$type": "number" }
+  },
+
+  "borderRadius": {
+    "sm":   { "$value": "4px",   "$type": "dimension", "$description": "Tags, badges, chips" },
+    "md":   { "$value": "6px",   "$type": "dimension", "$description": "Botões, inputs" },
+    "base": { "$value": "8px",   "$type": "dimension", "$description": "Cards default" },
+    "lg":   { "$value": "10px",  "$type": "dimension", "$description": "Surfaces importantes" },
+    "xl":   { "$value": "14px",  "$type": "dimension", "$description": "Modais, cards destacados" },
+    "2xl":  { "$value": "20px",  "$type": "dimension", "$description": "Promocional" },
+    "pill": { "$value": "999px", "$type": "dimension", "$description": "Chips arredondados, avatars" }
+  },
+
+  "shadow": {
+    "$description": "Valores v7 — mais sutis que v16, melhores em light mode.",
+    "1": { "$value": [
+      { "offsetX": "0", "offsetY": "1px", "blur": "2px", "spread": "0", "color": "rgba(15,20,30,.04)" },
+      { "offsetX": "0", "offsetY": "1px", "blur": "1px", "spread": "0", "color": "rgba(15,20,30,.03)" }
+    ], "$type": "shadow", "$description": "Cards default" },
+    "2": { "$value": [
+      { "offsetX": "0", "offsetY": "4px",  "blur": "12px", "spread": "0", "color": "rgba(15,20,30,.06)" },
+      { "offsetX": "0", "offsetY": "2px",  "blur": "4px",  "spread": "0", "color": "rgba(15,20,30,.04)" }
+    ], "$type": "shadow", "$description": "Dropdowns, popovers, elevated cards" },
+    "3": { "$value": [
+      { "offsetX": "0", "offsetY": "12px", "blur": "32px", "spread": "0", "color": "rgba(15,20,30,.10)" },
+      { "offsetX": "0", "offsetY": "4px",  "blur": "8px",  "spread": "0", "color": "rgba(15,20,30,.05)" }
+    ], "$type": "shadow", "$description": "Modais, drawers" }
+  },
+
+  "semantic": {
+    "$description": "Camada 2 — esses são os tokens que produto consome. Sempre prefira sobre primitivos.",
+
+    "bg": {
+      "app":      { "$value": "{color.gray.100}", "$type": "color", "$description": "Canvas geral da app" },
+      "surface":  { "$value": "{color.gray.0}",   "$type": "color", "$description": "Card, sidebar, modal body" },
+      "subtle":   { "$value": "{color.gray.50}",  "$type": "color", "$description": "Container de itens, hover leve" },
+      "sunken":   { "$value": "{color.gray.100}", "$type": "color", "$description": "Input bg recessed" },
+      "emphasis": { "$value": "{color.gray.150}", "$type": "color", "$description": "Novo v17 — hover state intermediário" },
+      "hover":    { "$value": "{color.gray.100}", "$type": "color" },
+      "active":   { "$value": "{color.gray.150}", "$type": "color" },
+      "inverse":  { "$value": "{color.gray.900}", "$type": "color", "$description": "Sobre inverse bg (tooltip, toast dark)" }
+    },
+
+    "text": {
+      "default": { "$value": "{color.gray.900}",  "$type": "color" },
+      "muted":   { "$value": "{color.gray.500}",  "$type": "color", "$description": "AA em todos os bg" },
+      "subtle":  { "$value": "{color.gray.400}",  "$type": "color" },
+      "inverse": { "$value": "{color.gray.0}",    "$type": "color", "$description": "Sobre primary/inverse bg" },
+      "brand":   { "$value": "{color.trouw.600}", "$type": "color", "$description": "Links, ênfase brand" }
+    },
+
+    "border": {
+      "default": { "$value": "{color.gray.200}",  "$type": "color" },
+      "strong":  { "$value": "{color.gray.300}",  "$type": "color", "$description": "Inputs, dividers fortes" },
+      "subtle":  { "$value": "{color.gray.150}",  "$type": "color", "$description": "Novo v17 — divisor interno sutil" },
+      "focus":   { "$value": "{color.trouw.500}", "$type": "color", "$description": "Outline de focus visible" }
+    },
+
+    "primary": {
+      "default":    { "$value": "{color.trouw.500}",       "$type": "color" },
+      "hover":      { "$value": "{color.trouw.600}",       "$type": "color" },
+      "soft":       { "$value": "{color.trouw.100}",       "$type": "color", "$description": "Bg de pill/chip selecionado" },
+      "softStrong": { "$value": "rgba(46,91,255,.20)",     "$type": "color", "$description": "Selected state ativo" }
+    },
+
+    "feedback": {
+      "ok":         { "$value": "{color.ok.500}",     "$type": "color" },
+      "okSoft":     { "$value": "{color.ok.100}",     "$type": "color" },
+      "warn":       { "$value": "{color.warn.500}",   "$type": "color" },
+      "warnSoft":   { "$value": "{color.warn.100}",   "$type": "color" },
+      "danger":     { "$value": "{color.danger.500}", "$type": "color" },
+      "dangerSoft": { "$value": "{color.danger.100}", "$type": "color" },
+      "info":       { "$value": "{color.info.500}",   "$type": "color" },
+      "infoSoft":   { "$value": "{color.info.100}",   "$type": "color" }
+    }
+  },
+
+  "$deprecated": {
+    "$description": "Tokens removidos em v17. Não usar. Em v18 aliases legados em ds-v17-legacy-aliases.css também serão removidos.",
+    "text.t4": { "$value": null, "$type": "color", "$description": "Removido — falhava WCAG AA (contraste 1.67:1 sobre s1). Sem substituto; se precisar cinza muito claro, use text.subtle com opacity ou repense o hierarchy." }
+  },
+
+  "$meta": {
+    "version": "17.0.0",
+    "date": "2026-04-14",
+    "license": "Proprietary — Trouw Logística",
+    "sources": [
+      "torre-operacional-v2_85.html (DS v16)",
+      "torre-cadastro-cliente-v7.html"
+    ],
+    "decisions": [
+      "Nomenclatura vence em v7 (DTCG-compliant).",
+      "Valores mistos — v7 em neutral/status, v16 em granularidade.",
+      "Plus Jakarta Sans única, tabular-nums em números.",
+      "--t4 removido (contraste falho).",
+      "Severidade oficial: sev-info/low/med/high/crit.",
+      "Dois modos de densidade via [data-density='ops|form']."
+    ]
+  }
+}

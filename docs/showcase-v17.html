@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Trouw DS v17 · Form Patterns (complementa showcase v16)</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/ds-v17-primitives.css">
+<link rel="stylesheet" href="/styles/ds-v17-legacy-aliases.css">
+<style>
+/* ============================================================
+   TOKENS v17 — paridade com cadastro-cliente-step1/2 v17
+   Reconciliação DS v16 + cadastro-v7. Ver tokens-reconciliation-v17.md
+   ============================================================ */
+:root{
+  /* PRIMITIVES */
+  --gray-0:#FFFFFF; --gray-50:#FAFBFC; --gray-100:#F4F5F7;
+  --gray-150:#ECEEF1; --gray-200:#E2E5EA; --gray-300:#CBD0D9;
+  --gray-400:#9AA2AE; --gray-500:#6C7480; --gray-600:#4A5160;
+  --gray-700:#333A47; --gray-800:#1F242E; --gray-900:#10131A; --gray-950:#0B0E14;
+  --trouw-50:#F0F4FF; --trouw-100:#E6ECFF; --trouw-400:#5A7DFF;
+  --trouw-500:#2E5BFF; --trouw-600:#1E45D9;
+  --ok-500:#1F9E5C; --ok-100:#DEF3E7;
+  --warn-500:#E89A1A; --warn-100:#FCF1DD; --warn-700:#92400E;
+  --danger-500:#D9342B; --danger-100:#FCE7E5; --danger-600:#B82820;
+  --info-500:#2E7DC1; --info-100:#DEEBF6;
+  --op-kellux:#7C3AED; --op-bombril:#0891B2; --op-fenza:#65A30D;
+
+  /* Spacing */
+  --s-1:2px; --s-2h:4px; --s-2:6px; --s-3:8px; --s-4:12px;
+  --s-5:16px; --s-6:20px; --s-8:24px; --s-9:28px; --s-10:32px; --s-12:48px;
+
+  /* Radius */
+  --r-sm:4px; --r-md:6px; --r-base:8px; --r-lg:10px; --r-xl:14px; --r-pill:999px;
+
+  /* Shadows */
+  --sh-1:0 1px 2px rgba(15,20,30,.04),0 1px 1px rgba(15,20,30,.03);
+  --sh-2:0 4px 12px rgba(15,20,30,.06),0 2px 4px rgba(15,20,30,.04);
+  --sh-3:0 12px 32px rgba(15,20,30,.10),0 4px 8px rgba(15,20,30,.05);
+
+  /* Typography — form density (default) */
+  --font-sans:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  --fs-xs:11px; --fs-sm:12px; --fs-base:13px; --fs-md:14px;
+  --fs-lg:15px; --fs-xl:17px; --fs-2xl:20px; --fs-3xl:24px;
+
+  /* Motion */
+  --duration-fast:120ms; --duration-base:160ms; --duration-slow:260ms;
+  --easing-standard:cubic-bezier(.4,0,.2,1);
+
+  /* Semantic */
+  --bg-app:var(--gray-100);
+  --bg-surface:var(--gray-0);
+  --bg-subtle:var(--gray-50);
+  --bg-sunken:var(--gray-100);
+  --bg-hover:var(--gray-100);
+  --text-default:var(--gray-900);
+  --text-muted:var(--gray-500);
+  --text-subtle:var(--gray-400);
+  --text-inverse:var(--gray-0);
+  --text-brand:var(--trouw-600);
+  --border-default:var(--gray-200);
+  --border-strong:var(--gray-300);
+  --border-subtle:var(--gray-150);
+  --border-focus:var(--trouw-500);
+  --primary:var(--trouw-500);
+  --primary-hover:var(--trouw-600);
+  --primary-soft:var(--trouw-100);
+  --feedback-danger:var(--danger-500); --feedback-danger-soft:var(--danger-100);
+  --feedback-warn:var(--warn-500);     --feedback-warn-soft:var(--warn-100);
+  --feedback-ok:var(--ok-500);         --feedback-ok-soft:var(--ok-100);
+  --feedback-info:var(--info-500);     --feedback-info-soft:var(--info-100);
+}
+
+/* Density ops (override) — aplicado via [data-density="ops"] */
+[data-density="ops"]{
+  --fs-xs:9px; --fs-sm:10px; --fs-base:11px; --fs-md:12px;
+  --fs-lg:13px; --fs-xl:15px; --fs-2xl:17px; --fs-3xl:20px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--font-sans);
+  font-size:var(--fs-base);
+  color:var(--text-default);
+  background:var(--bg-app);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,select,textarea{font-family:inherit;color:inherit}
+svg{display:block}
+code{
+  font-family:var(--font-mono);font-size:.92em;
+  background:var(--bg-sunken);
+  border:1px solid var(--border-subtle);
+  padding:1px 6px;border-radius:var(--r-sm);
+  color:var(--text-default);
+}
+
+/* ============================================================
+   LAYOUT: sidebar nav + main
+   ============================================================ */
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.nav{
+  position:sticky;top:0;align-self:start;
+  height:100vh;overflow-y:auto;
+  background:var(--bg-surface);
+  border-right:1px solid var(--border-default);
+  padding:var(--s-6) var(--s-5);
+}
+.nav-brand{
+  display:flex;align-items:center;gap:var(--s-3);
+  padding-bottom:var(--s-5);margin-bottom:var(--s-5);
+  border-bottom:1px solid var(--border-subtle);
+}
+.nav-brand img{width:32px;height:32px;object-fit:contain}
+.nav-brand-title{font-size:var(--fs-md);font-weight:800;letter-spacing:-.01em;line-height:1.15;margin:0}
+.nav-brand-sub{font-size:var(--fs-xs);color:var(--text-muted);margin:2px 0 0}
+.nav-group{margin-bottom:var(--s-5)}
+.nav-group-h{
+  font-size:10px;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--text-subtle);font-weight:700;
+  margin:0 0 var(--s-2);padding:0 var(--s-3);
+}
+.nav a{
+  display:block;padding:var(--s-2) var(--s-3);
+  font-size:var(--fs-sm);font-weight:500;
+  color:var(--text-muted);text-decoration:none;
+  border-radius:var(--r-sm);
+  transition:background var(--duration-fast) var(--easing-standard),color var(--duration-fast) var(--easing-standard);
+}
+.nav a:hover{background:var(--bg-hover);color:var(--text-default)}
+.nav a.active{background:var(--primary-soft);color:var(--primary);font-weight:600}
+
+.main{padding:36px 40px 80px;max-width:1180px}
+.doc-h1{
+  font-size:var(--fs-3xl);font-weight:800;color:var(--text-default);
+  margin:0 0 6px;letter-spacing:-.02em;
+}
+.doc-sub{font-size:var(--fs-md);color:var(--text-muted);margin:0 0 8px;max-width:760px;line-height:1.65}
+.doc-meta{
+  font-size:var(--fs-xs);color:var(--text-subtle);
+  margin:0 0 36px;display:flex;gap:var(--s-3);flex-wrap:wrap;
+}
+.doc-meta span{
+  padding:2px 8px;background:var(--bg-sunken);
+  border:1px solid var(--border-subtle);
+  border-radius:var(--r-sm);font-weight:600;color:var(--text-muted);
+}
+
+.section{margin-bottom:56px;scroll-margin-top:24px}
+.section-h{
+  display:flex;align-items:baseline;gap:var(--s-4);
+  padding-bottom:var(--s-3);margin-bottom:var(--s-5);
+  border-bottom:1px solid var(--border-default);
+}
+.section-h h2{
+  font-size:var(--fs-2xl);font-weight:700;color:var(--text-default);
+  letter-spacing:-.01em;margin:0;
+}
+.section-h .tag{
+  font-size:10px;font-weight:700;padding:2px 8px;
+  border-radius:var(--r-sm);background:var(--bg-sunken);color:var(--text-muted);
+  letter-spacing:.05em;text-transform:uppercase;
+}
+.section-h .tag.new{background:var(--primary-soft);color:var(--primary)}
+
+.section-lede{font-size:var(--fs-md);color:var(--text-muted);margin:0 0 var(--s-6);max-width:760px;line-height:1.65}
+.section-lede code{font-size:.92em}
+.subsection{margin-bottom:var(--s-8)}
+.subsection-h{font-size:var(--fs-md);font-weight:700;color:var(--text-default);margin:0 0 var(--s-3)}
+
+.demo-card{
+  background:var(--bg-surface);
+  border:1px solid var(--border-default);
+  border-radius:var(--r-base);
+  padding:var(--s-6);
+  margin-bottom:var(--s-4);
+  box-shadow:var(--sh-1);
+}
+.demo-card.on-canvas{background:var(--bg-sunken)}
+.demo-row{display:flex;flex-wrap:wrap;gap:var(--s-4);align-items:center}
+.demo-row.col{flex-direction:column;align-items:stretch;gap:var(--s-3)}
+.demo-row + .demo-row{margin-top:var(--s-4)}
+
+.helper{
+  font-size:var(--fs-sm);color:var(--text-muted);
+  margin-top:var(--s-4);padding-top:var(--s-3);
+  border-top:1px dashed var(--border-default);line-height:1.55;
+}
+.helper strong{color:var(--text-default)}
+
+/* ════════════════════════════════════════════════════════════════
+   ══════════ COMPONENTES v17 (copiados dos steps 1 e 2) ══════════
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── FORM SYSTEM ── */
+.form-grid{display:grid;gap:var(--s-4)}
+.form-grid-2{grid-template-columns:1fr 1fr}
+.form-grid-3{grid-template-columns:repeat(3,1fr)}
+.form-grid-4{grid-template-columns:repeat(4,1fr)}
+.col-span-2{grid-column:span 2}
+.col-span-3{grid-column:span 3}
+.col-span-full{grid-column:1/-1}
+.form-field{display:flex;flex-direction:column;gap:var(--s-2);min-width:0}
+.form-label{font-size:var(--fs-sm);font-weight:600;color:var(--text-default);display:flex;align-items:center;gap:var(--s-2)}
+.form-hint{font-size:var(--fs-xs);color:var(--text-muted);line-height:1.4;margin-top:2px}
+.req{color:var(--feedback-danger);font-weight:700}
+.opt{font-size:var(--fs-xs);color:var(--text-subtle);font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+
+.input,.select{
+  width:100%;height:36px;padding:0 var(--s-3);
+  background:var(--bg-surface);
+  border:1px solid var(--border-default);
+  border-radius:var(--r-md);
+  font-size:var(--fs-base);color:var(--text-default);
+  transition:border-color var(--duration-fast) var(--easing-standard),box-shadow var(--duration-fast) var(--easing-standard);
+  outline:none;
+}
+.input:hover,.select:hover{border-color:var(--border-strong)}
+.input:focus,.select:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px var(--primary-soft)}
+.input::placeholder{color:var(--text-subtle)}
+.select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239AA2AE' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+.input-sm,.select-sm{height:28px;font-size:var(--fs-xs);padding:0 var(--s-2)}
+
+.unit-input{
+  display:flex;align-items:center;
+  background:var(--bg-surface);
+  border:1px solid var(--border-default);
+  border-radius:var(--r-md);
+  transition:border-color var(--duration-fast) var(--easing-standard),box-shadow var(--duration-fast) var(--easing-standard);
+}
+.unit-input:focus-within{border-color:var(--border-focus);box-shadow:0 0 0 3px var(--primary-soft)}
+.unit-input input{flex:1;border:none;background:transparent;outline:none;height:34px;padding:0 var(--s-3);font-size:var(--fs-base);font-variant-numeric:tabular-nums}
+.unit-input .unit{padding:0 var(--s-3);color:var(--text-muted);font-size:var(--fs-sm);border-left:1px solid var(--border-subtle);height:22px;display:flex;align-items:center}
+
+/* ── BUTTON ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s-2);height:36px;padding:0 var(--s-5);border:1px solid transparent;border-radius:var(--r-md);font-size:var(--fs-sm);font-weight:600;transition:background var(--duration-fast) var(--easing-standard),border-color var(--duration-fast) var(--easing-standard),color var(--duration-fast) var(--easing-standard);outline:none}
+.btn:focus-visible{box-shadow:0 0 0 3px var(--primary-soft)}
+.btn-primary{background:var(--primary);color:var(--text-inverse);border-color:var(--primary)}
+.btn-primary:hover{background:var(--primary-hover);border-color:var(--primary-hover)}
+.btn-secondary{background:var(--bg-surface);color:var(--text-default);border-color:var(--border-default)}
+.btn-secondary:hover{background:var(--bg-subtle);border-color:var(--border-strong)}
+.btn-ghost{background:transparent;color:var(--text-muted);border-color:transparent}
+.btn-ghost:hover{background:var(--bg-hover);color:var(--text-default)}
+.btn-sm{height:30px;font-size:var(--fs-xs);padding:0 var(--s-4)}
+.btn-xs{height:24px;font-size:var(--fs-xs);padding:0 var(--s-3)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ── STEPPER ── */
+.stepper{display:flex;align-items:center;gap:var(--s-3);overflow-x:auto}
+.step{display:flex;align-items:center;gap:var(--s-3);flex-shrink:0}
+.step-circle{width:28px;height:28px;border-radius:var(--r-pill);display:flex;align-items:center;justify-content:center;font-size:var(--fs-sm);font-weight:700;background:var(--bg-sunken);color:var(--text-muted);border:1px solid var(--border-default)}
+.step[data-state="active"] .step-circle{background:var(--primary);color:var(--text-inverse);border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+.step[data-state="complete"] .step-circle{background:var(--feedback-ok);color:var(--text-inverse);border-color:var(--feedback-ok)}
+.step-info{display:flex;flex-direction:column;line-height:1.2}
+.step-label{font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.06em;color:var(--text-subtle);font-weight:700;margin:0}
+.step-name{font-size:var(--fs-sm);font-weight:600;margin:0;color:var(--text-muted);white-space:nowrap}
+.step[data-state="active"] .step-name,.step[data-state="complete"] .step-name{color:var(--text-default)}
+.step-line{flex:1;min-width:24px;height:1px;background:var(--border-default)}
+
+/* ── ACCORDION ── */
+.accordion{background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--r-base);margin-bottom:var(--s-4);overflow:hidden;transition:border-color var(--duration-base) var(--easing-standard)}
+.accordion:hover{border-color:var(--border-strong)}
+.accordion-header{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-5);cursor:pointer;width:100%;background:transparent;border:none;text-align:left;font-family:inherit;color:inherit}
+.accordion-icon{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--bg-subtle);border-radius:var(--r-md);font-size:18px}
+.accordion-info{flex:1;min-width:0}
+.accordion-title{font-size:var(--fs-md);font-weight:700;margin:0;line-height:1.3;color:var(--text-default)}
+.accordion-meta{font-size:var(--fs-xs);color:var(--text-muted);margin:2px 0 0;line-height:1.3}
+.accordion-status{display:inline-flex;align-items:center;gap:var(--s-2);padding:var(--s-1) var(--s-3);border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:600;background:var(--feedback-warn-soft);color:var(--warn-700);border:1px solid rgba(232,154,26,.25)}
+.accordion-status.complete{background:var(--feedback-ok-soft);color:var(--ok-500);border-color:rgba(31,158,92,.25)}
+.accordion-chevron{width:20px;height:20px;flex-shrink:0;color:var(--text-subtle);transition:transform var(--duration-base) var(--easing-standard)}
+.accordion[data-state="open"] .accordion-chevron{transform:rotate(180deg)}
+.accordion-body{padding:0 var(--s-5) var(--s-5);display:none}
+.accordion[data-state="open"] .accordion-body{display:block}
+
+/* ── RADIO CARD ── */
+.radio-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3)}
+.radio-card{display:flex;flex-direction:column;gap:var(--s-1);padding:var(--s-4) var(--s-5);background:var(--bg-surface);border:1.5px solid var(--border-default);border-radius:var(--r-md);cursor:pointer;transition:border-color var(--duration-fast) var(--easing-standard),background var(--duration-fast) var(--easing-standard)}
+.radio-card:hover{border-color:var(--border-strong);background:var(--bg-subtle)}
+.radio-card input[type="radio"]{display:none}
+.radio-card[data-selected="true"]{border-color:var(--primary);background:var(--primary-soft)}
+.radio-card-title{font-size:var(--fs-sm);font-weight:700;color:var(--text-default);line-height:1.3}
+.radio-card-desc{font-size:var(--fs-xs);color:var(--text-muted);line-height:1.4}
+
+/* ── CHIP MULTI ── */
+.chips-multi{display:flex;flex-wrap:wrap;gap:var(--s-1)}
+.chip-multi{display:inline-flex;align-items:center;gap:4px;padding:4px var(--s-3);border:1.5px solid var(--border-default);background:var(--bg-surface);border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:600;color:var(--text-default);transition:all var(--duration-fast) var(--easing-standard)}
+.chip-multi:hover{border-color:var(--border-strong)}
+.chip-multi[data-selected="true"]{border-color:var(--primary);background:var(--primary-soft);color:var(--text-brand)}
+
+/* ── CALLOUTS ── */
+.callout-info,.callout-warn{
+  padding:var(--s-3);border-radius:var(--r-md);
+  font-size:var(--fs-sm);display:flex;gap:var(--s-2);
+  align-items:flex-start;color:var(--text-default);
+}
+.callout-info{background:var(--feedback-info-soft)}
+.callout-warn{background:var(--feedback-warn-soft);color:var(--warn-700)}
+.callout-ico{font-size:14px;flex-shrink:0;line-height:1.4}
+
+/* ── DATA TABLE (users) ── */
+.users-table-wrap{background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--r-md);overflow:hidden}
+.users-table{width:100%;border-collapse:separate;border-spacing:0;font-size:var(--fs-sm)}
+.users-table th{padding:var(--s-3) var(--s-4);text-align:left;background:var(--bg-subtle);color:var(--text-muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;font-weight:700;border-bottom:1px solid var(--border-default)}
+.users-table td{padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--border-subtle);vertical-align:middle}
+.users-table tbody tr:last-child td{border-bottom:none}
+.users-table tbody tr:hover{background:var(--bg-subtle)}
+
+.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--primary);color:var(--text-inverse);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-right:var(--s-2);flex-shrink:0}
+.user-name-cell{display:flex;align-items:center}
+.user-name-info{display:flex;flex-direction:column;line-height:1.3}
+.user-name-info strong{font-weight:600;color:var(--text-default)}
+.user-name-info .email{font-size:var(--fs-xs);color:var(--text-muted)}
+
+.role-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:var(--r-pill);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+.role-badge[data-r="admin"]{background:var(--danger-100);color:var(--danger-600)}
+.role-badge[data-r="gerente"]{background:var(--trouw-100);color:var(--trouw-600)}
+.role-badge[data-r="operador"]{background:var(--feedback-info-soft);color:var(--feedback-info)}
+.role-badge[data-r="visualizador"]{background:var(--bg-sunken);color:var(--text-muted)}
+
+.status-dot{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-xs);color:var(--text-muted)}
+.status-dot::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--feedback-ok)}
+.status-dot[data-s="pendente"]::before{background:var(--feedback-warn)}
+.status-dot[data-s="inativo"]::before{background:var(--text-subtle)}
+
+.user-actions{display:flex;gap:4px;justify-content:flex-end}
+.user-action-btn{width:28px;height:28px;border-radius:var(--r-sm);display:inline-flex;align-items:center;justify-content:center;color:var(--text-muted);transition:background var(--duration-fast) var(--easing-standard),color var(--duration-fast) var(--easing-standard)}
+.user-action-btn:hover{background:var(--bg-hover);color:var(--text-default)}
+.user-action-btn[data-danger]:hover{background:var(--feedback-danger-soft);color:var(--feedback-danger)}
+
+/* ── TOPBAR ICON BTN ── */
+.topbar-icon-btn{width:32px;height:32px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:background var(--duration-fast) var(--easing-standard),color var(--duration-fast) var(--easing-standard)}
+.topbar-icon-btn:hover{background:var(--bg-hover);color:var(--text-default)}
+
+/* ── MODAL (inline demo, não fixed) ── */
+.modal-demo-wrap{
+  background:var(--bg-sunken);border-radius:var(--r-md);
+  padding:var(--s-6);display:flex;justify-content:center;
+}
+.modal{background:var(--bg-surface);border-radius:var(--r-lg);width:560px;max-width:100%;display:flex;flex-direction:column;box-shadow:var(--sh-3);overflow:hidden}
+.modal-wide{width:780px}
+.modal-header{padding:var(--s-4) var(--s-5);border-bottom:1px solid var(--border-default);display:flex;align-items:center;gap:var(--s-3)}
+.modal-title{font-size:var(--fs-lg);font-weight:700;margin:0;flex:1}
+.modal-body{padding:var(--s-5)}
+.modal-footer{padding:var(--s-3) var(--s-5);border-top:1px solid var(--border-default);display:flex;justify-content:flex-end;gap:var(--s-2)}
+
+/* ── PERM MATRIX ── */
+.perm-matrix{width:100%;border-collapse:separate;border-spacing:0;font-size:var(--fs-sm);border:1px solid var(--border-default);border-radius:var(--r-md);overflow:hidden}
+.perm-matrix th,.perm-matrix td{padding:var(--s-2) var(--s-3);border-bottom:1px solid var(--border-subtle);text-align:center}
+.perm-matrix tbody tr:last-child td{border-bottom:none}
+.perm-matrix th{background:var(--bg-subtle);font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);font-weight:700}
+.perm-matrix th:first-child,.perm-matrix td:first-child{text-align:left;font-weight:600}
+.perm-check{width:18px;height:18px;border-radius:3px;border:1.5px solid var(--border-strong);background:var(--bg-surface);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all var(--duration-fast) var(--easing-standard)}
+.perm-check[data-on="true"]{background:var(--primary);border-color:var(--primary)}
+.perm-check[data-on="true"]::after{content:"✓";color:var(--text-inverse);font-size:11px;font-weight:700}
+
+/* ── FILIAL LIST ── */
+.filial-list{display:flex;flex-direction:column;gap:var(--s-3)}
+.filial-row{display:flex;gap:var(--s-3);align-items:center}
+.filial-row .input,.filial-row .select{height:30px;font-size:var(--fs-sm)}
+.filial-empty{padding:var(--s-4);background:var(--bg-sunken);border-radius:var(--r-sm);text-align:center;color:var(--text-muted);font-size:var(--fs-sm);font-style:italic}
+
+/* ── DENSITY DEMO ── */
+.density-demo{
+  display:grid;grid-template-columns:1fr 1fr;gap:var(--s-5);
+}
+.density-box{
+  background:var(--bg-surface);border:1px solid var(--border-default);
+  border-radius:var(--r-base);padding:var(--s-5);
+}
+.density-tag{
+  display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;
+  border-radius:var(--r-sm);margin-bottom:var(--s-3);
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.density-tag.form{background:var(--primary-soft);color:var(--primary)}
+.density-tag.ops{background:var(--feedback-info-soft);color:var(--feedback-info)}
+
+/* ── Token legend line (inline "code") ── */
+.kv{display:flex;gap:var(--s-3);flex-wrap:wrap;font-size:var(--fs-xs);color:var(--text-muted);margin-top:var(--s-3)}
+.kv span{font-family:var(--font-mono)}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ═══════════════════════ NAV ═══════════════════════ -->
+  <aside class="nav">
+    <div class="nav-brand">
+      <img src="pin-trouw.png" alt="Trouw">
+      <div>
+        <h1 class="nav-brand-title">Trouw DS v17</h1>
+        <p class="nav-brand-sub">Form Patterns</p>
+      </div>
+    </div>
+
+    <div class="nav-group">
+      <p class="nav-group-h">Intro</p>
+      <a href="#intro" class="active">Visão geral</a>
+      <a href="#density">Density modes</a>
+    </div>
+
+    <div class="nav-group">
+      <p class="nav-group-h">Form System</p>
+      <a href="#form-field">Form Field</a>
+      <a href="#form-grid">Form Grid</a>
+      <a href="#inputs">Input / Select / Unit</a>
+    </div>
+
+    <div class="nav-group">
+      <p class="nav-group-h">Navegação / Wizard</p>
+      <a href="#stepper">Stepper</a>
+      <a href="#accordion">Accordion</a>
+    </div>
+
+    <div class="nav-group">
+      <p class="nav-group-h">Seleção</p>
+      <a href="#radio-card">Radio Card</a>
+      <a href="#chip-multi">Chip Multi</a>
+    </div>
+
+    <div class="nav-group">
+      <p class="nav-group-h">Data Display</p>
+      <a href="#data-table">Data Table</a>
+      <a href="#role-badge">Role Badge</a>
+      <a href="#status-dot">Status Dot</a>
+      <a href="#user-avatar">User Avatar</a>
+    </div>
+
+    <div class="nav-group">
+      <p class="nav-group-h">Overlay</p>
+      <a href="#modal">Modal</a>
+      <a href="#perm-matrix">Perm Matrix</a>
+    </div>
+
+    <div class="nav-group">
+      <p class="nav-group-h">Feedback</p>
+      <a href="#callouts">Callouts</a>
+    </div>
+
+    <div class="nav-group">
+      <p class="nav-group-h">Atoms secundários</p>
+      <a href="#topbar-icon-btn">Topbar Icon Btn</a>
+    </div>
+
+    <div class="nav-group">
+      <p class="nav-group-h">Patterns</p>
+      <a href="#filial-pattern">Filial List</a>
+      <a href="#wizard-pattern">Wizard completo</a>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════ MAIN ═══════════════════════ -->
+  <main class="main">
+    <h1 class="doc-h1">Trouw DS v17 · Form Patterns</h1>
+    <p class="doc-sub">
+      Showcase complementar ao <code>trouw-ds-showcase-v16.html</code>. Documenta os componentes
+      que emergiram do cadastro-cliente v7 e foram reconciliados na proposta v17
+      (<code>tokens-reconciliation-v17.md</code>). Foco: telas de admin, cadastro, wizard, dashboards
+      em densidade <strong>form</strong>.
+    </p>
+    <p class="doc-meta">
+      <span>Fonte: Plus Jakarta Sans</span>
+      <span>Densidade: form</span>
+      <span>Tokens DTCG W3C 1.0</span>
+      <span>WCAG 2.2 AA</span>
+    </p>
+
+    <!-- ══════════════════ INTRO ══════════════════ -->
+    <section class="section" id="intro">
+      <div class="section-h"><h2>Visão geral</h2><span class="tag">read first</span></div>
+      <p class="section-lede">
+        A v17 não substitui a v16 — complementa. A v16 cobre a <strong>Torre Operacional</strong>
+        (densidade <code>ops</code>, tipografia a partir de 9px, cards densos). A v17 cobre
+        telas de <strong>cadastro, admin e wizard</strong> (densidade <code>form</code>, tipografia
+        a partir de 11px, componentes de formulário).
+      </p>
+      <div class="demo-card">
+        <div class="subsection">
+          <h3 class="subsection-h">O que muda em nomes de tokens</h3>
+          <ul style="margin:0;padding-left:var(--s-5);line-height:1.9;color:var(--text-muted);font-size:var(--fs-sm)">
+            <li><code>--neutral-*</code> → <code>--gray-*</code> (13 shades, inclui <code>--gray-150</code> novo)</li>
+            <li><code>--space-*</code> → <code>--s-*</code> (escala numérica direta em px)</li>
+            <li><code>--text-*</code> → <code>--fs-*</code> (font-size, evita colidir com <code>--text-default</code>)</li>
+            <li><code>--radius-*</code> → <code>--r-*</code> · <code>--elev-*</code> → <code>--sh-*</code></li>
+            <li><code>--s1/s2/s3</code> → <code>--bg-surface/subtle/sunken</code></li>
+            <li><code>--t1/t2/t3</code> → <code>--text-default/muted/subtle</code> (<code>t4</code> removido — falhava AA)</li>
+            <li><code>--blue/red/amber/green</code> → <code>--primary/feedback-danger/warn/ok</code></li>
+            <li>Escala <code>--sev-info/low/med/high/crit</code> promovida a oficial</li>
+          </ul>
+        </div>
+        <div class="helper">
+          <strong>Legacy aliases:</strong> durante a migração, os nomes v16 seguem funcionando via
+          <code>ds-v17-legacy-aliases.css</code> (gerado no passo B do plano).
+          Remover aliases em v18.
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ DENSITY ══════════════════ -->
+    <section class="section" id="density">
+      <div class="section-h"><h2>Density modes</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Dois modos de densidade tipográfica, selecionados por <code>data-density</code> no root ou
+        em qualquer container. <code>form</code> é o default; <code>ops</code> é aplicado na Torre e
+        em dashboards densos.
+      </p>
+      <div class="density-demo">
+        <div class="density-box">
+          <span class="density-tag form">form · default</span>
+          <p style="font-size:var(--fs-3xl);font-weight:700;margin:0;letter-spacing:-.02em">Cadastro do cliente</p>
+          <p style="font-size:var(--fs-md);color:var(--text-muted);margin:4px 0 12px">Dados cadastrais e contrato</p>
+          <p style="font-size:var(--fs-base);margin:0">OTIF Target contratual: <strong>90%</strong></p>
+          <p style="font-size:var(--fs-sm);color:var(--text-muted);margin:4px 0 0">Meta mensal monitorada em D-070</p>
+          <div class="kv"><span>--fs-base: 13px</span><span>--fs-md: 14px</span><span>--fs-3xl: 24px</span></div>
+        </div>
+        <div class="density-box" data-density="ops">
+          <span class="density-tag ops">ops · torre</span>
+          <p style="font-size:var(--fs-3xl);font-weight:700;margin:0;letter-spacing:-.02em">Torre Operacional</p>
+          <p style="font-size:var(--fs-md);color:var(--text-muted);margin:4px 0 12px">SMs em andamento · Kellux</p>
+          <p style="font-size:var(--fs-base);margin:0">OTIF atual: <strong>87,4%</strong></p>
+          <p style="font-size:var(--fs-sm);color:var(--text-muted);margin:4px 0 0">12 SMs em risco · 3 críticas</p>
+          <div class="kv"><span>--fs-base: 11px</span><span>--fs-md: 12px</span><span>--fs-3xl: 20px</span></div>
+        </div>
+      </div>
+      <div class="helper">
+        Aplicar via <code>&lt;div data-density="ops"&gt;</code> em containers que precisam do
+        modo ops — não precisa duplicar tokens em arquivos separados.
+      </div>
+    </section>
+
+    <!-- ══════════════════ FORM FIELD ══════════════════ -->
+    <section class="section" id="form-field">
+      <div class="section-h"><h2>Form Field</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Átomo de formulário: label + controle + hint opcional. Use <code>.req</code> para marcar
+        obrigatório (*) e <code>.opt</code> para marcar campos opcionais.
+      </p>
+      <div class="demo-card">
+        <div class="demo-row col">
+          <div class="form-field" style="max-width:320px">
+            <label class="form-label">Razão Social <span class="req">*</span></label>
+            <input class="input" value="Kellux Indústrias S.A.">
+          </div>
+          <div class="form-field" style="max-width:320px">
+            <label class="form-label">Nome Fantasia <span class="req">*</span></label>
+            <input class="input" value="Kellux">
+            <span class="form-hint">Aparece nos cards e relatórios.</span>
+          </div>
+          <div class="form-field" style="max-width:320px">
+            <label class="form-label">Porte <span class="opt">opcional</span></label>
+            <select class="select"><option>Grande</option></select>
+          </div>
+        </div>
+        <div class="kv">
+          <span>.form-field · flex column · gap s-2</span>
+          <span>.form-label · fs-sm/600</span>
+          <span>.form-hint · fs-xs/muted</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ FORM GRID ══════════════════ -->
+    <section class="section" id="form-grid">
+      <div class="section-h"><h2>Form Grid</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Grid responsivo para formulários: 2, 3 ou 4 colunas. <code>.col-span-2</code> e
+        <code>.col-span-full</code> controlam células largas dentro do grid.
+      </p>
+
+      <div class="subsection">
+        <h3 class="subsection-h">form-grid-2 com col-span-2</h3>
+        <div class="demo-card">
+          <div class="form-grid form-grid-2">
+            <div class="form-field col-span-2">
+              <label class="form-label">Razão Social <span class="req">*</span></label>
+              <input class="input" value="Kellux Indústrias S.A.">
+            </div>
+            <div class="form-field">
+              <label class="form-label">Cidade</label>
+              <input class="input" value="São Paulo">
+            </div>
+            <div class="form-field">
+              <label class="form-label">UF</label>
+              <select class="select"><option>SP</option></select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-h">form-grid-3</h3>
+        <div class="demo-card">
+          <div class="form-grid form-grid-3">
+            <div class="form-field"><label class="form-label">Início <span class="req">*</span></label><input type="date" class="input" value="2025-01-01"></div>
+            <div class="form-field"><label class="form-label">Fim</label><input type="date" class="input"></div>
+            <div class="form-field"><label class="form-label">OTIF</label><div class="unit-input"><input type="number" value="90"><span class="unit">%</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ INPUTS ══════════════════ -->
+    <section class="section" id="inputs">
+      <div class="section-h"><h2>Input / Select / Unit Input</h2><span class="tag">refined</span></div>
+      <p class="section-lede">
+        Controles de formulário padrão. Todos com <code>height:36px</code>, radius <code>--r-md</code>,
+        foco com ring <code>--primary-soft</code>. Variantes <code>-sm</code> para uso em
+        listas editáveis (ex: filiais).
+      </p>
+
+      <div class="subsection">
+        <h3 class="subsection-h">Input — estados</h3>
+        <div class="demo-card">
+          <div class="form-grid form-grid-3">
+            <div class="form-field"><label class="form-label">Default</label><input class="input" placeholder="Digite aqui"></div>
+            <div class="form-field"><label class="form-label">Preenchido</label><input class="input" value="Kellux Indústrias"></div>
+            <div class="form-field"><label class="form-label">Disabled</label><input class="input" value="Readonly" disabled></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-h">Select</h3>
+        <div class="demo-card">
+          <div class="form-grid form-grid-3">
+            <div class="form-field"><label class="form-label">Segmento</label>
+              <select class="select"><option>Indústria</option><option>FMCG</option><option>Agronegócio</option></select>
+            </div>
+            <div class="form-field"><label class="form-label">UF</label>
+              <select class="select"><option>SP</option><option>RJ</option><option>MG</option></select>
+            </div>
+            <div class="form-field"><label class="form-label">Select-sm</label>
+              <select class="select select-sm" style="width:90px"><option>SP</option></select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-h">Unit Input — sufixo inline</h3>
+        <div class="demo-card">
+          <div class="demo-row">
+            <div class="unit-input" style="width:140px"><input type="number" value="90"><span class="unit">%</span></div>
+            <div class="unit-input" style="width:140px"><input type="number" value="150"><span class="unit">min</span></div>
+            <div class="unit-input" style="width:180px"><input type="number" value="2500" style="font-variant-numeric:tabular-nums"><span class="unit">R$</span></div>
+          </div>
+          <div class="helper">
+            <strong>Use quando</strong> a unidade é o sufixo natural do campo (OTIF %, tempo em min,
+            valor em R$). <strong>Não use</strong> para prefixo — use campo + hint textual.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ STEPPER ══════════════════ -->
+    <section class="section" id="stepper">
+      <div class="section-h"><h2>Stepper</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Indicador horizontal de progresso em wizards. Três estados por step:
+        <code>complete</code>, <code>active</code>, <code>pending</code>.
+      </p>
+      <div class="demo-card on-canvas">
+        <div class="stepper">
+          <div class="step" data-state="complete"><div class="step-circle"><i class="fas fa-check"></i></div><div class="step-info"><p class="step-label">Etapa 1</p><p class="step-name">Cliente</p></div></div>
+          <div class="step-line"></div>
+          <div class="step" data-state="active"><div class="step-circle">2</div><div class="step-info"><p class="step-label">Etapa 2</p><p class="step-name">Usuários</p></div></div>
+          <div class="step-line"></div>
+          <div class="step" data-state="pending"><div class="step-circle">3</div><div class="step-info"><p class="step-label">Etapa 3</p><p class="step-name">Operação</p></div></div>
+          <div class="step-line"></div>
+          <div class="step" data-state="pending"><div class="step-circle">4</div><div class="step-info"><p class="step-label">Etapa 4</p><p class="step-name">Integração</p></div></div>
+          <div class="step-line"></div>
+          <div class="step" data-state="pending"><div class="step-circle">5</div><div class="step-info"><p class="step-label">Etapa 5</p><p class="step-name">SLAs</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ ACCORDION ══════════════════ -->
+    <section class="section" id="accordion">
+      <div class="section-h"><h2>Accordion</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Blocos colapsáveis com header + ícone + meta + status. Usado em cadastros multi-seção
+        (ex: Step 1 do cadastro de cliente). Toggle via <code>data-state="open"</code>.
+      </p>
+
+      <div class="subsection">
+        <h3 class="subsection-h">Estado: aberto · Completo</h3>
+        <div class="accordion" data-state="open">
+          <button class="accordion-header" type="button">
+            <div class="accordion-icon">🏢</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Identificação da empresa</h3>
+              <p class="accordion-meta">Kellux Indústrias S.A. · 12.345.678/0001-90</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+            <p style="margin:0;color:var(--text-muted);font-size:var(--fs-sm)">Conteúdo do accordion — pode ser qualquer bloco de formulário.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-h">Estado: fechado · Incompleto</h3>
+        <div class="accordion">
+          <button class="accordion-header" type="button" onclick="this.parentElement.dataset.state = this.parentElement.dataset.state === 'open' ? 'closed' : 'open'">
+            <div class="accordion-icon">📋</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Contrato e SLAs</h3>
+              <p class="accordion-meta">Vigência, OTIF, faturamento</p>
+            </div>
+            <span class="accordion-status">Incompleto</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body"><p style="margin:0">Clique no header pra expandir.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ RADIO CARD ══════════════════ -->
+    <section class="section" id="radio-card">
+      <div class="section-h"><h2>Radio Card</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Radio button expandido com título + descrição. Use quando a diferença entre opções
+        precisa de explicação (não apenas um label). <code>data-selected="true"</code> aplica
+        border + background do primary.
+      </p>
+      <div class="demo-card">
+        <div class="radio-row">
+          <label class="radio-card" data-selected="true">
+            <input type="radio" name="demo-estr" checked>
+            <span class="radio-card-title">Apenas Matriz</span>
+            <span class="radio-card-desc">Um único CNPJ. Todas as SMs originam dele.</span>
+          </label>
+          <label class="radio-card" data-selected="false">
+            <input type="radio" name="demo-estr">
+            <span class="radio-card-title">Matriz + Filiais</span>
+            <span class="radio-card-desc">Múltiplos CNPJs. Filiais viram filtro dimensional na torre.</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ CHIP MULTI ══════════════════ -->
+    <section class="section" id="chip-multi">
+      <div class="section-h"><h2>Chip Multi</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Seleção múltipla inline com estética de pill. Alternativa a checkboxes quando os itens
+        são curtos e cabem numa linha.
+      </p>
+      <div class="demo-card">
+        <label class="form-label" style="margin-bottom:var(--s-2)">Restringir por filial <span class="opt">opcional</span></label>
+        <div class="chips-multi">
+          <button class="chip-multi" data-selected="false">Campinas / SP</button>
+          <button class="chip-multi" data-selected="true">Guarulhos / SP</button>
+          <button class="chip-multi" data-selected="false">Rio de Janeiro / RJ</button>
+          <button class="chip-multi" data-selected="true">Belo Horizonte / MG</button>
+          <button class="chip-multi" data-selected="false">Curitiba / PR</button>
+        </div>
+        <span class="form-hint" style="margin-top:var(--s-3);display:block">Se nenhuma for marcada, o usuário vê todas as filiais.</span>
+      </div>
+    </section>
+
+    <!-- ══════════════════ DATA TABLE ══════════════════ -->
+    <section class="section" id="data-table">
+      <div class="section-h"><h2>Data Table</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Tabela de gestão (ex: lista de usuários do cliente). Células compactas, header em
+        <code>bg-subtle</code> com caps, hover em <code>bg-subtle</code>.
+      </p>
+      <div class="demo-card">
+        <div class="users-table-wrap">
+          <table class="users-table">
+            <thead>
+              <tr>
+                <th>Usuário</th>
+                <th style="width:180px">Cargo</th>
+                <th style="width:140px">Função</th>
+                <th style="width:100px">Status</th>
+                <th style="width:120px;text-align:right">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="user-name-cell"><span class="user-avatar">AL</span><span class="user-name-info"><strong>Ana Lima</strong><span class="email">ana@kellux.com.br</span></span></div></td>
+                <td style="color:var(--text-muted);font-size:var(--fs-xs)">Gerente de Logística</td>
+                <td><span class="role-badge" data-r="admin">Administrador</span></td>
+                <td><span class="status-dot" data-s="ativo">Ativo</span></td>
+                <td><div class="user-actions">
+                  <button class="user-action-btn" title="Permissões"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+                  <button class="user-action-btn" title="Editar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                  <button class="user-action-btn" data-danger title="Remover"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                </div></td>
+              </tr>
+              <tr>
+                <td><div class="user-name-cell"><span class="user-avatar" style="background:var(--op-kellux)">CM</span><span class="user-name-info"><strong>Carlos Mendes</strong><span class="email">carlos@kellux.com.br</span></span></div></td>
+                <td style="color:var(--text-muted);font-size:var(--fs-xs)">Coordenador</td>
+                <td><span class="role-badge" data-r="gerente">Gerente</span></td>
+                <td><span class="status-dot" data-s="ativo">Ativo</span></td>
+                <td><div class="user-actions">
+                  <button class="user-action-btn" title="Permissões"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+                  <button class="user-action-btn" title="Editar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                  <button class="user-action-btn" data-danger title="Remover"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                </div></td>
+              </tr>
+              <tr>
+                <td><div class="user-name-cell"><span class="user-avatar" style="background:var(--op-bombril)">MS</span><span class="user-name-info"><strong>Marina Souza</strong><span class="email">marina@kellux.com.br</span></span></div></td>
+                <td style="color:var(--text-muted);font-size:var(--fs-xs)">Analista</td>
+                <td><span class="role-badge" data-r="operador">Operador</span></td>
+                <td><span class="status-dot" data-s="pendente">Pendente</span></td>
+                <td><div class="user-actions">
+                  <button class="user-action-btn" title="Permissões"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+                  <button class="user-action-btn" title="Editar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                  <button class="user-action-btn" data-danger title="Remover"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                </div></td>
+              </tr>
+              <tr>
+                <td><div class="user-name-cell"><span class="user-avatar" style="background:var(--gray-500)">JP</span><span class="user-name-info"><strong>João Pereira</strong><span class="email">joao@kellux.com.br</span></span></div></td>
+                <td style="color:var(--text-muted);font-size:var(--fs-xs)">Diretoria</td>
+                <td><span class="role-badge" data-r="visualizador">Visualizador</span></td>
+                <td><span class="status-dot" data-s="inativo">Inativo</span></td>
+                <td><div class="user-actions">
+                  <button class="user-action-btn" title="Permissões"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+                  <button class="user-action-btn" title="Editar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                  <button class="user-action-btn" data-danger title="Remover"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="helper">
+          <strong>Anatomia:</strong> <code>.users-table-wrap</code> (container com border+radius) ›
+          <code>.users-table</code> ›
+          <code>.user-name-cell</code> +
+          <code>.role-badge</code> +
+          <code>.status-dot</code> +
+          <code>.user-actions</code>.
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ ROLE BADGE ══════════════════ -->
+    <section class="section" id="role-badge">
+      <div class="section-h"><h2>Role Badge</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Identifica a função do usuário no sistema. 4 variantes via <code>data-r</code>. Palette
+        mapeia severidade do papel: Admin (danger) > Gerente (primary) > Operador (info) > Visualizador (muted).
+      </p>
+      <div class="demo-card">
+        <div class="demo-row">
+          <span class="role-badge" data-r="admin">Administrador</span>
+          <span class="role-badge" data-r="gerente">Gerente</span>
+          <span class="role-badge" data-r="operador">Operador</span>
+          <span class="role-badge" data-r="visualizador">Visualizador</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ STATUS DOT ══════════════════ -->
+    <section class="section" id="status-dot">
+      <div class="section-h"><h2>Status Dot</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Indicador de status com dot colorido + label. 3 variantes: <code>ativo</code> (ok),
+        <code>pendente</code> (warn), <code>inativo</code> (muted).
+      </p>
+      <div class="demo-card">
+        <div class="demo-row">
+          <span class="status-dot" data-s="ativo">Ativo</span>
+          <span class="status-dot" data-s="pendente">Pendente</span>
+          <span class="status-dot" data-s="inativo">Inativo</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ USER AVATAR ══════════════════ -->
+    <section class="section" id="user-avatar">
+      <div class="section-h"><h2>User Avatar</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Avatar circular com iniciais (2 letras). Background usa <code>--primary</code> por default,
+        mas pode usar qualquer <code>--op-*</code> para diferenciar operações.
+      </p>
+      <div class="demo-card">
+        <div class="demo-row">
+          <span class="user-avatar">AL</span>
+          <span class="user-avatar" style="background:var(--op-kellux)">CM</span>
+          <span class="user-avatar" style="background:var(--op-bombril)">MS</span>
+          <span class="user-avatar" style="background:var(--op-fenza)">JP</span>
+          <span class="user-avatar" style="background:var(--gray-500)">??</span>
+        </div>
+        <div class="helper">
+          <strong>Gerar iniciais:</strong>
+          <code>nome.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase()</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ MODAL ══════════════════ -->
+    <section class="section" id="modal">
+      <div class="section-h"><h2>Modal</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Sobreposição centralizada com header + body + footer. Dois tamanhos: padrão (560px) e
+        wide (780px — <code>.modal-wide</code>). Overlay com <code>data-open="true"</code>.
+      </p>
+
+      <div class="subsection">
+        <h3 class="subsection-h">Modal padrão (560px)</h3>
+        <div class="modal-demo-wrap">
+          <div class="modal">
+            <header class="modal-header">
+              <h3 class="modal-title">Adicionar usuário</h3>
+              <button class="topbar-icon-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+            </header>
+            <div class="modal-body">
+              <div class="form-grid form-grid-2">
+                <div class="form-field col-span-2">
+                  <label class="form-label">Nome completo <span class="req">*</span></label>
+                  <input class="input" placeholder="Ex: Ana Lima">
+                </div>
+                <div class="form-field">
+                  <label class="form-label">E-mail <span class="req">*</span></label>
+                  <input type="email" class="input" placeholder="ana@cliente.com.br">
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Telefone</label>
+                  <input class="input" placeholder="(11) 98765-4321">
+                </div>
+              </div>
+            </div>
+            <footer class="modal-footer">
+              <button class="btn btn-ghost">Cancelar</button>
+              <button class="btn btn-primary">Adicionar e enviar convite</button>
+            </footer>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-h">Modal wide (780px)</h3>
+        <div class="modal-demo-wrap">
+          <div class="modal modal-wide">
+            <header class="modal-header">
+              <h3 class="modal-title">Permissões · Marina Souza</h3>
+              <button class="topbar-icon-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+            </header>
+            <div class="modal-body">
+              <p class="form-hint">Ajuste o que este usuário pode fazer em cada solução contratada.</p>
+              <table class="perm-matrix">
+                <thead><tr><th>Solução</th><th>Visualizar</th><th>Criar</th><th>Editar</th><th>Aprovar</th></tr></thead>
+                <tbody>
+                  <tr><td>🎯 M1 — Operacional</td>
+                    <td><span class="perm-check" data-on="true"></span></td>
+                    <td><span class="perm-check" data-on="true"></span></td>
+                    <td><span class="perm-check" data-on="true"></span></td>
+                    <td><span class="perm-check" data-on="false"></span></td>
+                  </tr>
+                  <tr><td>📜 M7 — Histórico</td>
+                    <td><span class="perm-check" data-on="true"></span></td>
+                    <td><span class="perm-check" data-on="false"></span></td>
+                    <td><span class="perm-check" data-on="false"></span></td>
+                    <td><span class="perm-check" data-on="false"></span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <footer class="modal-footer">
+              <button class="btn btn-primary">Fechar</button>
+            </footer>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ PERM MATRIX ══════════════════ -->
+    <section class="section" id="perm-matrix">
+      <div class="section-h"><h2>Perm Matrix</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Grid de permissões granulares (solução × ação). <code>.perm-check</code> com
+        <code>data-on="true/false"</code>. Checkbox customizado para caber na célula compacta.
+      </p>
+      <div class="demo-card">
+        <table class="perm-matrix">
+          <thead><tr><th>Solução</th><th>Visualizar</th><th>Criar</th><th>Editar</th><th>Aprovar</th></tr></thead>
+          <tbody>
+            <tr><td>🎯 M1 — Operacional</td>
+              <td><span class="perm-check" data-on="true"></span></td>
+              <td><span class="perm-check" data-on="true"></span></td>
+              <td><span class="perm-check" data-on="true"></span></td>
+              <td><span class="perm-check" data-on="true"></span></td>
+            </tr>
+            <tr><td>📊 M3 — Gerencial</td>
+              <td><span class="perm-check" data-on="true"></span></td>
+              <td><span class="perm-check" data-on="false"></span></td>
+              <td><span class="perm-check" data-on="false"></span></td>
+              <td><span class="perm-check" data-on="false"></span></td>
+            </tr>
+            <tr><td>📜 M7 — Histórico</td>
+              <td><span class="perm-check" data-on="true"></span></td>
+              <td><span class="perm-check" data-on="false"></span></td>
+              <td><span class="perm-check" data-on="false"></span></td>
+              <td><span class="perm-check" data-on="false"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ══════════════════ CALLOUTS ══════════════════ -->
+    <section class="section" id="callouts">
+      <div class="section-h"><h2>Callouts</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Mensagens contextuais inline. <code>.callout-info</code> para dicas/instruções,
+        <code>.callout-warn</code> para bloqueios obrigatórios.
+      </p>
+      <div class="demo-card">
+        <div class="demo-row col">
+          <div class="callout-info">
+            <span class="callout-ico">💡</span>
+            <div>Este contato é <strong>apenas referência comercial</strong>. Para dar acesso ao sistema, cadastre a pessoa como usuário na <strong>Etapa 2</strong>.</div>
+          </div>
+          <div class="callout-warn">
+            <span class="callout-ico">⚠️</span>
+            <div><strong>É obrigatório ter ao menos 1 Administrador.</strong> Marque um usuário existente como Admin ou adicione um novo.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ TOPBAR ICON BTN ══════════════════ -->
+    <section class="section" id="topbar-icon-btn">
+      <div class="section-h"><h2>Topbar Icon Button</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Botão de ícone compacto (32×32) para topbars, headers de modal, ou qualquer
+        área onde o botão de ação precisa ser visualmente leve.
+      </p>
+      <div class="demo-card">
+        <div class="demo-row">
+          <button class="topbar-icon-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          <button class="topbar-icon-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></button>
+          <button class="topbar-icon-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button>
+          <button class="topbar-icon-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ FILIAL PATTERN ══════════════════ -->
+    <section class="section" id="filial-pattern">
+      <div class="section-h"><h2>Pattern · Filial List</h2><span class="tag">pattern</span></div>
+      <p class="section-lede">
+        Editor de lista com linhas dinâmicas: <code>.filial-list</code> > <code>.filial-row</code> (com
+        <code>.input-sm</code> / <code>.select-sm</code>) + botão remover + botão adicionar.
+        Estado vazio: <code>.filial-empty</code>.
+      </p>
+
+      <div class="subsection">
+        <h3 class="subsection-h">Estado vazio</h3>
+        <div class="demo-card">
+          <label class="form-label" style="margin-bottom:var(--s-2)">Filiais <span class="opt">0 cadastrada(s)</span></label>
+          <div class="filial-list">
+            <div class="filial-empty">Nenhuma filial cadastrada. Adicione pelo menos 1 abaixo.</div>
+          </div>
+          <button class="btn btn-secondary btn-sm" style="margin-top:var(--s-3)"><i class="fas fa-plus"></i> Adicionar filial</button>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-h">Com linhas preenchidas</h3>
+        <div class="demo-card">
+          <label class="form-label" style="margin-bottom:var(--s-2)">Filiais <span class="opt">3 cadastrada(s)</span></label>
+          <div class="filial-list">
+            <div class="filial-row">
+              <input class="input input-sm" value="12.345.678/0002-71" placeholder="CNPJ" style="flex:2">
+              <input class="input input-sm" value="Campinas" placeholder="Cidade" style="flex:2">
+              <select class="select select-sm" style="width:70px"><option>SP</option></select>
+              <button class="btn btn-ghost btn-xs" style="padding:0;width:28px;height:28px;color:var(--text-muted)">×</button>
+            </div>
+            <div class="filial-row">
+              <input class="input input-sm" value="12.345.678/0003-52" placeholder="CNPJ" style="flex:2">
+              <input class="input input-sm" value="Guarulhos" placeholder="Cidade" style="flex:2">
+              <select class="select select-sm" style="width:70px"><option>SP</option></select>
+              <button class="btn btn-ghost btn-xs" style="padding:0;width:28px;height:28px;color:var(--text-muted)">×</button>
+            </div>
+            <div class="filial-row">
+              <input class="input input-sm" value="12.345.678/0004-33" placeholder="CNPJ" style="flex:2">
+              <input class="input input-sm" value="Rio de Janeiro" placeholder="Cidade" style="flex:2">
+              <select class="select select-sm" style="width:70px"><option>RJ</option></select>
+              <button class="btn btn-ghost btn-xs" style="padding:0;width:28px;height:28px;color:var(--text-muted)">×</button>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm" style="margin-top:var(--s-3)"><i class="fas fa-plus"></i> Adicionar filial</button>
+          <span class="form-hint" style="margin-top:var(--s-3);display:block">Cada filial herda os dados da matriz por padrão. Disponíveis como filtro dimensional na torre (D-080).</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════ WIZARD PATTERN ══════════════════ -->
+    <section class="section" id="wizard-pattern">
+      <div class="section-h"><h2>Pattern · Wizard completo</h2><span class="tag">pattern</span></div>
+      <p class="section-lede">
+        Composição completa dos átomos e moléculas: <strong>Stepper</strong> (topo) + <strong>Accordion</strong>
+        (blocos) + <strong>Form Grid</strong> (campos) + <strong>Callout</strong> (instruções) +
+        wizard footer. Implementado em <code>cadastro-cliente-step1-ds-v17.html</code> e
+        <code>cadastro-cliente-step2-ds-v17.html</code>.
+      </p>
+      <div class="demo-card on-canvas">
+        <p style="margin:0;font-size:var(--fs-sm);color:var(--text-muted)">
+          Abra os arquivos <code>cadastro-cliente-step1-ds-v17.html</code> e
+          <code>cadastro-cliente-step2-ds-v17.html</code> na mesma pasta pra ver o pattern completo rodando.
+        </p>
+        <div class="demo-row" style="margin-top:var(--s-4)">
+          <a class="btn btn-primary" href="cadastro-cliente-step1-ds-v17.html" target="_blank">
+            <i class="fas fa-arrow-up-right-from-square"></i> Abrir Step 1
+          </a>
+          <a class="btn btn-secondary" href="cadastro-cliente-step2-ds-v17.html" target="_blank">
+            <i class="fas fa-arrow-up-right-from-square"></i> Abrir Step 2
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+/* Active nav link on scroll */
+const links = document.querySelectorAll('.nav a');
+const sections = Array.from(document.querySelectorAll('.section'));
+function updateActive(){
+  const y = window.scrollY + 80;
+  let current = sections[0].id;
+  for (const s of sections){
+    if (s.offsetTop <= y) current = s.id;
+  }
+  links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#'+current));
+}
+window.addEventListener('scroll', updateActive, {passive:true});
+updateActive();
+
+/* Accordion toggle demo */
+document.querySelectorAll('.accordion-header').forEach(h => {
+  if (h.hasAttribute('onclick')) return;
+  h.addEventListener('click', () => {
+    const acc = h.parentElement;
+    acc.dataset.state = acc.dataset.state === 'open' ? 'closed' : 'open';
+  });
+});
+
+/* Radio card interaction (per section) */
+document.querySelectorAll('.radio-row').forEach(row => {
+  row.querySelectorAll('.radio-card').forEach(card => {
+    card.addEventListener('click', () => {
+      row.querySelectorAll('.radio-card').forEach(c => c.dataset.selected = 'false');
+      card.dataset.selected = 'true';
+      const r = card.querySelector('input[type="radio"]');
+      if (r) r.checked = true;
+    });
+  });
+});
+
+/* Chip multi toggle */
+document.querySelectorAll('.chip-multi').forEach(chip => {
+  chip.addEventListener('click', () => {
+    chip.dataset.selected = chip.dataset.selected === 'true' ? 'false' : 'true';
+  });
+});
+
+/* Perm check toggle */
+document.querySelectorAll('.perm-check').forEach(pc => {
+  pc.addEventListener('click', () => {
+    pc.dataset.on = pc.dataset.on === 'true' ? 'false' : 'true';
+  });
+});
+</script>
+
+</body>
+</html>

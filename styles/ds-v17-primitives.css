@@ -1,0 +1,281 @@
+/* =====================================================================
+   Trouw Design System v17 — Primitives & Semantics
+   ---------------------------------------------------------------------
+   Arquivo único, consumível direto em produto. Define as 2 camadas:
+     1) Primitivos (gray-*, trouw-*, s-*, fs-*, r-*, sh-*, sev-*, op-*)
+     2) Semânticos (bg-*, text-*, border-*, primary-*, feedback-*)
+
+   Regras de ouro:
+     · Nunca consuma primitivo direto em código de produto. Use semantic.
+     · Default de densidade é "form". Adicione [data-density="ops"] no
+       <body> (ou container) para a Torre / telas densas.
+     · Fonte canônica: Plus Jakarta Sans + tabular-nums.
+
+   Version: 17.0.0   ·   2026-04-14
+   Sources: DS v16 + cadastro-cliente-v7
+   ===================================================================== */
+
+:root {
+  /* ═══════════════════════════════════════════════════════════════════
+     1 · PRIMITIVOS — CORES NEUTRAIS
+     Nunca referencie em produto. Use via semantic.
+     ═══════════════════════════════════════════════════════════════════ */
+  --gray-0:   #FFFFFF;
+  --gray-50:  #FAFBFC;
+  --gray-100: #F4F5F7;
+  --gray-150: #ECEEF1;  /* novo v17 — hover intermediário */
+  --gray-200: #E2E5EA;
+  --gray-300: #CBD0D9;
+  --gray-400: #9AA2AE;
+  --gray-500: #6C7480;
+  --gray-600: #4A5160;
+  --gray-700: #333A47;
+  --gray-800: #1F242E;
+  --gray-900: #10131A;
+  --gray-950: #0B0E14;  /* dark mode deep */
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PRIMITIVOS — MARCA (Trouw blue)
+     ═══════════════════════════════════════════════════════════════════ */
+  --trouw-50:  #F0F4FF;
+  --trouw-100: #E6ECFF;
+  --trouw-400: #5A7DFF;
+  --trouw-500: #2E5BFF;
+  --trouw-600: #1E45D9;
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PRIMITIVOS — FEEDBACK / STATUS
+     ═══════════════════════════════════════════════════════════════════ */
+  --ok-100:     #DEF3E7;
+  --ok-500:     #1F9E5C;
+
+  --warn-100:   #FCF1DD;
+  --warn-500:   #E89A1A;
+  --warn-700:   #92400E;  /* text sobre warn-soft bg */
+
+  --danger-100: #FCE7E5;
+  --danger-500: #D9342B;
+  --danger-600: #B82820;  /* destructive hover */
+
+  --info-100:   #DEEBF6;
+  --info-500:   #2E7DC1;
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PRIMITIVOS — SEVERIDADE (oficial v17)
+     Eventos, alertas, prioridade de SM. Usar com variante -soft também.
+     ═══════════════════════════════════════════════════════════════════ */
+  --sev-info:      var(--gray-500);
+  --sev-info-soft: rgba(108, 116, 128, .12);
+  --sev-low:       var(--info-500);
+  --sev-low-soft:  rgba(46, 125, 193, .12);
+  --sev-med:       var(--warn-500);
+  --sev-med-soft:  rgba(232, 154, 26, .14);
+  --sev-high:      #E85D1A;
+  --sev-high-soft: rgba(232, 93, 26, .14);
+  --sev-crit:      var(--danger-500);
+  --sev-crit-soft: rgba(217, 52, 43, .14);
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PRIMITIVOS — OPERAÇÃO (antes "cliente")
+     Cor de identificação visual por contrato.
+     ═══════════════════════════════════════════════════════════════════ */
+  --op-kellux:  #7C3AED;
+  --op-bombril: #0891B2;
+  --op-fenza:   #65A30D;
+
+  /* AI accent — sugestões geradas por agente */
+  --ai-600: #7C3AED;
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PRIMITIVOS — SPACING
+     Base 4pt. Nomenclatura --s-N.
+     ═══════════════════════════════════════════════════════════════════ */
+  --s-1:   2px;
+  --s-2h:  4px;   /* half — base 4pt */
+  --s-2:   6px;
+  --s-3:   8px;
+  --s-4:  12px;
+  --s-5:  16px;
+  --s-6:  20px;
+  --s-8:  24px;
+  --s-9:  28px;
+  --s-10: 32px;
+  --s-12: 48px;   /* novo v17 */
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PRIMITIVOS — TIPOGRAFIA
+     Default: mode "form". Alternar via [data-density="ops"].
+     ═══════════════════════════════════════════════════════════════════ */
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI',
+               Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo,
+               Consolas, monospace;
+
+  /* Font weights */
+  --fw-light:      300;
+  --fw-regular:    400;
+  --fw-medium:     500;
+  --fw-semibold:   600;
+  --fw-bold:       700;
+  --fw-extrabold:  800;
+
+  /* Line heights */
+  --lh-tight:   1.2;
+  --lh-snug:    1.35;
+  --lh-default: 1.5;
+  --lh-relaxed: 1.65;
+
+  /* Font sizes — mode form (default) */
+  --fs-xs:   11px;
+  --fs-sm:   12px;
+  --fs-base: 13px;
+  --fs-md:   14px;
+  --fs-lg:   15px;
+  --fs-xl:   17px;
+  --fs-2xl:  20px;
+  --fs-3xl:  24px;
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PRIMITIVOS — RADIUS
+     ═══════════════════════════════════════════════════════════════════ */
+  --r-sm:   4px;
+  --r-md:   6px;
+  --r-base: 8px;
+  --r-lg:  10px;
+  --r-xl:  14px;
+  --r-2xl: 20px;
+  --r-pill: 999px;
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PRIMITIVOS — SHADOWS
+     Valores v7 — mais sutis, melhores em light mode.
+     ═══════════════════════════════════════════════════════════════════ */
+  --sh-1: 0 1px 2px rgba(15, 20, 30, .04),
+          0 1px 1px rgba(15, 20, 30, .03);
+  --sh-2: 0 4px 12px rgba(15, 20, 30, .06),
+          0 2px  4px rgba(15, 20, 30, .04);
+  --sh-3: 0 12px 32px rgba(15, 20, 30, .10),
+          0  4px  8px rgba(15, 20, 30, .05);
+
+  /* ═══════════════════════════════════════════════════════════════════
+     2 · SEMÂNTICOS — BACKGROUNDS
+     Esses são os tokens que o produto consome.
+     ═══════════════════════════════════════════════════════════════════ */
+  --bg-app:      var(--gray-100);
+  --bg-surface:  var(--gray-0);
+  --bg-subtle:   var(--gray-50);
+  --bg-sunken:   var(--gray-100);
+  --bg-emphasis: var(--gray-150);
+  --bg-hover:    var(--gray-100);
+  --bg-active:   var(--gray-150);
+  --bg-inverse:  var(--gray-900);
+
+  /* ═══════════════════════════════════════════════════════════════════
+     SEMÂNTICOS — TEXT
+     ═══════════════════════════════════════════════════════════════════ */
+  --text-default: var(--gray-900);
+  --text-muted:   var(--gray-500);  /* AA em todos os bg */
+  --text-subtle:  var(--gray-400);
+  --text-inverse: var(--gray-0);
+  --text-brand:   var(--trouw-600);
+  /* NOTA: --text-t4 foi REMOVIDO na v17 (falhava WCAG AA 1.67:1). */
+
+  /* ═══════════════════════════════════════════════════════════════════
+     SEMÂNTICOS — BORDERS
+     ═══════════════════════════════════════════════════════════════════ */
+  --border-default: var(--gray-200);
+  --border-strong:  var(--gray-300);
+  --border-subtle:  var(--gray-150);  /* divisor interno sutil */
+  --border-focus:   var(--trouw-500);
+
+  /* ═══════════════════════════════════════════════════════════════════
+     SEMÂNTICOS — PRIMARY
+     ═══════════════════════════════════════════════════════════════════ */
+  --primary:             var(--trouw-500);
+  --primary-hover:       var(--trouw-600);
+  --primary-soft:        var(--trouw-100);
+  --primary-soft-strong: rgba(46, 91, 255, .20);
+
+  /* ═══════════════════════════════════════════════════════════════════
+     SEMÂNTICOS — FEEDBACK (ok / warn / danger / info)
+     ═══════════════════════════════════════════════════════════════════ */
+  --feedback-ok:          var(--ok-500);
+  --feedback-ok-soft:     var(--ok-100);
+  --feedback-warn:        var(--warn-500);
+  --feedback-warn-soft:   var(--warn-100);
+  --feedback-danger:      var(--danger-500);
+  --feedback-danger-soft: var(--danger-100);
+  --feedback-info:        var(--info-500);
+  --feedback-info-soft:   var(--info-100);
+}
+
+/* =====================================================================
+   MODE ops — DENSIDADE ALTA (Torre Operacional)
+   Ativar com [data-density="ops"] no <body> ou container raiz.
+   Só redefine fontSizes. O resto permanece.
+   ===================================================================== */
+[data-density="ops"] {
+  --fs-3xs:  8px;
+  --fs-2xs:  9px;
+  --fs-xs:  10px;
+  --fs-sm:  11px;
+  --fs-base:12px;
+  --fs-md:  13px;
+  --fs-lg:  14px;
+  --fs-xl:  16px;
+  --fs-2xl: 18px;
+  --fs-3xl: 21px;
+}
+
+/* =====================================================================
+   BASE — reset mínimo + fonte canônica
+   Opcional — importe apenas se quiser aplicar default no body.
+   ===================================================================== */
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-default);
+  color: var(--text-default);
+  background: var(--bg-app);
+}
+
+/* Números com tabular-nums — crítico pra tabelas, códigos, KPIs */
+.num,
+.tnum,
+[data-num],
+table td,
+table th,
+code,
+kbd,
+samp,
+pre {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* Foco visível (WCAG 2.2 AA) */
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* Respeita preferência de redução de movimento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

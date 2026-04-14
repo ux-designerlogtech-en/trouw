@@ -1,0 +1,197 @@
+/* =====================================================================
+   Trouw DS v17 — Legacy Aliases (v16 → v17)
+   ---------------------------------------------------------------------
+   IMPORTAR SEMPRE DEPOIS de ds-v17-primitives.css.
+
+   Propósito:
+     Mapear nomes antigos do DS v16 para os novos tokens da v17, pra
+     que arquivos legados (torre-operacional-v2_85, showcase-v16, etc.)
+     continuem funcionando enquanto o time migra.
+
+   Escopo temporário:
+     · Remover quando todos os produtos estiverem migrados.
+     · Target: v18 (pós-migração da Torre em produção).
+
+   Não adicione aliases novos aqui. Se um token v16 foi removido
+   intencionalmente (ex: --t4), NÃO crie alias — corrija o consumo.
+
+   Version: 17.0.0   ·   2026-04-14
+   ===================================================================== */
+
+:root {
+  /* ═══════════════════════════════════════════════════════════════════
+     CORES NEUTRAIS — --neutral-* → --gray-*
+     ═══════════════════════════════════════════════════════════════════ */
+  --neutral-0:   var(--gray-0);
+  --neutral-50:  var(--gray-50);
+  --neutral-100: var(--gray-100);
+  --neutral-200: var(--gray-200);
+  --neutral-300: var(--gray-300);
+  --neutral-400: var(--gray-400);
+  --neutral-500: var(--gray-500);
+  --neutral-600: var(--gray-600);
+  --neutral-700: var(--gray-700);
+  --neutral-800: var(--gray-800);
+  --neutral-900: var(--gray-900);
+  --neutral-950: var(--gray-950);
+
+  /* ═══════════════════════════════════════════════════════════════════
+     MARCA — --info-500 (v16 era primary) → --primary / --trouw-500
+     Obs: --info-500 legado apontava pra azul primário. Na v17 o
+     azul primário é --trouw-500 e --info-500 é feedback informativo.
+     Para não quebrar v16 que usava --info-500 como primário, NÃO
+     criamos alias inverso. Migrar chamadas manualmente:
+       --info-500 (uso primário no v16) → --primary
+       --info-500 (uso informativo no v16) → --feedback-info
+     ═══════════════════════════════════════════════════════════════════ */
+
+  /* ═══════════════════════════════════════════════════════════════════
+     FEEDBACK — nomes v16 → v17 (adiciona sufixo numérico)
+     ═══════════════════════════════════════════════════════════════════ */
+  --success-500: var(--ok-500);
+  --success-50:  var(--ok-100);
+  --success-200: var(--ok-100);  /* v16 tinha 2 softs; v17 consolida em 1 */
+
+  --warning-500: var(--warn-500);
+  --warning-700: var(--warn-700);
+  --warning-50:  var(--warn-100);
+  --warning-200: var(--warn-100);
+
+  --danger-50:   var(--danger-100);
+  --danger-200:  var(--danger-100);
+
+  /* ═══════════════════════════════════════════════════════════════════
+     SPACING — --space-* → --s-*
+     ═══════════════════════════════════════════════════════════════════ */
+  --space-1: var(--s-2h);   /* 4px */
+  --space-2: var(--s-3);    /* 8px */
+  --space-3: var(--s-4);    /* 12px */
+  --space-4: var(--s-5);    /* 16px */
+  --space-5: var(--s-6);    /* 20px */
+  --space-6: var(--s-8);    /* 24px */
+  --space-7: var(--s-9);    /* 28px */
+  --space-8: var(--s-10);   /* 32px */
+
+  /* ═══════════════════════════════════════════════════════════════════
+     TIPOGRAFIA — --text-N (v16 font-size) → --fs-N
+     OBS: v16 usava --text-md, v17 tem granularidade diferente.
+     Mapeamento abaixo resolve pros nomes legados.
+     ═══════════════════════════════════════════════════════════════════ */
+  --text-2xs: var(--fs-xs);   /* v16 8px → v17 11px no form, 9px ops */
+  --text-xs:  var(--fs-xs);
+  --text-sm:  var(--fs-sm);
+  --text-base:var(--fs-base);
+  --text-md:  var(--fs-base); /* v16 13px = v17 base */
+  --text-lg:  var(--fs-lg);
+  --text-xl:  var(--fs-xl);
+  --text-2xl: var(--fs-2xl);
+  --text-3xl: var(--fs-3xl);
+
+  /* Aliases de font-family que existiam em v16 (apontavam todos pra
+     Plus Jakarta — eram redundantes). Consolidar em --font-sans. */
+  --font: var(--font-sans);
+  --f-d:  var(--font-sans);
+  --f-u:  var(--font-sans);
+  --f-m:  var(--font-sans);
+
+  /* ═══════════════════════════════════════════════════════════════════
+     RADIUS — --radius-* → --r-*
+     ═══════════════════════════════════════════════════════════════════ */
+  --radius-sm:   var(--r-sm);
+  --radius-md:   var(--r-md);
+  --radius-base: var(--r-base);
+  --radius-lg:   var(--r-lg);
+  --radius-xl:   var(--r-xl);
+  --radius-2xl:  var(--r-2xl);
+  --radius-full: var(--r-pill);
+
+  /* ═══════════════════════════════════════════════════════════════════
+     ELEVATION — --elev-N → --sh-N
+     ═══════════════════════════════════════════════════════════════════ */
+  --elev-1: var(--sh-1);
+  --elev-2: var(--sh-2);
+  --elev-3: var(--sh-3);
+
+  /* ═══════════════════════════════════════════════════════════════════
+     BG — --sN → --bg-*
+     ═══════════════════════════════════════════════════════════════════ */
+  --s1: var(--bg-surface);
+  --s2: var(--bg-subtle);
+  --s3: var(--bg-sunken);
+  --s4: var(--bg-emphasis);
+
+  --bg:         var(--bg-app);
+  --canvas:     var(--bg-app);
+  --sidebar-bg: var(--bg-surface);
+
+  /* ═══════════════════════════════════════════════════════════════════
+     TEXT — --tN → --text-*
+     NOTA: --t4 NÃO tem alias. Era o cinza 1.67:1 (falha AA).
+     Se algo ainda referenciar --t4, corrigir manualmente pra
+     --text-subtle com opacity ≤0.7 OU repensar hierarquia.
+     ═══════════════════════════════════════════════════════════════════ */
+  --t1: var(--text-default);
+  --t2: var(--text-muted);
+  --t3: var(--text-subtle);
+  /* --t4: REMOVIDO sem alias. */
+
+  /* ═══════════════════════════════════════════════════════════════════
+     BORDER — --border / --bN → --border-*
+     ═══════════════════════════════════════════════════════════════════ */
+  --border: var(--border-default);
+  --b1:     var(--border-default);
+  --b2:     var(--border-strong);
+  --b3:     var(--border-strong);  /* v16 b3 raramente usado → strong */
+
+  /* ═══════════════════════════════════════════════════════════════════
+     ACCENT / PRIMARY — --blue* → --primary*
+     ═══════════════════════════════════════════════════════════════════ */
+  --blue:    var(--primary);
+  --blue-s:  var(--primary-soft);
+  --blue-m:  var(--primary-soft-strong);
+
+  /* ═══════════════════════════════════════════════════════════════════
+     FEEDBACK DIRECT — cores diretas do v16 → --feedback-*
+     ═══════════════════════════════════════════════════════════════════ */
+  --red:     var(--feedback-danger);
+  --red-s:   var(--feedback-danger-soft);
+
+  --amber:   var(--feedback-warn);
+  --amber-s: var(--feedback-warn-soft);
+
+  --green:   var(--feedback-ok);
+  --green-s: var(--feedback-ok-soft);
+
+  --cyan:    var(--feedback-info);
+
+  /* --orange não era feedback, era severidade high. Mapear. */
+  --orange:  var(--sev-high);
+
+  /* --purple era usado só em ai-600. Manter ai-600 direto. */
+  /* --purple: NÃO aliased — corrigir manualmente pra --ai-600 */
+
+  /* ═══════════════════════════════════════════════════════════════════
+     RISK (SM Card) → SEVERIDADE
+     v16 tinha --risk-low/medium/high/critical. v17 promove pra
+     --sev-low/med/high/crit oficial.
+     ═══════════════════════════════════════════════════════════════════ */
+  --risk-low:      var(--sev-low);
+  --risk-medium:   var(--sev-med);
+  --risk-high:     var(--sev-high);
+  --risk-critical: var(--sev-crit);
+}
+
+/* =====================================================================
+   DEPRECATION WARNINGS (debug)
+   Descomente pra highlightar usos legados via outline vermelho
+   durante auditoria visual. Não deixe em produção.
+   ===================================================================== */
+/*
+[class*="--neutral-"],
+[class*="--space-"],
+[class*="--text-xs"],
+[class*="--radius-"],
+[class*="--elev-"] {
+  outline: 1px dashed var(--feedback-danger) !important;
+}
+*/

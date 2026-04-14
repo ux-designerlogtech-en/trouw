@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Cadastro Cliente — Step 1 · DS v17 aligned</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles/ds-v17-primitives.css">
+<link rel="stylesheet" href="/styles/ds-v17-legacy-aliases.css">
+<style>
+/* ============================================================
+   TOKENS v17 — Reconciliação DS v16 + cadastro-v7
+   Ver: tokens-reconciliation-v17.md
+   ============================================================ */
+:root{
+  /* ── PRIMITIVES: Gray (adota v7) ─────────────────────── */
+  --gray-0:#FFFFFF; --gray-50:#FAFBFC; --gray-100:#F4F5F7;
+  --gray-150:#ECEEF1; --gray-200:#E2E5EA; --gray-300:#CBD0D9;
+  --gray-400:#9AA2AE; --gray-500:#6C7480; --gray-600:#4A5160;
+  --gray-700:#333A47; --gray-800:#1F242E; --gray-900:#10131A; --gray-950:#0B0E14;
+
+  /* ── PRIMITIVES: Brand (adota v7) ────────────────────── */
+  --trouw-50:#F0F4FF; --trouw-100:#E6ECFF; --trouw-400:#5A7DFF;
+  --trouw-500:#2E5BFF; --trouw-600:#1E45D9;
+
+  /* ── PRIMITIVES: Feedback ────────────────────────────── */
+  --ok-500:#1F9E5C;    --ok-100:#DEF3E7;
+  --warn-500:#E89A1A;  --warn-100:#FCF1DD;  --warn-700:#92400E;
+  --danger-500:#D9342B; --danger-100:#FCE7E5; --danger-600:#B82820;
+  --info-500:#2E7DC1;  --info-100:#DEEBF6;
+  --ai-600:#7C3AED;
+
+  /* ── PRIMITIVES: Severidade (nova escala) ────────────── */
+  --sev-info:#6C7480;  --sev-info-soft:#ECEEF1;
+  --sev-low:#2E7DC1;   --sev-low-soft:#DEEBF6;
+  --sev-med:#E89A1A;   --sev-med-soft:#FCF1DD;
+  --sev-high:#E85D1A;  --sev-high-soft:#FCE2D5;
+  --sev-crit:#D9342B;  --sev-crit-soft:#FCE7E5;
+
+  /* ── PRIMITIVES: Ops (cores de operação) ─────────────── */
+  --op-kellux:#7C3AED; --op-bombril:#0891B2; --op-fenza:#65A30D;
+
+  /* ── Spacing ──────────────────────────────────────────── */
+  --s-1:2px; --s-2h:4px; --s-2:6px; --s-3:8px; --s-4:12px;
+  --s-5:16px; --s-6:20px; --s-8:24px; --s-9:28px; --s-10:32px; --s-12:48px;
+
+  /* ── Radius ───────────────────────────────────────────── */
+  --r-sm:4px; --r-md:6px; --r-base:8px; --r-lg:10px; --r-xl:14px; --r-2xl:20px; --r-pill:999px;
+
+  /* ── Shadows ──────────────────────────────────────────── */
+  --sh-1:0 1px 2px rgba(15,20,30,.04), 0 1px 1px rgba(15,20,30,.03);
+  --sh-2:0 4px 12px rgba(15,20,30,.06), 0 2px 4px rgba(15,20,30,.04);
+  --sh-3:0 12px 32px rgba(15,20,30,.10), 0 4px 8px rgba(15,20,30,.05);
+
+  /* ── Typography ───────────────────────────────────────── */
+  --font-sans:'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:'JetBrains Mono', ui-monospace, monospace;
+  /* Mode "form" (default): */
+  --fs-xs:11px; --fs-sm:12px; --fs-base:13px; --fs-md:14px;
+  --fs-lg:15px; --fs-xl:17px; --fs-2xl:20px; --fs-3xl:24px;
+
+  /* ── Motion ───────────────────────────────────────────── */
+  --duration-fast:120ms; --duration-base:160ms; --duration-slow:260ms;
+  --easing-standard:cubic-bezier(.4,0,.2,1);
+  --easing-in:cubic-bezier(.4,0,1,1);
+  --easing-out:cubic-bezier(0,0,.2,1);
+
+  /* ── SEMANTIC: Backgrounds ───────────────────────────── */
+  --bg-app:var(--gray-100);
+  --bg-surface:var(--gray-0);
+  --bg-subtle:var(--gray-50);
+  --bg-sunken:var(--gray-100);
+  --bg-emphasis:var(--gray-150);
+  --bg-hover:var(--gray-100);
+  --bg-active:var(--gray-150);
+
+  /* ── SEMANTIC: Text ──────────────────────────────────── */
+  --text-default:var(--gray-900);
+  --text-muted:var(--gray-500);
+  --text-subtle:var(--gray-400);
+  --text-inverse:var(--gray-0);
+  --text-brand:var(--trouw-600);
+
+  /* ── SEMANTIC: Borders ───────────────────────────────── */
+  --border-default:var(--gray-200);
+  --border-strong:var(--gray-300);
+  --border-subtle:var(--gray-150);
+  --border-focus:var(--trouw-500);
+
+  /* ── SEMANTIC: Primary & Feedback ────────────────────── */
+  --primary:var(--trouw-500);
+  --primary-hover:var(--trouw-600);
+  --primary-soft:var(--trouw-100);
+  --primary-soft-strong:rgba(46,91,255,.20);
+
+  --feedback-danger:var(--danger-500);       --feedback-danger-soft:var(--danger-100);
+  --feedback-warn:var(--warn-500);           --feedback-warn-soft:var(--warn-100);
+  --feedback-ok:var(--ok-500);               --feedback-ok-soft:var(--ok-100);
+  --feedback-info:var(--info-500);           --feedback-info-soft:var(--info-100);
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{
+  font-family:var(--font-sans);
+  font-size:var(--fs-base);
+  color:var(--text-default);
+  background:var(--bg-app);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;color:inherit}
+
+/* ============================================================
+   SHELL — sidebar compacta + main
+   ============================================================ */
+.shell{display:grid;grid-template-columns:52px 1fr;height:100vh;overflow:hidden}
+
+.sidebar{
+  background:var(--bg-surface);
+  border-right:1px solid var(--border-default);
+  padding:var(--s-4) 0;display:flex;flex-direction:column;
+  align-items:center;gap:var(--s-1);
+}
+.sidebar-logo{
+  width:36px;height:36px;margin-bottom:var(--s-3);
+  display:flex;align-items:center;justify-content:center;
+}
+.sidebar-logo img{width:100%;height:100%;object-fit:contain}
+.sidebar-btn{
+  width:36px;height:36px;border:none;background:transparent;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:var(--r-md);color:var(--text-muted);
+  transition:background var(--duration-fast) var(--easing-standard),
+             color var(--duration-fast) var(--easing-standard);
+  font-size:15px;
+}
+.sidebar-btn:hover{background:var(--bg-hover);color:var(--text-default)}
+.sidebar-btn[aria-current="page"]{
+  background:var(--primary-soft);color:var(--primary);
+}
+
+.main{display:grid;grid-template-rows:auto auto 1fr auto;overflow:hidden;background:var(--bg-app)}
+
+/* ============================================================
+   TOPBAR — breadcrumb + ações
+   ============================================================ */
+.topbar{
+  display:flex;align-items:center;gap:var(--s-3);
+  padding:var(--s-3) var(--s-6);
+  background:var(--bg-surface);
+  border-bottom:1px solid var(--border-default);
+  min-height:48px;
+}
+.breadcrumb{display:flex;align-items:center;gap:var(--s-2);font-size:var(--fs-base);color:var(--text-muted)}
+.breadcrumb-current{color:var(--text-default);font-weight:600}
+.breadcrumb-sep{color:var(--text-subtle)}
+.topbar-spacer{flex:1}
+.client-pill{
+  display:inline-flex;align-items:center;gap:var(--s-2);
+  padding:var(--s-2) var(--s-3);
+  background:var(--bg-subtle);
+  border:1px solid var(--border-subtle);
+  border-radius:var(--r-pill);
+  font-size:var(--fs-sm);font-weight:600;color:var(--text-default);
+}
+.client-pill-dot{width:8px;height:8px;border-radius:var(--r-pill);background:var(--op-kellux)}
+
+/* ============================================================
+   STEPPER — wizard topo
+   ============================================================ */
+.stepper{
+  display:flex;align-items:center;gap:var(--s-3);
+  padding:var(--s-4) var(--s-6);
+  background:var(--bg-surface);
+  border-bottom:1px solid var(--border-default);
+  overflow-x:auto;
+}
+.step{display:flex;align-items:center;gap:var(--s-3);flex-shrink:0}
+.step-circle{
+  width:28px;height:28px;border-radius:var(--r-pill);
+  display:flex;align-items:center;justify-content:center;
+  font-size:var(--fs-sm);font-weight:700;
+  background:var(--bg-sunken);color:var(--text-muted);
+  border:1px solid var(--border-default);
+  transition:all var(--duration-base) var(--easing-standard);
+}
+.step[data-state="active"] .step-circle{
+  background:var(--primary);color:var(--text-inverse);border-color:var(--primary);
+  box-shadow:0 0 0 3px var(--primary-soft);
+}
+.step[data-state="complete"] .step-circle{
+  background:var(--feedback-ok);color:var(--text-inverse);border-color:var(--feedback-ok);
+}
+.step-info{display:flex;flex-direction:column;line-height:1.2}
+.step-label{
+  font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.06em;
+  color:var(--text-subtle);font-weight:700;margin:0;
+}
+.step-name{font-size:var(--fs-sm);font-weight:600;margin:0;color:var(--text-muted);white-space:nowrap}
+.step[data-state="active"] .step-name{color:var(--text-default)}
+.step-line{
+  flex:1;min-width:24px;height:1px;background:var(--border-default);
+}
+
+/* ============================================================
+   WIZARD CONTENT
+   ============================================================ */
+.wizard-content{overflow-y:auto;padding:var(--s-6) var(--s-6) var(--s-10)}
+.wizard-inner{max-width:960px;margin:0 auto}
+
+.step-header{margin-bottom:var(--s-6)}
+.step-title{
+  font-size:var(--fs-3xl);font-weight:700;
+  margin:0 0 var(--s-2);letter-spacing:-.02em;color:var(--text-default);
+}
+.step-desc{
+  font-size:var(--fs-md);color:var(--text-muted);
+  margin:0;max-width:640px;line-height:1.55;
+}
+.step-desc strong{color:var(--text-default);font-weight:600}
+
+/* ============================================================
+   ACCORDION — novo no DS v17 (promovido do cadastro-v7)
+   ============================================================ */
+.accordion{
+  background:var(--bg-surface);
+  border:1px solid var(--border-default);
+  border-radius:var(--r-base);
+  margin-bottom:var(--s-4);
+  overflow:hidden;
+  transition:border-color var(--duration-base) var(--easing-standard);
+}
+.accordion:hover{border-color:var(--border-strong)}
+.accordion-header{
+  display:flex;align-items:center;gap:var(--s-4);
+  padding:var(--s-5);cursor:pointer;width:100%;
+  background:transparent;border:none;text-align:left;
+  font-family:inherit;color:inherit;
+}
+.accordion-icon{
+  width:36px;height:36px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg-subtle);border-radius:var(--r-md);
+  font-size:18px;
+}
+.accordion-info{flex:1;min-width:0}
+.accordion-title{
+  font-size:var(--fs-md);font-weight:700;margin:0;
+  display:flex;align-items:center;gap:var(--s-2);line-height:1.3;
+  color:var(--text-default);
+}
+.accordion-meta{
+  font-size:var(--fs-xs);color:var(--text-muted);
+  margin:2px 0 0;line-height:1.3;
+}
+.accordion-status{
+  display:inline-flex;align-items:center;gap:var(--s-2);
+  padding:var(--s-1) var(--s-3);border-radius:var(--r-pill);
+  font-size:var(--fs-xs);font-weight:600;
+  background:var(--feedback-warn-soft);color:var(--warn-700);
+  border:1px solid rgba(232,154,26,.25);
+}
+.accordion-status.complete{
+  background:var(--feedback-ok-soft);color:var(--ok-500);
+  border-color:rgba(31,158,92,.25);
+}
+.accordion-chevron{
+  width:20px;height:20px;flex-shrink:0;color:var(--text-subtle);
+  transition:transform var(--duration-base) var(--easing-standard);
+}
+.accordion[data-state="open"] .accordion-chevron{transform:rotate(180deg)}
+.accordion-body{
+  padding:0 var(--s-5) var(--s-5);
+  display:none;
+}
+.accordion[data-state="open"] .accordion-body{display:block}
+
+/* ============================================================
+   FORM SYSTEM — novo no DS v17 (promovido do cadastro-v7)
+   ============================================================ */
+.form-grid{display:grid;gap:var(--s-4)}
+.form-grid-2{grid-template-columns:1fr 1fr}
+.form-grid-3{grid-template-columns:repeat(3,1fr)}
+.form-grid-4{grid-template-columns:repeat(4,1fr)}
+.col-span-2{grid-column:span 2}
+.col-span-3{grid-column:span 3}
+.col-span-full{grid-column:1/-1}
+
+.form-field{display:flex;flex-direction:column;gap:var(--s-2);min-width:0}
+.form-label{
+  font-size:var(--fs-sm);font-weight:600;color:var(--text-default);
+  display:flex;align-items:center;gap:var(--s-2);
+}
+.form-hint{font-size:var(--fs-xs);color:var(--text-muted);line-height:1.4;margin-top:2px}
+.req{color:var(--feedback-danger);font-weight:700}
+.opt{
+  font-size:var(--fs-xs);color:var(--text-subtle);font-weight:500;
+  text-transform:uppercase;letter-spacing:.04em;
+}
+
+/* Input / Select — já formalizado no DS v16, refinado em v17 */
+.input,.select{
+  width:100%;height:36px;
+  padding:0 var(--s-3);
+  background:var(--bg-surface);
+  border:1px solid var(--border-default);
+  border-radius:var(--r-md);
+  font-size:var(--fs-base);color:var(--text-default);
+  transition:border-color var(--duration-fast) var(--easing-standard),
+             box-shadow var(--duration-fast) var(--easing-standard);
+  outline:none;
+}
+.input:hover,.select:hover{border-color:var(--border-strong)}
+.input:focus,.select:focus{
+  border-color:var(--border-focus);
+  box-shadow:0 0 0 3px var(--primary-soft);
+}
+.input::placeholder{color:var(--text-subtle)}
+.select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239AA2AE' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+
+/* Unit input (input com sufixo) */
+.unit-input{
+  display:flex;align-items:center;
+  background:var(--bg-surface);
+  border:1px solid var(--border-default);
+  border-radius:var(--r-md);
+  transition:border-color var(--duration-fast) var(--easing-standard),
+             box-shadow var(--duration-fast) var(--easing-standard);
+}
+.unit-input:focus-within{
+  border-color:var(--border-focus);
+  box-shadow:0 0 0 3px var(--primary-soft);
+}
+.unit-input input{
+  flex:1;border:none;background:transparent;outline:none;
+  height:34px;padding:0 var(--s-3);font-size:var(--fs-base);
+}
+.unit-input .unit{
+  padding:0 var(--s-3);color:var(--text-muted);font-size:var(--fs-sm);
+  border-left:1px solid var(--border-subtle);height:22px;
+  display:flex;align-items:center;
+}
+
+/* Radio Card — novo no DS v17 */
+.radio-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3)}
+.radio-card{
+  display:flex;flex-direction:column;gap:var(--s-1);
+  padding:var(--s-4) var(--s-5);
+  background:var(--bg-surface);
+  border:1.5px solid var(--border-default);
+  border-radius:var(--r-md);
+  cursor:pointer;
+  transition:border-color var(--duration-fast) var(--easing-standard),
+             background var(--duration-fast) var(--easing-standard);
+}
+.radio-card:hover{border-color:var(--border-strong);background:var(--bg-subtle)}
+.radio-card input[type="radio"]{display:none}
+.radio-card[data-selected="true"]{
+  border-color:var(--primary);background:var(--primary-soft);
+}
+.radio-card-title{font-size:var(--fs-sm);font-weight:700;color:var(--text-default);line-height:1.3}
+.radio-card-desc{font-size:var(--fs-xs);color:var(--text-muted);line-height:1.4}
+
+/* Filial list */
+.filial-list{display:flex;flex-direction:column;gap:var(--s-3);margin-top:var(--s-3)}
+.filial-row{display:flex;gap:var(--s-3);align-items:center}
+.filial-row .input,.filial-row .select{height:30px;font-size:var(--fs-sm)}
+.filial-empty{
+  padding:var(--s-4);background:var(--bg-sunken);border-radius:var(--r-sm);
+  text-align:center;color:var(--text-muted);font-size:var(--fs-sm);font-style:italic;
+}
+.input-sm,.select-sm{height:28px;font-size:var(--fs-xs);padding:0 var(--s-2)}
+.select-sm{padding-right:22px;background-position:right 6px center}
+
+/* Feedback callout — pattern inline reutilizável */
+.callout-info{
+  padding:var(--s-3);background:var(--feedback-info-soft);
+  border-radius:var(--r-md);font-size:var(--fs-sm);
+  display:flex;gap:var(--s-2);align-items:flex-start;
+  color:var(--text-default);margin-bottom:var(--s-3);
+}
+.callout-info-ico{font-size:14px;flex-shrink:0;line-height:1.4}
+
+/* ============================================================
+   BUTTON — já existe no DS v16, refinado v17
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s-2);
+  height:36px;padding:0 var(--s-5);
+  border:1px solid transparent;
+  border-radius:var(--r-md);
+  font-size:var(--fs-sm);font-weight:600;
+  transition:background var(--duration-fast) var(--easing-standard),
+             border-color var(--duration-fast) var(--easing-standard),
+             color var(--duration-fast) var(--easing-standard);
+  outline:none;
+}
+.btn:focus-visible{box-shadow:0 0 0 3px var(--primary-soft)}
+.btn-primary{background:var(--primary);color:var(--text-inverse);border-color:var(--primary)}
+.btn-primary:hover{background:var(--primary-hover);border-color:var(--primary-hover)}
+.btn-secondary{background:var(--bg-surface);color:var(--text-default);border-color:var(--border-default)}
+.btn-secondary:hover{background:var(--bg-subtle);border-color:var(--border-strong)}
+.btn-ghost{background:transparent;color:var(--text-muted);border-color:transparent}
+.btn-ghost:hover{background:var(--bg-hover);color:var(--text-default)}
+.btn-sm{height:30px;font-size:var(--fs-xs);padding:0 var(--s-4)}
+.btn-xs{height:24px;font-size:var(--fs-xs);padding:0 var(--s-3)}
+.btn-icon{padding:0;width:36px;height:36px}
+.btn-danger-text:hover{color:var(--feedback-danger);background:var(--feedback-danger-soft)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ============================================================
+   WIZARD FOOTER — navegação entre steps
+   ============================================================ */
+.wizard-footer{
+  display:flex;align-items:center;gap:var(--s-3);
+  padding:var(--s-4) var(--s-6);
+  background:var(--bg-surface);
+  border-top:1px solid var(--border-default);
+}
+.wizard-footer-spacer{flex:1}
+.footer-hint{font-size:var(--fs-xs);color:var(--text-subtle)}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- ═══════════════════════ SIDEBAR ═══════════════════════ -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="pin-trouw.png" alt="Trouw">
+    </div>
+    <button class="sidebar-btn" title="Dashboard"><i class="fas fa-gauge"></i></button>
+    <button class="sidebar-btn" title="SMs"><i class="fas fa-truck-fast"></i></button>
+    <button class="sidebar-btn" aria-current="page" title="Cadastros"><i class="fas fa-folder-plus"></i></button>
+    <button class="sidebar-btn" title="Relatórios"><i class="fas fa-chart-line"></i></button>
+  </aside>
+
+  <!-- ═══════════════════════ MAIN ═══════════════════════ -->
+  <main class="main">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <nav class="breadcrumb">
+        <span>Cadastros</span>
+        <span class="breadcrumb-sep">/</span>
+        <span>Clientes</span>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Novo cliente</span>
+      </nav>
+      <div class="topbar-spacer"></div>
+      <div class="client-pill">
+        <span class="client-pill-dot"></span>
+        Novo cadastro · rascunho
+      </div>
+      <button class="btn btn-ghost btn-sm"><i class="fas fa-xmark"></i> Cancelar</button>
+    </div>
+
+    <!-- STEPPER -->
+    <div class="stepper" role="tablist" aria-label="Etapas do cadastro">
+      <div class="step" data-state="active">
+        <div class="step-circle">1</div>
+        <div class="step-info">
+          <p class="step-label">Etapa 1</p>
+          <p class="step-name">Cliente</p>
+        </div>
+      </div>
+      <div class="step-line"></div>
+      <div class="step" data-state="pending">
+        <div class="step-circle">2</div>
+        <div class="step-info">
+          <p class="step-label">Etapa 2</p>
+          <p class="step-name">Usuários</p>
+        </div>
+      </div>
+      <div class="step-line"></div>
+      <div class="step" data-state="pending">
+        <div class="step-circle">3</div>
+        <div class="step-info">
+          <p class="step-label">Etapa 3</p>
+          <p class="step-name">Operação</p>
+        </div>
+      </div>
+      <div class="step-line"></div>
+      <div class="step" data-state="pending">
+        <div class="step-circle">4</div>
+        <div class="step-info">
+          <p class="step-label">Etapa 4</p>
+          <p class="step-name">Integração</p>
+        </div>
+      </div>
+      <div class="step-line"></div>
+      <div class="step" data-state="pending">
+        <div class="step-circle">5</div>
+        <div class="step-info">
+          <p class="step-label">Etapa 5</p>
+          <p class="step-name">SLAs</p>
+        </div>
+      </div>
+      <div class="step-line"></div>
+      <div class="step" data-state="pending">
+        <div class="step-circle">6</div>
+        <div class="step-info">
+          <p class="step-label">Etapa 6</p>
+          <p class="step-name">Revisão</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTEÚDO DO STEP -->
+    <div class="wizard-content">
+      <div class="wizard-inner">
+        <header class="step-header">
+          <h1 class="step-title">Cadastro do cliente</h1>
+          <p class="step-desc">
+            Dados cadastrais, contrato e contato comercial. O cadastro de
+            <strong>usuários com acesso ao sistema</strong> é feito na próxima etapa.
+            Campos obrigatórios estão marcados com <span class="req">*</span>.
+          </p>
+        </header>
+
+        <!-- ══════════ ACCORDION 1 · Identificação ══════════ -->
+        <div class="accordion" data-state="open">
+          <button class="accordion-header" type="button">
+            <div class="accordion-icon">🏢</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Identificação da empresa</h3>
+              <p class="accordion-meta">Kellux Indústrias S.A. · 12.345.678/0001-90</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+
+          <div class="accordion-body">
+            <div class="form-grid form-grid-2">
+              <div class="form-field col-span-2">
+                <label class="form-label">Razão Social <span class="req">*</span></label>
+                <input class="input" data-bind="razaoSocial" value="Kellux Indústrias S.A." placeholder="Kellux Indústrias S.A.">
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Nome Fantasia <span class="req">*</span></label>
+                <input class="input" data-bind="nomeFantasia" value="Kellux" placeholder="Kellux">
+                <span class="form-hint">Aparece nos cards e relatórios.</span>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">CNPJ <span class="req">*</span></label>
+                <input class="input" data-bind="cnpj" value="12.345.678/0001-90" placeholder="00.000.000/0001-00">
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Segmento <span class="req">*</span></label>
+                <select class="select" data-bind="segmento">
+                  <option value="">Selecione…</option>
+                  <option value="industria" selected>Indústria</option>
+                  <option value="fmcg">FMCG (bens de consumo)</option>
+                  <option value="agro">Agronegócio</option>
+                  <option value="varejo">Varejo / E-commerce</option>
+                  <option value="farma">Farmacêutico</option>
+                  <option value="outros">Outros</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Porte <span class="opt">opcional</span></label>
+                <select class="select" data-bind="porte">
+                  <option value="">—</option>
+                  <option value="pme">PME</option>
+                  <option value="medio">Médio</option>
+                  <option value="grande" selected>Grande</option>
+                  <option value="corporate">Corporate</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Cidade matriz</label>
+                <input class="input" data-bind="enderecoCidade" value="São Paulo" placeholder="São Paulo">
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">UF</label>
+                <select class="select" data-bind="enderecoUf">
+                  <option value="">—</option>
+                  <option value="SP" selected>SP</option>
+                  <option value="RJ">RJ</option>
+                  <option value="MG">MG</option>
+                  <option value="RS">RS</option>
+                  <option value="PR">PR</option>
+                  <option value="SC">SC</option>
+                  <option value="BA">BA</option>
+                  <option value="GO">GO</option>
+                  <option value="DF">DF</option>
+                  <option value="PE">PE</option>
+                  <option value="CE">CE</option>
+                  <option value="ES">ES</option>
+                  <option value="PA">PA</option>
+                  <option value="MT">MT</option>
+                  <option value="MS">MS</option>
+                </select>
+              </div>
+
+              <div class="form-field col-span-2">
+                <label class="form-label">CD/Hub principal</label>
+                <input class="input" data-bind="hub" value="CD São Paulo Sul" placeholder="Ex: CD São Paulo Sul">
+                <span class="form-hint">Centro de distribuição de origem padrão das viagens.</span>
+              </div>
+
+              <!-- ALT-02 · Estrutura societária -->
+              <div class="form-field col-span-2" style="padding-top:var(--s-4);border-top:1px solid var(--border-subtle);margin-top:var(--s-2)">
+                <label class="form-label">Estrutura societária</label>
+                <div class="radio-row">
+                  <label class="radio-card" data-selected="true">
+                    <input type="radio" name="estrSoc" value="matriz" checked>
+                    <span class="radio-card-title">Apenas Matriz</span>
+                    <span class="radio-card-desc">Um único CNPJ. Todas as SMs originam dele.</span>
+                  </label>
+                  <label class="radio-card" data-selected="false">
+                    <input type="radio" name="estrSoc" value="matriz_filiais">
+                    <span class="radio-card-title">Matriz + Filiais</span>
+                    <span class="radio-card-desc">Múltiplos CNPJs. Filiais viram filtro dimensional na torre.</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Bloco condicional: só aparece quando "Matriz + Filiais" selecionado -->
+              <div class="form-field col-span-2" id="filiaisBlock" style="margin-top:var(--s-1);display:none">
+                <label class="form-label">Filiais <span class="opt" id="filiaisCount">0 cadastrada(s)</span></label>
+                <div class="filial-list" id="filialList">
+                  <div class="filial-empty">Nenhuma filial cadastrada. Adicione pelo menos 1 abaixo.</div>
+                </div>
+                <button class="btn btn-secondary btn-sm" style="margin-top:var(--s-3);align-self:flex-start" type="button" onclick="addFilial()">
+                  <i class="fas fa-plus"></i> Adicionar filial
+                </button>
+                <span class="form-hint">Cada filial herda os dados da matriz por padrão. Disponíveis como filtro dimensional na torre (D-080).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════ ACCORDION 2 · Contrato e SLAs ══════════ -->
+        <div class="accordion">
+          <button class="accordion-header" type="button" onclick="this.parentElement.dataset.state = this.parentElement.dataset.state === 'open' ? 'closed' : 'open'">
+            <div class="accordion-icon">📋</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Contrato e SLAs</h3>
+              <p class="accordion-meta">OTIF Target 90% · Faturamento mensal</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+            <div class="form-grid form-grid-3">
+              <div class="form-field">
+                <label class="form-label">Início do contrato <span class="req">*</span></label>
+                <input type="date" class="input" data-bind="contratoInicio" value="2025-01-01">
+              </div>
+              <div class="form-field">
+                <label class="form-label">Fim do contrato</label>
+                <input type="date" class="input" data-bind="contratoFim" value="">
+                <span class="form-hint">Vazio = indeterminado.</span>
+              </div>
+              <div class="form-field">
+                <label class="form-label">OTIF Target (%) <span class="req">*</span></label>
+                <div class="unit-input">
+                  <input type="number" data-bind="otifTarget" value="90" min="0" max="100">
+                  <span class="unit">%</span>
+                </div>
+                <span class="form-hint">Meta contratual. Alimenta o farol OTIF (D-070).</span>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Modelo de cobrança</label>
+                <select class="select" data-bind="faturamentoCobranca">
+                  <option value="mensal" selected>Mensal (assinatura)</option>
+                  <option value="por_sm">Por SM monitorada</option>
+                  <option value="hibrido">Híbrido (fixo + variável)</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Moeda</label>
+                <select class="select" data-bind="moeda">
+                  <option value="BRL" selected>BRL — Real</option>
+                  <option value="USD">USD — Dólar</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════ ACCORDION 3 · Contato ══════════ -->
+        <div class="accordion">
+          <button class="accordion-header" type="button" onclick="this.parentElement.dataset.state = this.parentElement.dataset.state === 'open' ? 'closed' : 'open'">
+            <div class="accordion-icon">👤</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Contato comercial principal</h3>
+              <p class="accordion-meta">Ana Lima · ana@kellux.com.br</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+            <div class="callout-info">
+              <span class="callout-info-ico">💡</span>
+              <div>Este contato é <strong>apenas referência comercial</strong>. Para dar acesso ao sistema, cadastre a pessoa como usuário na <strong>Etapa 2</strong>.</div>
+            </div>
+            <div class="form-grid form-grid-2">
+              <div class="form-field">
+                <label class="form-label">Nome <span class="req">*</span></label>
+                <input class="input" data-bind="contatoNome" value="Ana Lima" placeholder="Maria Silva">
+              </div>
+              <div class="form-field">
+                <label class="form-label">Cargo</label>
+                <input class="input" data-bind="contatoCargo" value="Gerente de Logística" placeholder="Diretora Comercial">
+              </div>
+              <div class="form-field">
+                <label class="form-label">E-mail <span class="req">*</span></label>
+                <input type="email" class="input" data-bind="contatoEmail" value="ana@kellux.com.br" placeholder="maria@empresa.com">
+              </div>
+              <div class="form-field">
+                <label class="form-label">Telefone</label>
+                <input class="input" data-bind="contatoTelefone" value="(11) 98765-4321" placeholder="(11) 99999-9999">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER DO WIZARD -->
+    <footer class="wizard-footer">
+      <span class="footer-hint"><i class="fas fa-floppy-disk" style="margin-right:var(--s-2);color:var(--text-subtle)"></i>Rascunho salvo automaticamente</span>
+      <div class="wizard-footer-spacer"></div>
+      <button class="btn btn-ghost">Cancelar</button>
+      <button class="btn btn-secondary" disabled>Voltar</button>
+      <button class="btn btn-primary">Continuar <i class="fas fa-arrow-right"></i></button>
+    </footer>
+  </main>
+</div>
+
+<script>
+/* Toggle accordion (os que não têm inline handler) */
+document.querySelectorAll('.accordion').forEach(acc => {
+  const header = acc.querySelector('.accordion-header');
+  if (!header.hasAttribute('onclick')) {
+    header.addEventListener('click', () => {
+      acc.dataset.state = acc.dataset.state === 'open' ? 'closed' : 'open';
+    });
+  }
+});
+
+/* Radio cards — estrutura societária */
+document.querySelectorAll('.radio-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.radio-card').forEach(c => c.dataset.selected = 'false');
+    card.dataset.selected = 'true';
+    const radio = card.querySelector('input[type="radio"]');
+    if (radio) radio.checked = true;
+    /* Mostra/esconde bloco de filiais conforme seleção */
+    const filiaisBlock = document.getElementById('filiaisBlock');
+    if (radio && radio.value === 'matriz_filiais') {
+      filiaisBlock.style.display = '';
+      /* Se lista vazia, já adiciona uma linha em branco (comportamento do v7) */
+      if (state.filiais.length === 0) addFilial();
+    } else {
+      filiaisBlock.style.display = 'none';
+    }
+  });
+});
+
+/* Estado leve das filiais (espelha state.data.cliente.filiais do v7) */
+const state = { filiais: [] };
+const UF_LIST = ['SP','RJ','MG','RS','PR','SC','BA','GO','DF','PE','CE','ES','PA','MT','MS'];
+
+function renderFiliais(){
+  const list = document.getElementById('filialList');
+  const count = document.getElementById('filiaisCount');
+  count.textContent = `${state.filiais.length} cadastrada(s)`;
+  if (state.filiais.length === 0){
+    list.innerHTML = `<div class="filial-empty">Nenhuma filial cadastrada. Adicione pelo menos 1 abaixo.</div>`;
+    return;
+  }
+  list.innerHTML = state.filiais.map((f, i) => `
+    <div class="filial-row">
+      <input class="input input-sm" value="${f.cnpj||''}" placeholder="CNPJ da filial" onchange="updateFilial(${i},'cnpj',this.value)" style="flex:2">
+      <input class="input input-sm" value="${f.cidade||''}" placeholder="Cidade" onchange="updateFilial(${i},'cidade',this.value)" style="flex:2">
+      <select class="select select-sm" onchange="updateFilial(${i},'uf',this.value)" style="width:70px">
+        <option value="">UF</option>
+        ${UF_LIST.map(uf => `<option ${f.uf===uf?'selected':''} value="${uf}">${uf}</option>`).join('')}
+      </select>
+      <button class="btn btn-ghost btn-xs btn-danger-text" type="button" onclick="removeFilial(${i})" title="Remover filial" style="padding:0;width:28px;height:28px">×</button>
+    </div>
+  `).join('');
+}
+function addFilial(){ state.filiais.push({cnpj:'', cidade:'', uf:''}); renderFiliais(); }
+function removeFilial(i){ state.filiais.splice(i, 1); renderFiliais(); }
+function updateFilial(i, key, val){ state.filiais[i][key] = val; }
+</script>
+
+</body>
+</html>
