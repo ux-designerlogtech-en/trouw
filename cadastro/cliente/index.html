@@ -49,10 +49,22 @@
   }
 
   .grid{
-    display:grid;grid-template-columns:repeat(2,1fr);
+    display:grid;grid-template-columns:repeat(3,1fr);
     gap:var(--s-5);margin-top:var(--s-10);
   }
-  @media (max-width:720px){ .grid{grid-template-columns:1fr} }
+  @media (max-width:980px){ .grid{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:620px){ .grid{grid-template-columns:1fr} }
+
+  .section-title{
+    grid-column:1/-1;
+    font-size:var(--fs-xs);color:var(--text-subtle);
+    text-transform:uppercase;letter-spacing:.08em;
+    font-weight:var(--fw-bold);
+    margin-top:var(--s-3);
+    padding-bottom:var(--s-2);
+    border-bottom:1px solid var(--border-subtle);
+  }
+  .section-title:first-child{margin-top:0}
 
   .card{
     background:var(--bg-surface);
@@ -103,6 +115,18 @@
     background:var(--bg-subtle);color:var(--text-muted);
   }
   .card.variant-archive:hover{border-color:var(--border-strong)}
+  .card.variant-review .card-ico{
+    background:rgba(22,163,74,.10);color:var(--feedback-success);
+  }
+  .card-foot{
+    margin-top:auto;padding-top:var(--s-3);
+    display:flex;justify-content:space-between;align-items:center;
+    border-top:1px solid var(--border-subtle);
+  }
+  .card-kind-mini{
+    font-size:10px;color:var(--text-subtle);
+    text-transform:uppercase;letter-spacing:.08em;font-weight:var(--fw-bold);
+  }
 
   footer{
     margin-top:64px;padding-top:var(--s-6);
@@ -138,27 +162,93 @@
 
   <main class="grid">
 
+    <div class="section-title">Wizard de cadastro · 6 passos</div>
+
     <a href="/cadastro/cliente/steps/step-1-identificacao" class="card">
       <div class="card-ico"><i class="fas fa-id-card"></i></div>
-      <div class="card-kind">Wizard · Passo 1 / 6</div>
-      <div class="card-title">Identificação do cliente</div>
+      <div class="card-kind">Passo 1 / 6</div>
+      <div class="card-title">Identificação</div>
       <p class="card-desc">
-        Dados cadastrais, contrato, SLAs, contato comercial e filiais.
-        Demonstra Form Grid, Accordion, Radio Card, Unit Input, Callout.
+        Dados cadastrais, contrato, SLAs base, contato comercial e filiais.
+        Form Grid, Accordion, Radio Card, Unit Input, Callout.
       </p>
-      <span class="card-cta">Abrir tela <i class="fas fa-arrow-right"></i></span>
+      <div class="card-foot">
+        <span class="card-kind-mini">Wizard</span>
+        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+      </div>
     </a>
 
     <a href="/cadastro/cliente/steps/step-2-usuarios" class="card">
       <div class="card-ico"><i class="fas fa-users"></i></div>
-      <div class="card-kind">Wizard · Passo 2 / 6</div>
-      <div class="card-title">Usuários do cliente</div>
+      <div class="card-kind">Passo 2 / 6</div>
+      <div class="card-title">Usuários</div>
       <p class="card-desc">
         Convite de usuários, funções, chips de filial e matriz de permissões.
-        Demonstra Data Table, Role Badge, Modal, Perm Matrix, Chip Multi.
+        Data Table, Role Badge, Modal, Perm Matrix, Chip Multi.
       </p>
-      <span class="card-cta">Abrir tela <i class="fas fa-arrow-right"></i></span>
+      <div class="card-foot">
+        <span class="card-kind-mini">Wizard</span>
+        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+      </div>
     </a>
+
+    <a href="/cadastro/cliente/steps/step-3-operacao" class="card">
+      <div class="card-ico"><i class="fas fa-truck"></i></div>
+      <div class="card-kind">Passo 3 / 6</div>
+      <div class="card-title">Operação</div>
+      <p class="card-desc">
+        Modais, veículos, tipos de carga, restrições, cobertura geográfica e
+        janelas de coleta/entrega. Switch, Chips Multi, Radio Card.
+      </p>
+      <div class="card-foot">
+        <span class="card-kind-mini">Wizard</span>
+        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+      </div>
+    </a>
+
+    <a href="/cadastro/cliente/steps/step-4-integracao" class="card">
+      <div class="card-ico"><i class="fas fa-plug"></i></div>
+      <div class="card-kind">Passo 4 / 6</div>
+      <div class="card-title">Integração</div>
+      <p class="card-desc">
+        Canal (API/EDI/Portal/Upload), webhooks, sincronização e teste
+        de conexão. Webhook Table, Check Grid, Conditional Panel, Mono Input.
+      </p>
+      <div class="card-foot">
+        <span class="card-kind-mini">Wizard</span>
+        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+      </div>
+    </a>
+
+    <a href="/cadastro/cliente/steps/step-5-slas" class="card">
+      <div class="card-ico"><i class="fas fa-gauge-high"></i></div>
+      <div class="card-kind">Passo 5 / 6</div>
+      <div class="card-title">SLAs</div>
+      <p class="card-desc">
+        Metas OTIF/OTD/OTP, penalidades editáveis por severidade, alertas
+        preventivos e relatórios. KPI Grid, Penalty Table, Severity Tag.
+      </p>
+      <div class="card-foot">
+        <span class="card-kind-mini">Wizard</span>
+        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+      </div>
+    </a>
+
+    <a href="/cadastro/cliente/steps/step-6-revisao" class="card variant-review">
+      <div class="card-ico"><i class="fas fa-clipboard-check"></i></div>
+      <div class="card-kind">Passo 6 / 6</div>
+      <div class="card-title">Revisão &amp; envio</div>
+      <p class="card-desc">
+        Checklist de completude, resumos expansíveis por etapa, observações
+        finais e aceite. Summary Card, Checklist Grid, KV Grid, Mini Table.
+      </p>
+      <div class="card-foot">
+        <span class="card-kind-mini">Wizard · Final</span>
+        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+      </div>
+    </a>
+
+    <div class="section-title">Documentação &amp; referência</div>
 
     <a href="/cadastro/cliente/docs/showcase-v17" class="card variant-docs">
       <div class="card-ico"><i class="fas fa-book-open"></i></div>
@@ -168,7 +258,10 @@
         Componentes promovidos do cadastro: Stepper, Accordion, Form Field,
         Data Table, Modal, Chip Multi, Role Badge, Status Dot, Callout, Avatar.
       </p>
-      <span class="card-cta">Abrir showcase <i class="fas fa-arrow-right"></i></span>
+      <div class="card-foot">
+        <span class="card-kind-mini">Docs</span>
+        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+      </div>
     </a>
 
     <a href="/cadastro/cliente/docs/showcase-v16" class="card variant-archive">
@@ -179,7 +272,10 @@
         Versão anterior derivada da Torre Operacional v2_85. Mantido como
         referência durante a migração. Tokens <code>--neutral-*</code>.
       </p>
-      <span class="card-cta">Abrir histórico <i class="fas fa-arrow-right"></i></span>
+      <div class="card-foot">
+        <span class="card-kind-mini">Arquivo</span>
+        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+      </div>
     </a>
 
   </main>

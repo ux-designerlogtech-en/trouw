@@ -21,7 +21,11 @@ trouw/
 │       ├── index.html             ← hub do cadastro cliente
 │       ├── steps/
 │       │   ├── step-1-identificacao.html
-│       │   └── step-2-usuarios.html
+│       │   ├── step-2-usuarios.html
+│       │   ├── step-3-operacao.html
+│       │   ├── step-4-integracao.html
+│       │   ├── step-5-slas.html
+│       │   └── step-6-revisao.html
 │       └── docs/
 │           ├── showcase-v17.html  ← showcase dos componentes v17
 │           └── showcase-v16.html  ← showcase v16 histórico
@@ -43,6 +47,10 @@ trouw/
 | `/cadastro/cliente/` | Hub do cadastro de cliente |
 | `/cadastro/cliente/steps/step-1-identificacao` | Wizard passo 1 — identificação, contrato, SLA, contato, filiais |
 | `/cadastro/cliente/steps/step-2-usuarios` | Wizard passo 2 — usuários, funções, permissões |
+| `/cadastro/cliente/steps/step-3-operacao` | Wizard passo 3 — modais, veículos, restrições, cobertura, janelas |
+| `/cadastro/cliente/steps/step-4-integracao` | Wizard passo 4 — canal, webhooks, sincronização, teste de conexão |
+| `/cadastro/cliente/steps/step-5-slas` | Wizard passo 5 — metas OTIF/OTD, penalidades, alertas, relatórios |
+| `/cadastro/cliente/steps/step-6-revisao` | Wizard passo 6 — checklist, resumos, aceite, finalizar |
 | `/cadastro/cliente/docs/showcase-v17` | Showcase dos componentes v17 (form patterns) |
 | `/cadastro/cliente/docs/showcase-v16` | Showcase v16 histórico (referência) |
 | `/ds/v17/tokens-v17.json` | Fonte canônica DTCG W3C 1.0 |
@@ -108,11 +116,11 @@ Funciona, mas as rotas usarão `.html` no fim (cleanUrls é feature do Vercel). 
 
 ## Backlog
 
-- Steps 3–6 do wizard de cadastro (Operação, Integração, SLAs, Revisão)
 - Migração da Torre de Controle v2_85 para v17
 - Início do módulo Frota
 - Auditoria de contraste automatizada em CI (`axe-core` ou Pa11y)
 - Pipeline Tokens Studio → Style Dictionary (quando houver codebase consumidor)
+- Promover componentes novos (Switch, KPI Grid, Penalty Table, Summary Card, Webhook Table) do cadastro para o showcase v17
 
 ---
 

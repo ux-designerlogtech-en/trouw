@@ -384,6 +384,138 @@ code{
 /* ── Token legend line (inline "code") ── */
 .kv{display:flex;gap:var(--s-3);flex-wrap:wrap;font-size:var(--fs-xs);color:var(--text-muted);margin-top:var(--s-3)}
 .kv span{font-family:var(--font-mono)}
+
+/* ════════════════════════════════════════════════════════════
+   KPI STRIP — Ops dashboard
+   Migração do padrão da Torre de Controle v2_85 → tokens v17.
+   3 grupos (Operação / Prazo / Atenção) com 1–3 cards cada.
+   ════════════════════════════════════════════════════════════ */
+.kpi-strip-wrap{
+  display:flex;flex-wrap:wrap;gap:var(--s-6) var(--s-8);
+  align-items:flex-start;
+  padding:var(--s-5);
+  background:var(--bg-surface);
+  border:1px solid var(--border-default);
+  border-radius:var(--r-lg);
+}
+.kpi-group-col{
+  display:flex;flex-direction:column;gap:var(--s-2h);
+  min-width:0;
+}
+.kpi-group-label{
+  font-size:10px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-subtle);
+  padding-left:var(--s-1);
+}
+.kpi-group-row{
+  display:flex;gap:var(--s-3);
+  flex-wrap:wrap;
+}
+.kpi-card-v17{
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:space-between;
+  min-width:140px;
+  padding:var(--s-4) var(--s-5) var(--s-4) var(--s-6);
+  background:var(--bg-surface);
+  border:1px solid var(--border-default);
+  border-radius:var(--r-lg);
+  cursor:pointer;
+  transition:background var(--duration-fast) var(--easing-standard),
+             border-color var(--duration-fast) var(--easing-standard),
+             transform 60ms var(--easing-standard),
+             box-shadow var(--duration-fast) var(--easing-standard);
+}
+/* Accent bar — FULL HEIGHT à esquerda */
+.kpi-card-v17::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--border-strong);
+}
+.kpi-card-v17:hover{transform:translateY(-1px)}
+.kpi-card-v17:active{transform:translateY(0)}
+.kpi-card-v17[data-selected="true"]{
+  box-shadow:inset 0 0 0 2px var(--border-focus);
+  transform:translateY(-1px);
+}
+.kpi-val-v17{
+  font-size:var(--fs-3xl);
+  font-weight:800;
+  line-height:1;
+  letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+  color:var(--text-default);
+  margin-bottom:var(--s-2);
+}
+.kpi-lbl-v17{
+  font-size:10px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-muted);
+  white-space:nowrap;
+}
+.kpi-delta-v17{
+  position:absolute;
+  top:var(--s-2h);right:var(--s-2h);
+  display:inline-flex;align-items:center;gap:2px;
+  padding:2px var(--s-2);
+  border-radius:var(--r-pill);
+  font-size:10px;font-weight:700;
+  font-variant-numeric:tabular-nums;
+  background:var(--bg-subtle);
+  color:var(--text-muted);
+}
+.kpi-delta-v17 i{font-size:8px}
+.kpi-delta-v17[data-dir="up"]{background:var(--feedback-danger-soft);color:var(--feedback-danger)}
+.kpi-delta-v17[data-dir="down"]{background:var(--feedback-ok-soft);color:var(--feedback-ok)}
+.kpi-delta-v17[data-dir="neutral"]{background:var(--bg-subtle);color:var(--text-muted)}
+
+/* Tones — gradient suave por variante + accent bar full-height + label/valor coloridos */
+.kpi-card-v17[data-tone="info"],
+.kpi-card-v17[data-tone="neutral"]{
+  background:linear-gradient(180deg, var(--bg-surface) 0%, var(--feedback-info-soft) 100%);
+  border-color:color-mix(in srgb, var(--feedback-info) 22%, transparent);
+}
+.kpi-card-v17[data-tone="info"]::before,
+.kpi-card-v17[data-tone="neutral"]::before{background:var(--feedback-info)}
+.kpi-card-v17[data-tone="info"] .kpi-val-v17,
+.kpi-card-v17[data-tone="neutral"] .kpi-val-v17{color:var(--feedback-info)}
+.kpi-card-v17[data-tone="info"] .kpi-lbl-v17,
+.kpi-card-v17[data-tone="neutral"] .kpi-lbl-v17{color:var(--feedback-info);opacity:.85}
+
+.kpi-card-v17[data-tone="ok"]{
+  background:linear-gradient(180deg, var(--bg-surface) 0%, var(--feedback-ok-soft) 100%);
+  border-color:color-mix(in srgb, var(--feedback-ok) 22%, transparent);
+}
+.kpi-card-v17[data-tone="ok"]::before{background:var(--feedback-ok)}
+.kpi-card-v17[data-tone="ok"] .kpi-val-v17{color:var(--feedback-ok)}
+.kpi-card-v17[data-tone="ok"] .kpi-lbl-v17{color:var(--feedback-ok);opacity:.85}
+
+.kpi-card-v17[data-tone="warn"]{
+  background:linear-gradient(180deg, var(--bg-surface) 0%, var(--feedback-warn-soft) 100%);
+  border-color:color-mix(in srgb, var(--feedback-warn) 22%, transparent);
+}
+.kpi-card-v17[data-tone="warn"]::before{background:var(--feedback-warn)}
+.kpi-card-v17[data-tone="warn"] .kpi-val-v17{color:var(--warn-700,var(--feedback-warn))}
+.kpi-card-v17[data-tone="warn"] .kpi-lbl-v17{color:var(--warn-700,var(--feedback-warn));opacity:.9}
+
+.kpi-card-v17[data-tone="danger"]{
+  background:linear-gradient(180deg, var(--bg-surface) 0%, var(--feedback-danger-soft) 100%);
+  border-color:color-mix(in srgb, var(--feedback-danger) 22%, transparent);
+}
+.kpi-card-v17[data-tone="danger"]::before{background:var(--feedback-danger)}
+.kpi-card-v17[data-tone="danger"] .kpi-val-v17{color:var(--feedback-danger)}
+.kpi-card-v17[data-tone="danger"] .kpi-lbl-v17{color:var(--feedback-danger);opacity:.85}
+
+/* Modo ops (density) — strip compacto */
+[data-density="ops"] .kpi-card-v17{
+  min-width:128px;
+  padding:var(--s-3) var(--s-4) var(--s-3) var(--s-5);
+}
+[data-density="ops"] .kpi-val-v17{
+  font-size:var(--fs-2xl);
+  margin-bottom:var(--s-1);
+}
+[data-density="ops"] .kpi-lbl-v17{font-size:9px}
+[data-density="ops"] .kpi-delta-v17{font-size:9px;padding:1px var(--s-2)}
 </style>
 </head>
 <body>
@@ -441,6 +573,11 @@ code{
     <div class="nav-group">
       <p class="nav-group-h">Feedback</p>
       <a href="#callouts">Callouts</a>
+    </div>
+
+    <div class="nav-group">
+      <p class="nav-group-h">Ops / Dashboard</p>
+      <a href="#kpi-strip">KPI Strip</a>
     </div>
 
     <div class="nav-group">
@@ -1031,6 +1168,160 @@ code{
       </div>
     </section>
 
+    <!-- ══════════════════ KPI STRIP (OPS DASHBOARD) ══════════════════ -->
+    <section class="section" id="kpi-strip">
+      <div class="section-h"><h2>KPI Strip · Ops</h2><span class="tag new">new</span></div>
+      <p class="section-lede">
+        Strip de métricas filtráveis do dashboard operacional. Migração do padrão da Torre de Controle v2_85
+        (DS v16) para tokens v17 (<code>--feedback-*</code>, <code>--bg-*</code>, <code>--text-*</code>).
+        Três grupos semânticos — <strong>Operação</strong>, <strong>Prazo</strong>, <strong>Atenção</strong> —
+        com valor em <code>tabular-nums</code>, accent bar esquerda colorida por tone, e delta badge opcional
+        (↑ danger-soft / ↓ ok-soft). Cada card é clicável como filtro dimensional.
+      </p>
+
+      <div class="subsection">
+        <h3 class="subsection-h">Strip completo — densidade <code>form</code> (default)</h3>
+        <div class="demo-card on-canvas">
+          <div class="kpi-strip-wrap" role="region" aria-label="Métricas operacionais">
+
+            <div class="kpi-group-col">
+              <div class="kpi-group-label">Operação</div>
+              <div class="kpi-group-row">
+                <button class="kpi-card-v17" data-tone="info" data-selected="true" title="47 solicitações de movimentação em andamento">
+                  <div class="kpi-val-v17">47</div>
+                  <div class="kpi-lbl-v17">SMs ativas</div>
+                </button>
+              </div>
+            </div>
+
+            <div class="kpi-group-col">
+              <div class="kpi-group-label">Prazo</div>
+              <div class="kpi-group-row">
+                <button class="kpi-card-v17" data-tone="danger" title="16 SMs com ETA já estourado">
+                  <span class="kpi-delta-v17" data-dir="up"><i class="fas fa-arrow-up"></i>+2</span>
+                  <div class="kpi-val-v17">16</div>
+                  <div class="kpi-lbl-v17">ETA atrasado</div>
+                </button>
+                <button class="kpi-card-v17" data-tone="warn" title="1 SM no limite de ETA">
+                  <div class="kpi-val-v17">1</div>
+                  <div class="kpi-lbl-v17">ETA limite</div>
+                </button>
+                <button class="kpi-card-v17" data-tone="danger" title="8 SMs com OTIF em risco">
+                  <span class="kpi-delta-v17" data-dir="up"><i class="fas fa-arrow-up"></i>+3</span>
+                  <div class="kpi-val-v17">8</div>
+                  <div class="kpi-lbl-v17">OTIF em risco</div>
+                </button>
+              </div>
+            </div>
+
+            <div class="kpi-group-col">
+              <div class="kpi-group-label">Atenção</div>
+              <div class="kpi-group-row">
+                <button class="kpi-card-v17" data-tone="danger" title="3 veículos parados há mais de 30min">
+                  <span class="kpi-delta-v17" data-dir="up"><i class="fas fa-arrow-up"></i>+1</span>
+                  <div class="kpi-val-v17">3</div>
+                  <div class="kpi-lbl-v17">Parados</div>
+                </button>
+                <button class="kpi-card-v17" data-tone="warn" title="12 alertas não tratados">
+                  <div class="kpi-val-v17">12</div>
+                  <div class="kpi-lbl-v17">Alertas ativos</div>
+                </button>
+              </div>
+            </div>
+
+          </div>
+          <div class="kv">
+            <span>tone=info → feedback-info + info-soft</span>
+            <span>tone=danger → feedback-danger</span>
+            <span>tone=warn → feedback-warn + warn-soft</span>
+            <span>tone=ok → feedback-ok</span>
+            <span>delta up → danger-soft</span>
+            <span>delta down → ok-soft</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-h">Densidade <code>ops</code> — compacto para torre/cockpit</h3>
+        <div class="demo-card on-canvas" data-density="ops">
+          <div class="kpi-strip-wrap" role="region" aria-label="Métricas operacionais (compacto)">
+            <div class="kpi-group-col">
+              <div class="kpi-group-label">Operação</div>
+              <div class="kpi-group-row">
+                <button class="kpi-card-v17" data-tone="info" data-selected="true">
+                  <div class="kpi-val-v17">47</div>
+                  <div class="kpi-lbl-v17">SMs ativas</div>
+                </button>
+              </div>
+            </div>
+            <div class="kpi-group-col">
+              <div class="kpi-group-label">Prazo</div>
+              <div class="kpi-group-row">
+                <button class="kpi-card-v17" data-tone="danger">
+                  <span class="kpi-delta-v17" data-dir="up"><i class="fas fa-arrow-up"></i>+2</span>
+                  <div class="kpi-val-v17">16</div>
+                  <div class="kpi-lbl-v17">ETA atrasado</div>
+                </button>
+                <button class="kpi-card-v17" data-tone="warn">
+                  <div class="kpi-val-v17">1</div>
+                  <div class="kpi-lbl-v17">ETA limite</div>
+                </button>
+                <button class="kpi-card-v17" data-tone="danger">
+                  <span class="kpi-delta-v17" data-dir="up"><i class="fas fa-arrow-up"></i>+3</span>
+                  <div class="kpi-val-v17">8</div>
+                  <div class="kpi-lbl-v17">OTIF em risco</div>
+                </button>
+              </div>
+            </div>
+            <div class="kpi-group-col">
+              <div class="kpi-group-label">Atenção</div>
+              <div class="kpi-group-row">
+                <button class="kpi-card-v17" data-tone="danger">
+                  <span class="kpi-delta-v17" data-dir="up"><i class="fas fa-arrow-up"></i>+1</span>
+                  <div class="kpi-val-v17">3</div>
+                  <div class="kpi-lbl-v17">Parados</div>
+                </button>
+                <button class="kpi-card-v17" data-tone="warn">
+                  <div class="kpi-val-v17">12</div>
+                  <div class="kpi-lbl-v17">Alertas ativos</div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <h3 class="subsection-h">Variações de tone &amp; delta</h3>
+        <div class="demo-card">
+          <div class="demo-row">
+            <button class="kpi-card-v17" data-tone="info"><div class="kpi-val-v17">47</div><div class="kpi-lbl-v17">Info</div></button>
+            <button class="kpi-card-v17" data-tone="ok"><div class="kpi-val-v17">98</div><div class="kpi-lbl-v17">No prazo</div></button>
+            <button class="kpi-card-v17" data-tone="warn"><div class="kpi-val-v17">1</div><div class="kpi-lbl-v17">No limite</div></button>
+            <button class="kpi-card-v17" data-tone="danger"><div class="kpi-val-v17">16</div><div class="kpi-lbl-v17">Atrasadas</div></button>
+            <button class="kpi-card-v17" data-tone="neutral"><div class="kpi-val-v17">12</div><div class="kpi-lbl-v17">Total</div></button>
+          </div>
+          <div class="demo-row" style="margin-top:var(--s-3)">
+            <button class="kpi-card-v17" data-tone="danger">
+              <span class="kpi-delta-v17" data-dir="up"><i class="fas fa-arrow-up"></i>+3</span>
+              <div class="kpi-val-v17">8</div>
+              <div class="kpi-lbl-v17">Delta up</div>
+            </button>
+            <button class="kpi-card-v17" data-tone="ok">
+              <span class="kpi-delta-v17" data-dir="down"><i class="fas fa-arrow-down"></i>-2</span>
+              <div class="kpi-val-v17">5</div>
+              <div class="kpi-lbl-v17">Delta down</div>
+            </button>
+            <button class="kpi-card-v17" data-tone="neutral">
+              <span class="kpi-delta-v17" data-dir="neutral">±0</span>
+              <div class="kpi-val-v17">0</div>
+              <div class="kpi-lbl-v17">Sem variação</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ══════════════════ TOPBAR ICON BTN ══════════════════ -->
     <section class="section" id="topbar-icon-btn">
       <div class="section-h"><h2>Topbar Icon Button</h2><span class="tag new">new</span></div>
@@ -1172,6 +1463,13 @@ document.querySelectorAll('.chip-multi').forEach(chip => {
 document.querySelectorAll('.perm-check').forEach(pc => {
   pc.addEventListener('click', () => {
     pc.dataset.on = pc.dataset.on === 'true' ? 'false' : 'true';
+  });
+});
+
+/* KPI card — toggle como filtro dimensional */
+document.querySelectorAll('.kpi-card-v17').forEach(card => {
+  card.addEventListener('click', () => {
+    card.dataset.selected = card.dataset.selected === 'true' ? 'false' : 'true';
   });
 });
 </script>
