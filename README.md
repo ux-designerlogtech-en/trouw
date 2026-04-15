@@ -62,7 +62,7 @@ trouw/
 ## Módulos
 
 - **`/cadastro/cliente/`** — ativo. Wizard de onboarding + showcase DS v17.
-- **`/torre-de-controle/`** — placeholder. Cockpit operacional (ref: v2_85). Migração para v17 pendente.
+- **`/torre-de-controle/`** — ativo. Cockpit operacional — SMs em tempo real, KPIs, mapa, painel de gestão.
 - **`/frota/`** — placeholder. Gestão de veículos/motoristas. Não iniciado.
 - **`/ds/v17/`** — tokens e CSSs compartilhados por todos os módulos.
 
@@ -116,7 +116,7 @@ Funciona, mas as rotas usarão `.html` no fim (cleanUrls é feature do Vercel). 
 
 ## Backlog
 
-- Migração da Torre de Controle v2_85 para v17
+- Migração progressiva da Torre de Controle para tokens v17 (bridge legacy-aliases ativo)
 - Início do módulo Frota
 - Auditoria de contraste automatizada em CI (`axe-core` ou Pa11y)
 - Pipeline Tokens Studio → Style Dictionary (quando houver codebase consumidor)
