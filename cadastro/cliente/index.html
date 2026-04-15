@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Torre de Controle · Cadastro & DS v17</title>
-<meta name="description" content="Vitrine do Trouw Design System v17 — fluxo de cadastro de cliente e showcase de componentes.">
+<title>Cadastro de Cliente &middot; Trouw</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,287 +11,3593 @@
 <link rel="stylesheet" href="/ds/v17/styles/ds-v17-primitives.css">
 <link rel="stylesheet" href="/ds/v17/styles/ds-v17-legacy-aliases.css">
 <style>
-  *{margin:0;padding:0;box-sizing:border-box}
-  html,body{min-height:100%}
-  body{
-    font-family:var(--font-sans);
-    background:
-      radial-gradient(1200px 600px at 12% -10%, rgba(46,91,255,.10), transparent 60%),
-      radial-gradient(900px 500px at 100% 100%, rgba(124,58,237,.06), transparent 55%),
-      var(--bg-app);
-    color:var(--text-default);
-    display:flex;flex-direction:column;align-items:center;
-    padding:72px 24px 48px;
-  }
-  .wrap{width:100%;max-width:1080px}
+/* ============================================================
+   TOKENS v17 — Reconciliação DS v16 + cadastro-v7
+   Ver: tokens-reconciliation-v17.md
+   ============================================================ */
+:root{
+  /* ── PRIMITIVES: Gray (adota v7) ─────────────────────── */
+  --gray-0:#FFFFFF; --gray-50:#FAFBFC; --gray-100:#F4F5F7;
+  --gray-150:#ECEEF1; --gray-200:#E2E5EA; --gray-300:#CBD0D9;
+  --gray-400:#9AA2AE; --gray-500:#6C7480; --gray-600:#4A5160;
+  --gray-700:#333A47; --gray-800:#1F242E; --gray-900:#10131A; --gray-950:#0B0E14;
 
-  header{margin-bottom:48px}
-  .eyebrow{
-    display:inline-flex;align-items:center;gap:var(--s-2);
-    background:var(--primary-soft);
-    color:var(--primary-hover);
-    padding:var(--s-2h) var(--s-4);
+  /* ── PRIMITIVES: Brand (adota v7) ────────────────────── */
+  --trouw-50:#F0F4FF; --trouw-100:#E6ECFF; --trouw-400:#5A7DFF;
+  --trouw-500:#2E5BFF; --trouw-600:#1E45D9;
+
+  /* ── PRIMITIVES: Feedback ────────────────────────────── */
+  --ok-500:#1F9E5C;    --ok-100:#DEF3E7;
+  --warn-500:#E89A1A;  --warn-100:#FCF1DD;  --warn-700:#92400E;
+  --danger-500:#D9342B; --danger-100:#FCE7E5; --danger-600:#B82820;
+  --info-500:#2E7DC1;  --info-100:#DEEBF6;
+  --ai-600:#7C3AED;
+
+  /* ── PRIMITIVES: Severidade (nova escala) ────────────── */
+  --sev-info:#6C7480;  --sev-info-soft:#ECEEF1;
+  --sev-low:#2E7DC1;   --sev-low-soft:#DEEBF6;
+  --sev-med:#E89A1A;   --sev-med-soft:#FCF1DD;
+  --sev-high:#E85D1A;  --sev-high-soft:#FCE2D5;
+  --sev-crit:#D9342B;  --sev-crit-soft:#FCE7E5;
+
+  /* ── PRIMITIVES: Ops (cores de operação) ─────────────── */
+  --op-kellux:#7C3AED; --op-bombril:#0891B2; --op-fenza:#65A30D;
+
+  /* ── Spacing ──────────────────────────────────────────── */
+  --s-1:2px; --s-2h:4px; --s-2:6px; --s-3:8px; --s-4:12px;
+  --s-5:16px; --s-6:20px; --s-8:24px; --s-9:28px; --s-10:32px; --s-12:48px;
+
+  /* ── Radius ───────────────────────────────────────────── */
+  --r-sm:4px; --r-md:6px; --r-base:8px; --r-lg:10px; --r-xl:14px; --r-2xl:20px; --r-pill:999px;
+
+  /* ── Shadows ──────────────────────────────────────────── */
+  --sh-1:0 1px 2px rgba(15,20,30,.04), 0 1px 1px rgba(15,20,30,.03);
+  --sh-2:0 4px 12px rgba(15,20,30,.06), 0 2px 4px rgba(15,20,30,.04);
+  --sh-3:0 12px 32px rgba(15,20,30,.10), 0 4px 8px rgba(15,20,30,.05);
+
+  /* ── Typography ───────────────────────────────────────── */
+  --font-sans:'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:'JetBrains Mono', ui-monospace, monospace;
+  /* Mode "form" (default): */
+  --fs-xs:11px; --fs-sm:12px; --fs-base:13px; --fs-md:14px;
+  --fs-lg:15px; --fs-xl:17px; --fs-2xl:20px; --fs-3xl:24px;
+
+  /* ── Motion ───────────────────────────────────────────── */
+  --duration-fast:120ms; --duration-base:160ms; --duration-slow:260ms;
+  --easing-standard:cubic-bezier(.4,0,.2,1);
+  --easing-in:cubic-bezier(.4,0,1,1);
+  --easing-out:cubic-bezier(0,0,.2,1);
+
+  /* ── SEMANTIC: Backgrounds ───────────────────────────── */
+  --bg-app:var(--gray-100);
+  --bg-surface:var(--gray-0);
+  --bg-subtle:var(--gray-50);
+  --bg-sunken:var(--gray-100);
+  --bg-emphasis:var(--gray-150);
+  --bg-hover:var(--gray-100);
+  --bg-active:var(--gray-150);
+
+  /* ── SEMANTIC: Text ──────────────────────────────────── */
+  --text-default:var(--gray-900);
+  --text-muted:var(--gray-500);
+  --text-subtle:var(--gray-400);
+  --text-inverse:var(--gray-0);
+  --text-brand:var(--trouw-600);
+
+  /* ── SEMANTIC: Borders ───────────────────────────────── */
+  --border-default:var(--gray-200);
+  --border-strong:var(--gray-300);
+  --border-subtle:var(--gray-150);
+  --border-focus:var(--trouw-500);
+
+  /* ── SEMANTIC: Primary & Feedback ────────────────────── */
+  --primary:var(--trouw-500);
+  --primary-hover:var(--trouw-600);
+  --primary-soft:var(--trouw-100);
+  --primary-soft-strong:rgba(46,91,255,.20);
+
+  --feedback-danger:var(--danger-500);       --feedback-danger-soft:var(--danger-100);
+  --feedback-warn:var(--warn-500);           --feedback-warn-soft:var(--warn-100);
+  --feedback-ok:var(--ok-500);               --feedback-ok-soft:var(--ok-100);
+  --feedback-info:var(--info-500);           --feedback-info-soft:var(--info-100);
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{
+  font-family:var(--font-sans);
+  font-size:var(--fs-base);
+  color:var(--text-default);
+  background:var(--bg-app);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;color:inherit}
+
+/* ============================================================
+   SHELL — sidebar compacta + main
+   ============================================================ */
+.shell{display:grid;grid-template-columns:52px 1fr;height:100vh;overflow:hidden}
+
+.sidebar{
+  background:var(--bg-surface);
+  border-right:1px solid var(--border-default);
+  padding:var(--s-4) 0;display:flex;flex-direction:column;
+  align-items:center;gap:var(--s-1);
+}
+.sidebar-logo{
+  width:36px;height:36px;margin-bottom:var(--s-3);
+  display:flex;align-items:center;justify-content:center;
+}
+.sidebar-logo img{width:100%;height:100%;object-fit:contain}
+.sidebar-btn{
+  width:36px;height:36px;border:none;background:transparent;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:var(--r-md);color:var(--text-muted);
+  transition:background var(--duration-fast) var(--easing-standard),
+             color var(--duration-fast) var(--easing-standard);
+  font-size:15px;
+}
+.sidebar-btn:hover{background:var(--bg-hover);color:var(--text-default)}
+.sidebar-btn[aria-current="page"]{
+  background:var(--primary-soft);color:var(--primary);
+}
+
+.main{display:grid;grid-template-rows:auto auto 1fr auto;overflow:hidden;background:var(--bg-app)}
+
+/* ============================================================
+   TOPBAR — breadcrumb + ações
+   ============================================================ */
+.topbar{
+  display:flex;align-items:center;gap:var(--s-3);
+  padding:var(--s-3) var(--s-6);
+  background:var(--bg-surface);
+  border-bottom:1px solid var(--border-default);
+  min-height:48px;
+}
+.breadcrumb{display:flex;align-items:center;gap:var(--s-2);font-size:var(--fs-base);color:var(--text-muted)}
+.breadcrumb-current{color:var(--text-default);font-weight:600}
+.breadcrumb-sep{color:var(--text-subtle)}
+.topbar-spacer{flex:1}
+.client-pill{
+  display:inline-flex;align-items:center;gap:var(--s-2);
+  padding:var(--s-2) var(--s-3);
+  background:var(--bg-subtle);
+  border:1px solid var(--border-subtle);
+  border-radius:var(--r-pill);
+  font-size:var(--fs-sm);font-weight:600;color:var(--text-default);
+}
+.client-pill-dot{width:8px;height:8px;border-radius:var(--r-pill);background:var(--op-kellux)}
+
+/* ============================================================
+   STEPPER — wizard topo
+   ============================================================ */
+.stepper{
+  display:flex;align-items:center;gap:var(--s-3);
+  padding:var(--s-4) var(--s-6);
+  background:var(--bg-surface);
+  border-bottom:1px solid var(--border-default);
+  overflow-x:auto;
+}
+.step{display:flex;align-items:center;gap:var(--s-3);flex-shrink:0}
+.step-circle{
+  width:28px;height:28px;border-radius:var(--r-pill);
+  display:flex;align-items:center;justify-content:center;
+  font-size:var(--fs-sm);font-weight:700;
+  background:var(--bg-sunken);color:var(--text-muted);
+  border:1px solid var(--border-default);
+  transition:all var(--duration-base) var(--easing-standard);
+}
+.step[data-state="active"] .step-circle{
+  background:var(--primary);color:var(--text-inverse);border-color:var(--primary);
+  box-shadow:0 0 0 3px var(--primary-soft);
+}
+.step[data-state="complete"] .step-circle{
+  background:var(--feedback-ok);color:var(--text-inverse);border-color:var(--feedback-ok);
+}
+.step-info{display:flex;flex-direction:column;line-height:1.2}
+.step-label{
+  font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.06em;
+  color:var(--text-subtle);font-weight:700;margin:0;
+}
+.step-name{font-size:var(--fs-sm);font-weight:600;margin:0;color:var(--text-muted);white-space:nowrap}
+.step[data-state="active"] .step-name{color:var(--text-default)}
+.step-line{
+  flex:1;min-width:24px;height:1px;background:var(--border-default);
+}
+
+/* ============================================================
+   WIZARD CONTENT
+   ============================================================ */
+.wizard-content{overflow-y:auto;padding:var(--s-6) var(--s-6) var(--s-10)}
+.wizard-inner{max-width:960px;margin:0 auto}
+
+.step-header{margin-bottom:var(--s-6)}
+.step-title{
+  font-size:var(--fs-3xl);font-weight:700;
+  margin:0 0 var(--s-2);letter-spacing:-.02em;color:var(--text-default);
+}
+.step-desc{
+  font-size:var(--fs-md);color:var(--text-muted);
+  margin:0;max-width:640px;line-height:1.55;
+}
+.step-desc strong{color:var(--text-default);font-weight:600}
+
+/* ============================================================
+   ACCORDION — novo no DS v17 (promovido do cadastro-v7)
+   ============================================================ */
+.accordion{
+  background:var(--bg-surface);
+  border:1px solid var(--border-default);
+  border-radius:var(--r-base);
+  margin-bottom:var(--s-4);
+  overflow:hidden;
+  transition:border-color var(--duration-base) var(--easing-standard);
+}
+.accordion:hover{border-color:var(--border-strong)}
+.accordion-header{
+  display:flex;align-items:center;gap:var(--s-4);
+  padding:var(--s-5);cursor:pointer;width:100%;
+  background:transparent;border:none;text-align:left;
+  font-family:inherit;color:inherit;
+}
+.accordion-icon{
+  width:36px;height:36px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg-subtle);border-radius:var(--r-md);
+  font-size:18px;
+}
+.accordion-info{flex:1;min-width:0}
+.accordion-title{
+  font-size:var(--fs-md);font-weight:700;margin:0;
+  display:flex;align-items:center;gap:var(--s-2);line-height:1.3;
+  color:var(--text-default);
+}
+.accordion-meta{
+  font-size:var(--fs-xs);color:var(--text-muted);
+  margin:2px 0 0;line-height:1.3;
+}
+.accordion-status{
+  display:inline-flex;align-items:center;gap:var(--s-2);
+  padding:var(--s-1) var(--s-3);border-radius:var(--r-pill);
+  font-size:var(--fs-xs);font-weight:600;
+  background:var(--feedback-warn-soft);color:var(--warn-700);
+  border:1px solid rgba(232,154,26,.25);
+}
+.accordion-status.complete{
+  background:var(--feedback-ok-soft);color:var(--ok-500);
+  border-color:rgba(31,158,92,.25);
+}
+.accordion-chevron{
+  width:20px;height:20px;flex-shrink:0;color:var(--text-subtle);
+  transition:transform var(--duration-base) var(--easing-standard);
+}
+.accordion[data-state="open"] .accordion-chevron{transform:rotate(180deg)}
+.accordion-body{
+  padding:0 var(--s-5) var(--s-5);
+  display:none;
+}
+.accordion[data-state="open"] .accordion-body{display:block}
+
+/* ============================================================
+   FORM SYSTEM — novo no DS v17 (promovido do cadastro-v7)
+   ============================================================ */
+.form-grid{display:grid;gap:var(--s-4)}
+.form-grid-2{grid-template-columns:1fr 1fr}
+.form-grid-3{grid-template-columns:repeat(3,1fr)}
+.form-grid-4{grid-template-columns:repeat(4,1fr)}
+.col-span-2{grid-column:span 2}
+.col-span-3{grid-column:span 3}
+.col-span-full{grid-column:1/-1}
+
+.form-field{display:flex;flex-direction:column;gap:var(--s-2);min-width:0}
+.form-label{
+  font-size:var(--fs-sm);font-weight:600;color:var(--text-default);
+  display:flex;align-items:center;gap:var(--s-2);
+}
+.form-hint{font-size:var(--fs-xs);color:var(--text-muted);line-height:1.4;margin-top:2px}
+.req{color:var(--feedback-danger);font-weight:700}
+.opt{
+  font-size:var(--fs-xs);color:var(--text-subtle);font-weight:500;
+  text-transform:uppercase;letter-spacing:.04em;
+}
+
+/* Input / Select — já formalizado no DS v16, refinado em v17 */
+.input,.select{
+  width:100%;height:36px;
+  padding:0 var(--s-3);
+  background:var(--bg-surface);
+  border:1px solid var(--border-default);
+  border-radius:var(--r-md);
+  font-size:var(--fs-base);color:var(--text-default);
+  transition:border-color var(--duration-fast) var(--easing-standard),
+             box-shadow var(--duration-fast) var(--easing-standard);
+  outline:none;
+}
+.input:hover,.select:hover{border-color:var(--border-strong)}
+.input:focus,.select:focus{
+  border-color:var(--border-focus);
+  box-shadow:0 0 0 3px var(--primary-soft);
+}
+.input::placeholder{color:var(--text-subtle)}
+.select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239AA2AE' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px}
+
+/* Unit input (input com sufixo) */
+.unit-input{
+  display:flex;align-items:center;
+  background:var(--bg-surface);
+  border:1px solid var(--border-default);
+  border-radius:var(--r-md);
+  transition:border-color var(--duration-fast) var(--easing-standard),
+             box-shadow var(--duration-fast) var(--easing-standard);
+}
+.unit-input:focus-within{
+  border-color:var(--border-focus);
+  box-shadow:0 0 0 3px var(--primary-soft);
+}
+.unit-input input{
+  flex:1;border:none;background:transparent;outline:none;
+  height:34px;padding:0 var(--s-3);font-size:var(--fs-base);
+}
+.unit-input .unit{
+  padding:0 var(--s-3);color:var(--text-muted);font-size:var(--fs-sm);
+  border-left:1px solid var(--border-subtle);height:22px;
+  display:flex;align-items:center;
+}
+
+/* Radio Card — novo no DS v17 */
+.radio-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3)}
+.radio-card{
+  display:flex;flex-direction:column;gap:var(--s-1);
+  padding:var(--s-4) var(--s-5);
+  background:var(--bg-surface);
+  border:1.5px solid var(--border-default);
+  border-radius:var(--r-md);
+  cursor:pointer;
+  transition:border-color var(--duration-fast) var(--easing-standard),
+             background var(--duration-fast) var(--easing-standard);
+}
+.radio-card:hover{border-color:var(--border-strong);background:var(--bg-subtle)}
+.radio-card input[type="radio"]{display:none}
+.radio-card[data-selected="true"]{
+  border-color:var(--primary);background:var(--primary-soft);
+}
+.radio-card-title{font-size:var(--fs-sm);font-weight:700;color:var(--text-default);line-height:1.3}
+.radio-card-desc{font-size:var(--fs-xs);color:var(--text-muted);line-height:1.4}
+
+/* Filial list */
+.filial-list{display:flex;flex-direction:column;gap:var(--s-3);margin-top:var(--s-3)}
+.filial-row{display:flex;gap:var(--s-3);align-items:center}
+.filial-row .input,.filial-row .select{height:30px;font-size:var(--fs-sm)}
+.filial-empty{
+  padding:var(--s-4);background:var(--bg-sunken);border-radius:var(--r-sm);
+  text-align:center;color:var(--text-muted);font-size:var(--fs-sm);font-style:italic;
+}
+.input-sm,.select-sm{height:28px;font-size:var(--fs-xs);padding:0 var(--s-2)}
+.select-sm{padding-right:22px;background-position:right 6px center}
+
+/* Feedback callout — pattern inline reutilizável */
+.callout-info{
+  padding:var(--s-3);background:var(--feedback-info-soft);
+  border-radius:var(--r-md);font-size:var(--fs-sm);
+  display:flex;gap:var(--s-2);align-items:flex-start;
+  color:var(--text-default);margin-bottom:var(--s-3);
+}
+.callout-info-ico{font-size:14px;flex-shrink:0;line-height:1.4}
+
+/* ============================================================
+   BUTTON — já existe no DS v16, refinado v17
+   ============================================================ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--s-2);
+  height:36px;padding:0 var(--s-5);
+  border:1px solid transparent;
+  border-radius:var(--r-md);
+  font-size:var(--fs-sm);font-weight:600;
+  transition:background var(--duration-fast) var(--easing-standard),
+             border-color var(--duration-fast) var(--easing-standard),
+             color var(--duration-fast) var(--easing-standard);
+  outline:none;
+}
+.btn:focus-visible{box-shadow:0 0 0 3px var(--primary-soft)}
+.btn-primary{background:var(--primary);color:var(--text-inverse);border-color:var(--primary)}
+.btn-primary:hover{background:var(--primary-hover);border-color:var(--primary-hover)}
+.btn-secondary{background:var(--bg-surface);color:var(--text-default);border-color:var(--border-default)}
+.btn-secondary:hover{background:var(--bg-subtle);border-color:var(--border-strong)}
+.btn-ghost{background:transparent;color:var(--text-muted);border-color:transparent}
+.btn-ghost:hover{background:var(--bg-hover);color:var(--text-default)}
+.btn-sm{height:30px;font-size:var(--fs-xs);padding:0 var(--s-4)}
+.btn-xs{height:24px;font-size:var(--fs-xs);padding:0 var(--s-3)}
+.btn-icon{padding:0;width:36px;height:36px}
+.btn-danger-text:hover{color:var(--feedback-danger);background:var(--feedback-danger-soft)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* ============================================================
+   WIZARD FOOTER — navegação entre steps
+   ============================================================ */
+.wizard-footer{
+  display:flex;align-items:center;gap:var(--s-3);
+  padding:var(--s-4) var(--s-6);
+  background:var(--bg-surface);
+  border-top:1px solid var(--border-default);
+}
+.wizard-footer-spacer{flex:1}
+.footer-hint{font-size:var(--fs-xs);color:var(--text-subtle)}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
+}
+
+/* Adicional Step 2 */
+/* ============================================================
+   TOKENS v17 — paridade com cadastro-cliente-step1-ds-v17.html
+   ============================================================ */
+:root{
+  /* PRIMITIVES: Gray */
+  --gray-0:#FFFFFF; --gray-50:#FAFBFC; --gray-100:#F4F5F7;
+  --gray-150:#ECEEF1; --gray-200:#E2E5EA; --gray-300:#CBD0D9;
+  --gray-400:#9AA2AE; --gray-500:#6C7480; --gray-600:#4A5160;
+  --gray-700:#333A47; --gray-800:#1F242E; --gray-900:#10131A; --gray-950:#0B0E14;
+
+  /* PRIMITIVES: Brand */
+  --trouw-50:#F0F4FF; --trouw-100:#E6ECFF; --trouw-400:#5A7DFF;
+  --trouw-500:#2E5BFF; --trouw-600:#1E45D9;
+
+  /* PRIMITIVES: Feedback */
+  --ok-500:#1F9E5C; --ok-100:#DEF3E7;
+  --warn-500:#E89A1A; --warn-100:#FCF1DD; --warn-700:#92400E;
+  --danger-500:#D9342B; --danger-100:#FCE7E5; --danger-600:#B82820;
+  --info-500:#2E7DC1; --info-100:#DEEBF6;
+  --ai-600:#7C3AED;
+
+  /* PRIMITIVES: Ops */
+  --op-kellux:#7C3AED; --op-bombril:#0891B2; --op-fenza:#65A30D;
+
+  /* Spacing */
+  --s-1:2px; --s-2h:4px; --s-2:6px; --s-3:8px; --s-4:12px;
+  --s-5:16px; --s-6:20px; --s-8:24px; --s-9:28px; --s-10:32px; --s-12:48px;
+
+  /* Radius */
+  --r-sm:4px; --r-md:6px; --r-base:8px; --r-lg:10px; --r-xl:14px; --r-2xl:20px; --r-pill:999px;
+
+  /* Shadows */
+  --sh-1:0 1px 2px rgba(15,20,30,.04), 0 1px 1px rgba(15,20,30,.03);
+  --sh-2:0 4px 12px rgba(15,20,30,.06), 0 2px 4px rgba(15,20,30,.04);
+  --sh-3:0 12px 32px rgba(15,20,30,.10), 0 4px 8px rgba(15,20,30,.05);
+
+  /* Typography */
+  --font-sans:'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --fs-xs:11px; --fs-sm:12px; --fs-base:13px; --fs-md:14px;
+  --fs-lg:15px; --fs-xl:17px; --fs-2xl:20px; --fs-3xl:24px;
+
+  /* Motion */
+  --duration-fast:120ms; --duration-base:160ms; --duration-slow:260ms;
+  --easing-standard:cubic-bezier(.4,0,.2,1);
+  --easing-in:cubic-bezier(.4,0,1,1);
+  --easing-out:cubic-bezier(0,0,.2,1);
+
+  /* Semantic */
+  --bg-app:var(--gray-100);
+  --bg-surface:var(--gray-0);
+  --bg-subtle:var(--gray-50);
+  --bg-sunken:var(--gray-100);
+  --bg-emphasis:var(--gray-150);
+  --bg-hover:var(--gray-100);
+  --bg-active:var(--gray-150);
+
+  --text-default:var(--gray-900);
+  --text-muted:var(--gray-500);
+  --text-subtle:var(--gray-400);
+  --text-inverse:var(--gray-0);
+  --text-brand:var(--trouw-600);
+
+  --border-default:var(--gray-200);
+  --border-strong:var(--gray-300);
+  --border-subtle:var(--gray-150);
+  --border-focus:var(--trouw-500);
+
+  --primary:var(--trouw-500);
+  --primary-hover:var(--trouw-600);
+  --primary-soft:var(--trouw-100);
+
+  --feedback-danger:var(--danger-500);  --feedback-danger-soft:var(--danger-100);
+  --feedback-warn:var(--warn-500);      --feedback-warn-soft:var(--warn-100);
+  --feedback-ok:var(--ok-500);          --feedback-ok-soft:var(--ok-100);
+  --feedback-info:var(--info-500);      --feedback-info-soft:var(--info-100);
+}
+body{font-family:var(--font-sans);font-size:var(--fs-base);color:var(--text-default);background:var(--bg-app);line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+svg{display:block}
+/* ============================================================
+   SHELL (mesmo do step 1)
+   ============================================================ */
+.shell{display:grid;grid-template-columns:52px 1fr;height:100vh;overflow:hidden}
+.sidebar{background:var(--bg-surface);border-right:1px solid var(--border-default);padding:var(--s-4) 0;display:flex;flex-direction:column;align-items:center;gap:var(--s-1)}
+.sidebar-logo{width:36px;height:36px;margin-bottom:var(--s-3);display:flex;align-items:center;justify-content:center}
+.sidebar-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:var(--r-md);color:var(--text-muted);transition:background var(--duration-fast) var(--easing-standard),color var(--duration-fast) var(--easing-standard);font-size:15px}
+.sidebar-btn[aria-current="page"]{background:var(--primary-soft);color:var(--primary)}
+/* Topbar */
+.topbar{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-3) var(--s-6);background:var(--bg-surface);border-bottom:1px solid var(--border-default);min-height:48px}
+.client-pill{display:inline-flex;align-items:center;gap:var(--s-2);padding:var(--s-2) var(--s-3);background:var(--bg-subtle);border:1px solid var(--border-subtle);border-radius:var(--r-pill);font-size:var(--fs-sm);font-weight:600;color:var(--text-default)}
+/* Topbar icon button — novo no DS v17 (promovido do v7) */
+.topbar-icon-btn{
+  width:32px;height:32px;border-radius:var(--r-md);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text-muted);
+  transition:background var(--duration-fast) var(--easing-standard),color var(--duration-fast) var(--easing-standard);
+}
+.topbar-icon-btn:hover{background:var(--bg-hover);color:var(--text-default)}
+/* Stepper */
+.stepper{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-4) var(--s-6);background:var(--bg-surface);border-bottom:1px solid var(--border-default);overflow-x:auto}
+.step-circle{width:28px;height:28px;border-radius:var(--r-pill);display:flex;align-items:center;justify-content:center;font-size:var(--fs-sm);font-weight:700;background:var(--bg-sunken);color:var(--text-muted);border:1px solid var(--border-default);transition:all var(--duration-base) var(--easing-standard)}
+.step[data-state="active"] .step-circle{background:var(--primary);color:var(--text-inverse);border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-soft)}
+.step[data-state="complete"] .step-circle{background:var(--feedback-ok);color:var(--text-inverse);border-color:var(--feedback-ok)}
+.step-label{font-size:var(--fs-xs);text-transform:uppercase;letter-spacing:.06em;color:var(--text-subtle);font-weight:700;margin:0}
+.step[data-state="complete"] .step-name{color:var(--text-default)}
+.step-line{flex:1;min-width:24px;height:1px;background:var(--border-default)}
+/* Wizard content */
+.wizard-content{overflow-y:auto;padding:var(--s-6) var(--s-6) var(--s-10)}
+.step-title{font-size:var(--fs-3xl);font-weight:700;margin:0 0 var(--s-2);letter-spacing:-.02em;color:var(--text-default)}
+.step-desc{font-size:var(--fs-md);color:var(--text-muted);margin:0;max-width:640px;line-height:1.55}
+/* ============================================================
+   FORM system (mesmo do step 1)
+   ============================================================ */
+.form-grid{display:grid;gap:var(--s-4)}
+.form-label{font-size:var(--fs-sm);font-weight:600;color:var(--text-default);display:flex;align-items:center;gap:var(--s-2)}
+.opt{font-size:var(--fs-xs);color:var(--text-subtle);font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.input,.select{width:100%;height:36px;padding:0 var(--s-3);background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--r-md);font-size:var(--fs-base);color:var(--text-default);transition:border-color var(--duration-fast) var(--easing-standard),box-shadow var(--duration-fast) var(--easing-standard);outline:none}
+.input:focus,.select:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px var(--primary-soft)}
+/* ============================================================
+   BUTTON (mesmo do step 1)
+   ============================================================ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s-2);height:36px;padding:0 var(--s-5);border:1px solid transparent;border-radius:var(--r-md);font-size:var(--fs-sm);font-weight:600;transition:background var(--duration-fast) var(--easing-standard),border-color var(--duration-fast) var(--easing-standard),color var(--duration-fast) var(--easing-standard);outline:none}
+/* Wizard footer */
+.wizard-footer{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-4) var(--s-6);background:var(--bg-surface);border-top:1px solid var(--border-default)}
+/* ============================================================
+   ══════════ NOVOS COMPONENTES DO STEP 2 ══════════
+   ============================================================ */
+
+/* DATA TABLE — novo no DS v17 (promovido do v7) */
+.users-table-wrap{
+  background:var(--bg-surface);
+  border:1px solid var(--border-default);
+  border-radius:var(--r-md);
+  overflow:hidden;
+  margin-top:var(--s-3);
+}
+.users-table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  font-size:var(--fs-sm);
+}
+.users-table th{
+  padding:var(--s-3) var(--s-4);
+  text-align:left;
+  background:var(--bg-subtle);
+  color:var(--text-muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  font-weight:700;
+  border-bottom:1px solid var(--border-default);
+}
+.users-table td{
+  padding:var(--s-3) var(--s-4);
+  border-bottom:1px solid var(--border-subtle);
+  vertical-align:middle;
+}
+.users-table tbody tr:last-child td{border-bottom:none}
+.users-table tbody tr:hover{background:var(--bg-subtle)}
+/* USER AVATAR + NAME CELL */
+.user-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--primary);color:var(--text-inverse);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;margin-right:var(--s-2);
+  flex-shrink:0;
+}
+.user-name-cell{display:flex;align-items:center}
+.user-name-info{display:flex;flex-direction:column;line-height:1.3}
+.user-name-info strong{font-weight:600;color:var(--text-default)}
+.user-name-info .email{font-size:var(--fs-xs);color:var(--text-muted)}
+/* ROLE BADGE */
+.role-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2px 8px;border-radius:var(--r-pill);
+  font-size:10px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.02em;
+}
+.role-badge[data-r="admin"]{background:var(--danger-100);color:var(--danger-600)}
+.role-badge[data-r="gerente"]{background:var(--trouw-100);color:var(--trouw-600)}
+.role-badge[data-r="operador"]{background:var(--feedback-info-soft);color:var(--feedback-info)}
+.role-badge[data-r="visualizador"]{background:var(--bg-sunken);color:var(--text-muted)}
+/* STATUS DOT */
+.status-dot{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:var(--fs-xs);color:var(--text-muted);
+}
+.status-dot::before{
+  content:"";width:6px;height:6px;border-radius:50%;
+  background:var(--feedback-ok);
+}
+.status-dot[data-s="pendente"]::before{background:var(--feedback-warn)}
+.status-dot[data-s="inativo"]::before{background:var(--text-subtle)}
+/* USER ACTIONS */
+.user-actions{display:flex;gap:4px;justify-content:flex-end}
+.user-action-btn{
+  width:28px;height:28px;border-radius:var(--r-sm);
+  display:inline-flex;align-items:center;justify-content:center;
+  color:var(--text-muted);
+  transition:background var(--duration-fast) var(--easing-standard),color var(--duration-fast) var(--easing-standard);
+}
+.user-action-btn:hover{background:var(--bg-hover);color:var(--text-default)}
+.user-action-btn[data-danger]:hover{background:var(--feedback-danger-soft);color:var(--feedback-danger)}
+/* CALLOUT (reuso do step 1) */
+.callout-warn{
+  padding:var(--s-3);background:var(--feedback-warn-soft);
+  border-radius:var(--r-md);font-size:var(--fs-sm);
+  display:flex;gap:var(--s-2);align-items:flex-start;
+  margin-bottom:var(--s-3);color:var(--warn-700);
+}
+.callout-info{
+  padding:var(--s-3);background:var(--feedback-info-soft);
+  border-radius:var(--r-md);font-size:var(--fs-sm);
+  color:var(--text-default);
+}
+.callout-ico{font-size:14px;flex-shrink:0}
+/* TABLE FOOTER (count + add btn) */
+.table-footer{
+  margin-top:var(--s-3);
+  display:flex;justify-content:space-between;align-items:center;
+}
+/* ============================================================
+   MODAL — novo no DS v17 (promovido do v7)
+   ============================================================ */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.35);
+  z-index:200;
+  display:none;
+  align-items:center;justify-content:center;
+  animation:fadeIn var(--duration-base) var(--easing-out);
+}
+.modal-overlay[data-open="true"]{display:flex}
+@keyframes fadeIn{from{opacity:0}}to{opacity:1}}}
+.modal{
+  background:var(--bg-surface);
+  border-radius:var(--r-lg);
+  width:560px;max-width:calc(100vw - 40px);
+  max-height:calc(100vh - 80px);
+  display:flex;flex-direction:column;
+  box-shadow:var(--sh-3);
+  overflow:hidden;
+}
+.modal-wide{width:780px}
+.modal-header{
+  padding:var(--s-4) var(--s-5);
+  border-bottom:1px solid var(--border-default);
+  display:flex;align-items:center;gap:var(--s-3);
+}
+.modal-title{font-size:var(--fs-lg);font-weight:700;margin:0;flex:1}
+.modal-body{padding:var(--s-5);overflow-y:auto;flex:1}
+.modal-footer{
+  padding:var(--s-3) var(--s-5);
+  border-top:1px solid var(--border-default);
+  display:flex;justify-content:flex-end;gap:var(--s-2);
+}
+/* ============================================================
+   CHIP MULTI — novo no DS v17 (promovido do v7)
+   ============================================================ */
+.chips-multi{display:flex;flex-wrap:wrap;gap:var(--s-1)}
+.chip-multi{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:4px var(--s-3);
+  border:1.5px solid var(--border-default);
+  background:var(--bg-surface);
+  border-radius:var(--r-pill);
+  font-size:var(--fs-xs);font-weight:600;
+  color:var(--text-default);
+  transition:all var(--duration-fast) var(--easing-standard);
+}
+.chip-multi:hover{border-color:var(--border-strong)}
+.chip-multi[data-selected="true"]{
+  border-color:var(--primary);
+  background:var(--primary-soft);
+  color:var(--text-brand);
+}
+/* ============================================================
+   PERM MATRIX — novo no DS v17 (promovido do v7)
+   ============================================================ */
+.perm-matrix{
+  width:100%;
+  border-collapse:separate;border-spacing:0;
+  font-size:var(--fs-sm);
+  margin-top:var(--s-3);
+  border:1px solid var(--border-default);
+  border-radius:var(--r-md);
+  overflow:hidden;
+}
+.perm-matrix th,.perm-matrix td{
+  padding:var(--s-2) var(--s-3);
+  border-bottom:1px solid var(--border-subtle);
+  text-align:center;
+}
+.perm-matrix tbody tr:last-child td{border-bottom:none}
+.perm-matrix th{
+  background:var(--bg-subtle);
+  font-size:10px;text-transform:uppercase;
+  letter-spacing:.05em;color:var(--text-muted);font-weight:700;
+}
+.perm-matrix th:first-child,.perm-matrix td:first-child{
+  text-align:left;font-weight:600;
+}
+.perm-check{
+  width:18px;height:18px;border-radius:3px;
+  border:1.5px solid var(--border-strong);
+  background:var(--bg-surface);
+  display:inline-flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:all var(--duration-fast) var(--easing-standard);
+}
+.perm-check[data-on="true"]{
+  background:var(--primary);
+  border-color:var(--primary);
+}
+.perm-check[data-on="true"]::after{
+  content:"✓";
+  color:var(--text-inverse);
+  font-size:11px;font-weight:700;
+}
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+}
+
+/* Adicional Step 3 */
+/* ============================================================
+   TOKENS v17 — paridade com steps 1 e 2
+   ============================================================ */
+:root{
+  /* PRIMITIVES: Gray */
+  --gray-0:#FFFFFF; --gray-50:#FAFBFC; --gray-100:#F4F5F7;
+  --gray-150:#ECEEF1; --gray-200:#E2E5EA; --gray-300:#CBD0D9;
+  --gray-400:#9AA2AE; --gray-500:#6C7480; --gray-600:#4A5160;
+  --gray-700:#333A47; --gray-800:#1F242E; --gray-900:#10131A; --gray-950:#0B0E14;
+
+  /* PRIMITIVES: Brand */
+  --trouw-50:#F0F4FF; --trouw-100:#E6ECFF; --trouw-400:#5A7DFF;
+  --trouw-500:#2E5BFF; --trouw-600:#1E45D9;
+
+  /* PRIMITIVES: Feedback */
+  --ok-500:#1F9E5C; --ok-100:#DEF3E7;
+  --warn-500:#E89A1A; --warn-100:#FCF1DD; --warn-700:#92400E;
+  --danger-500:#D9342B; --danger-100:#FCE7E5; --danger-600:#B82820;
+  --info-500:#2E7DC1; --info-100:#DEEBF6;
+  --ai-600:#7C3AED;
+
+  /* PRIMITIVES: Ops */
+  --op-kellux:#7C3AED; --op-bombril:#0891B2; --op-fenza:#65A30D;
+
+  /* Spacing */
+  --s-1:2px; --s-2h:4px; --s-2:6px; --s-3:8px; --s-4:12px;
+  --s-5:16px; --s-6:20px; --s-8:24px; --s-9:28px; --s-10:32px; --s-12:48px;
+
+  /* Radius */
+  --r-sm:4px; --r-md:6px; --r-base:8px; --r-lg:10px; --r-xl:14px; --r-2xl:20px; --r-pill:999px;
+
+  /* Shadows */
+  --sh-1:0 1px 2px rgba(15,20,30,.04), 0 1px 1px rgba(15,20,30,.03);
+  --sh-2:0 4px 12px rgba(15,20,30,.06), 0 2px 4px rgba(15,20,30,.04);
+  --sh-3:0 12px 32px rgba(15,20,30,.10), 0 4px 8px rgba(15,20,30,.05);
+
+  /* Typography */
+  --font-sans:'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --fs-xs:11px; --fs-sm:12px; --fs-base:13px; --fs-md:14px;
+  --fs-lg:15px; --fs-xl:17px; --fs-2xl:20px; --fs-3xl:24px;
+
+  /* Motion */
+  --duration-fast:120ms; --duration-base:160ms; --duration-slow:260ms;
+  --easing-standard:cubic-bezier(.4,0,.2,1);
+  --easing-in:cubic-bezier(.4,0,1,1);
+  --easing-out:cubic-bezier(0,0,.2,1);
+
+  /* Semantic */
+  --bg-app:var(--gray-100);
+  --bg-surface:var(--gray-0);
+  --bg-subtle:var(--gray-50);
+  --bg-sunken:var(--gray-100);
+  --bg-emphasis:var(--gray-150);
+  --bg-hover:var(--gray-100);
+  --bg-active:var(--gray-150);
+
+  --text-default:var(--gray-900);
+  --text-muted:var(--gray-500);
+  --text-subtle:var(--gray-400);
+  --text-inverse:var(--gray-0);
+  --text-brand:var(--trouw-600);
+
+  --border-default:var(--gray-200);
+  --border-strong:var(--gray-300);
+  --border-subtle:var(--gray-150);
+  --border-focus:var(--trouw-500);
+
+  --primary:var(--trouw-500);
+  --primary-hover:var(--trouw-600);
+  --primary-soft:var(--trouw-100);
+  --primary-soft-strong:rgba(46,91,255,.20);
+
+  --feedback-danger:var(--danger-500);  --feedback-danger-soft:var(--danger-100);
+  --feedback-warn:var(--warn-500);      --feedback-warn-soft:var(--warn-100);
+  --feedback-ok:var(--ok-500);          --feedback-ok-soft:var(--ok-100);
+  --feedback-info:var(--info-500);      --feedback-info-soft:var(--info-100);
+}
+/* ============================================================
+   SHELL
+   ============================================================ */
+.shell{display:grid;grid-template-columns:52px 1fr;height:100vh;overflow:hidden}
+/* Accordion */
+.accordion{background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--r-base);margin-bottom:var(--s-4);overflow:hidden;transition:border-color var(--duration-base) var(--easing-standard)}
+.accordion-header{display:flex;align-items:center;gap:var(--s-4);padding:var(--s-5);cursor:pointer;width:100%;background:transparent;border:none;text-align:left;font-family:inherit;color:inherit}
+.accordion-icon{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--bg-subtle);border-radius:var(--r-md);font-size:18px}
+.accordion-title{font-size:var(--fs-md);font-weight:700;margin:0;display:flex;align-items:center;gap:var(--s-2);line-height:1.3;color:var(--text-default)}
+.accordion-meta{font-size:var(--fs-xs);color:var(--text-muted);margin:2px 0 0;line-height:1.3}
+.accordion-status{display:inline-flex;align-items:center;gap:var(--s-2);padding:var(--s-1) var(--s-3);border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:600;background:var(--feedback-warn-soft);color:var(--warn-700);border:1px solid rgba(232,154,26,.25)}
+.accordion-status.complete{background:var(--feedback-ok-soft);color:var(--ok-500);border-color:rgba(31,158,92,.25)}
+.accordion-status.pending{background:var(--bg-sunken);color:var(--text-muted);border-color:var(--border-default)}
+.accordion-chevron{width:20px;height:20px;flex-shrink:0;color:var(--text-subtle);transition:transform var(--duration-base) var(--easing-standard)}
+.accordion-body{padding:0 var(--s-5) var(--s-5);display:none}
+/* Form system */
+.form-grid{display:grid;gap:var(--s-4)}
+.input,.select,.textarea{width:100%;background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--r-md);font-size:var(--fs-base);color:var(--text-default);transition:border-color var(--duration-fast) var(--easing-standard),box-shadow var(--duration-fast) var(--easing-standard);outline:none}
+.input,.select{height:36px;padding:0 var(--s-3)}
+.textarea{padding:var(--s-3);min-height:72px;resize:vertical;line-height:1.5}
+.input:hover,.select:hover,.textarea:hover{border-color:var(--border-strong)}
+.input:focus,.select:focus,.textarea:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px var(--primary-soft)}
+.input::placeholder,.textarea::placeholder{color:var(--text-subtle)}
+/* Unit input */
+.unit-input{display:flex;align-items:center;background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--r-md);transition:border-color var(--duration-fast) var(--easing-standard),box-shadow var(--duration-fast) var(--easing-standard)}
+.unit-input:focus-within{border-color:var(--border-focus);box-shadow:0 0 0 3px var(--primary-soft)}
+.unit-input input{flex:1;border:none;background:transparent;outline:none;height:34px;padding:0 var(--s-3);font-size:var(--fs-base);min-width:0}
+.unit-input .unit{padding:0 var(--s-3);color:var(--text-muted);font-size:var(--fs-sm);border-left:1px solid var(--border-subtle);height:22px;display:flex;align-items:center}
+/* Radio Card */
+.radio-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3)}
+.radio-row-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-3)}
+.radio-card{display:flex;flex-direction:column;gap:var(--s-1);padding:var(--s-4) var(--s-5);background:var(--bg-surface);border:1.5px solid var(--border-default);border-radius:var(--r-md);cursor:pointer;transition:border-color var(--duration-fast) var(--easing-standard),background var(--duration-fast) var(--easing-standard)}
+.radio-card[data-selected="true"]{border-color:var(--primary);background:var(--primary-soft)}
+/* Chips multi */
+.chips-multi{display:flex;flex-wrap:wrap;gap:var(--s-2)}
+.chip-multi{display:inline-flex;align-items:center;gap:4px;padding:4px var(--s-3);border:1.5px solid var(--border-default);background:var(--bg-surface);border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:600;color:var(--text-default);transition:all var(--duration-fast) var(--easing-standard)}
+.chip-multi[data-selected="true"]{border-color:var(--primary);background:var(--primary-soft);color:var(--text-brand)}
+.chip-multi i{font-size:10px}
+/* Switch row — novo pattern para flags booleanas */
+.switch-list{display:flex;flex-direction:column;gap:var(--s-1);margin-top:var(--s-2)}
+.switch-row{display:flex;align-items:flex-start;gap:var(--s-3);padding:var(--s-3) var(--s-4);border:1px solid var(--border-subtle);border-radius:var(--r-md);background:var(--bg-surface);transition:border-color var(--duration-fast) var(--easing-standard)}
+.switch-row:hover{border-color:var(--border-default)}
+.switch{flex-shrink:0;width:36px;height:20px;border-radius:var(--r-pill);background:var(--gray-300);position:relative;cursor:pointer;transition:background var(--duration-base) var(--easing-standard);margin-top:1px}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--bg-surface);box-shadow:var(--sh-1);transition:transform var(--duration-base) var(--easing-standard)}
+.switch[data-on="true"]{background:var(--primary)}
+.switch[data-on="true"]::after{transform:translateX(16px)}
+.switch-info{flex:1;min-width:0}
+.switch-title{font-size:var(--fs-sm);font-weight:600;color:var(--text-default);line-height:1.3;margin:0}
+.switch-desc{font-size:var(--fs-xs);color:var(--text-muted);line-height:1.4;margin:2px 0 0}
+/* Callout */
+.callout-info{padding:var(--s-3);background:var(--feedback-info-soft);border-radius:var(--r-md);font-size:var(--fs-sm);display:flex;gap:var(--s-2);align-items:flex-start;color:var(--text-default);margin-bottom:var(--s-5)}
+/* Button */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s-2);height:36px;padding:0 var(--s-5);border:1px solid transparent;border-radius:var(--r-md);font-size:var(--fs-sm);font-weight:600;transition:background var(--duration-fast) var(--easing-standard),border-color var(--duration-fast) var(--easing-standard),color var(--duration-fast) var(--easing-standard);outline:none}
+/* Section divider dentro do accordion */
+.form-section-title{font-size:var(--fs-sm);font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin:var(--s-5) 0 var(--s-3);padding-top:var(--s-4);border-top:1px solid var(--border-subtle)}
+.form-section-title:first-child{margin-top:0;padding-top:0;border-top:none}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+}
+
+/* Adicional Step 4 */
+/* ============================================================
+   TOKENS v17 — paridade com demais steps
+   ============================================================ */
+:root{
+  --gray-0:#FFFFFF; --gray-50:#FAFBFC; --gray-100:#F4F5F7;
+  --gray-150:#ECEEF1; --gray-200:#E2E5EA; --gray-300:#CBD0D9;
+  --gray-400:#9AA2AE; --gray-500:#6C7480; --gray-600:#4A5160;
+  --gray-700:#333A47; --gray-800:#1F242E; --gray-900:#10131A; --gray-950:#0B0E14;
+
+  --trouw-50:#F0F4FF; --trouw-100:#E6ECFF; --trouw-400:#5A7DFF;
+  --trouw-500:#2E5BFF; --trouw-600:#1E45D9;
+
+  --ok-500:#1F9E5C; --ok-100:#DEF3E7;
+  --warn-500:#E89A1A; --warn-100:#FCF1DD; --warn-700:#92400E;
+  --danger-500:#D9342B; --danger-100:#FCE7E5; --danger-600:#B82820;
+  --info-500:#2E7DC1; --info-100:#DEEBF6;
+  --ai-600:#7C3AED;
+
+  --op-kellux:#7C3AED; --op-bombril:#0891B2; --op-fenza:#65A30D;
+
+  --s-1:2px; --s-2h:4px; --s-2:6px; --s-3:8px; --s-4:12px;
+  --s-5:16px; --s-6:20px; --s-8:24px; --s-9:28px; --s-10:32px; --s-12:48px;
+
+  --r-sm:4px; --r-md:6px; --r-base:8px; --r-lg:10px; --r-xl:14px; --r-2xl:20px; --r-pill:999px;
+
+  --sh-1:0 1px 2px rgba(15,20,30,.04), 0 1px 1px rgba(15,20,30,.03);
+  --sh-2:0 4px 12px rgba(15,20,30,.06), 0 2px 4px rgba(15,20,30,.04);
+  --sh-3:0 12px 32px rgba(15,20,30,.10), 0 4px 8px rgba(15,20,30,.05);
+
+  --font-sans:'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --fs-xs:11px; --fs-sm:12px; --fs-base:13px; --fs-md:14px;
+  --fs-lg:15px; --fs-xl:17px; --fs-2xl:20px; --fs-3xl:24px;
+
+  --duration-fast:120ms; --duration-base:160ms; --duration-slow:260ms;
+  --easing-standard:cubic-bezier(.4,0,.2,1);
+  --easing-in:cubic-bezier(.4,0,1,1);
+  --easing-out:cubic-bezier(0,0,.2,1);
+
+  --bg-app:var(--gray-100);
+  --bg-surface:var(--gray-0);
+  --bg-subtle:var(--gray-50);
+  --bg-sunken:var(--gray-100);
+  --bg-emphasis:var(--gray-150);
+  --bg-hover:var(--gray-100);
+  --bg-active:var(--gray-150);
+
+  --text-default:var(--gray-900);
+  --text-muted:var(--gray-500);
+  --text-subtle:var(--gray-400);
+  --text-inverse:var(--gray-0);
+  --text-brand:var(--trouw-600);
+
+  --border-default:var(--gray-200);
+  --border-strong:var(--gray-300);
+  --border-subtle:var(--gray-150);
+  --border-focus:var(--trouw-500);
+
+  --primary:var(--trouw-500);
+  --primary-hover:var(--trouw-600);
+  --primary-soft:var(--trouw-100);
+
+  --feedback-danger:var(--danger-500);  --feedback-danger-soft:var(--danger-100);
+  --feedback-warn:var(--warn-500);      --feedback-warn-soft:var(--warn-100);
+  --feedback-ok:var(--ok-500);          --feedback-ok-soft:var(--ok-100);
+  --feedback-info:var(--info-500);      --feedback-info-soft:var(--info-100);
+}
+*,*::before,*::after{box-sizing:border-box}
+.shell{display:grid;grid-template-columns:52px 1fr;height:100vh;overflow:hidden}
+.topbar{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-3) var(--s-6);background:var(--bg-surface);border-bottom:1px solid var(--border-default);min-height:48px}
+.stepper{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-4) var(--s-6);background:var(--bg-surface);border-bottom:1px solid var(--border-default);overflow-x:auto}
+.wizard-content{overflow-y:auto;padding:var(--s-6) var(--s-6) var(--s-10)}
+.accordion{background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--r-base);margin-bottom:var(--s-4);overflow:hidden;transition:border-color var(--duration-base) var(--easing-standard)}
+.form-grid{display:grid;gap:var(--s-4)}
+.input.input-mono{font-family:var(--font-mono);font-size:var(--fs-sm)}
+.unit-input{display:flex;align-items:center;background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--r-md);transition:border-color var(--duration-fast) var(--easing-standard),box-shadow var(--duration-fast) var(--easing-standard)}
+.radio-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-3)}
+.radio-row-4{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-3)}
+.radio-card-title{font-size:var(--fs-sm);font-weight:700;color:var(--text-default);line-height:1.3;display:flex;align-items:center;gap:var(--s-2)}
+.radio-card-title i{color:var(--primary);font-size:14px}
+.chips-multi{display:flex;flex-wrap:wrap;gap:var(--s-2)}
+.callout-info{padding:var(--s-3);background:var(--feedback-info-soft);border-radius:var(--r-md);font-size:var(--fs-sm);display:flex;gap:var(--s-2);align-items:flex-start;color:var(--text-default);margin-bottom:var(--s-5)}
+.callout-warn{padding:var(--s-3);background:var(--feedback-warn-soft);border-radius:var(--r-md);font-size:var(--fs-sm);display:flex;gap:var(--s-2);align-items:flex-start;color:var(--warn-700);margin-bottom:var(--s-3)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s-2);height:36px;padding:0 var(--s-5);border:1px solid transparent;border-radius:var(--r-md);font-size:var(--fs-sm);font-weight:600;transition:background var(--duration-fast) var(--easing-standard),border-color var(--duration-fast) var(--easing-standard),color var(--duration-fast) var(--easing-standard);outline:none;text-decoration:none}
+.wizard-footer{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-4) var(--s-6);background:var(--bg-surface);border-top:1px solid var(--border-default)}
+.form-section-title{font-size:var(--fs-sm);font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin:var(--s-5) 0 var(--s-3);padding-top:var(--s-4);border-top:1px solid var(--border-subtle)}
+/* ============================================================
+   NOVOS COMPONENTES DO STEP 4
+   ============================================================ */
+
+/* Webhook table — variante compacta da users-table */
+.webhook-table-wrap{background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--r-md);overflow:hidden;margin-top:var(--s-3)}
+.webhook-table{width:100%;border-collapse:separate;border-spacing:0;font-size:var(--fs-sm)}
+.webhook-table th{padding:var(--s-3) var(--s-4);text-align:left;background:var(--bg-subtle);color:var(--text-muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;font-weight:700;border-bottom:1px solid var(--border-default)}
+.webhook-table td{padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--border-subtle);vertical-align:middle}
+.webhook-table tbody tr:last-child td{border-bottom:none}
+.webhook-table tbody tr:hover{background:var(--bg-subtle)}
+.webhook-url{font-family:var(--font-mono);font-size:var(--fs-xs);color:var(--text-default);word-break:break-all}
+.webhook-actions{display:flex;gap:4px;justify-content:flex-end}
+.webhook-action-btn{width:28px;height:28px;border-radius:var(--r-sm);display:inline-flex;align-items:center;justify-content:center;color:var(--text-muted);transition:background var(--duration-fast) var(--easing-standard),color var(--duration-fast) var(--easing-standard)}
+.webhook-action-btn:hover{background:var(--bg-hover);color:var(--text-default)}
+.webhook-action-btn[data-danger]:hover{background:var(--feedback-danger-soft);color:var(--feedback-danger)}
+/* Tag / badge de status de integração */
+.int-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:var(--r-pill);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+.int-tag[data-s="ativo"]{background:var(--feedback-ok-soft);color:var(--ok-500)}
+.int-tag[data-s="pendente"]{background:var(--feedback-warn-soft);color:var(--warn-700)}
+.int-tag[data-s="erro"]{background:var(--feedback-danger-soft);color:var(--danger-600)}
+/* Table footer (count + add btn) */
+.table-footer{margin-top:var(--s-3);display:flex;justify-content:space-between;align-items:center}
+/* Check grid (eventos) */
+.check-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--s-2);margin-top:var(--s-2)}
+.check-item{display:flex;align-items:center;gap:var(--s-3);padding:var(--s-3) var(--s-4);border:1px solid var(--border-subtle);border-radius:var(--r-md);background:var(--bg-surface);cursor:pointer;transition:border-color var(--duration-fast) var(--easing-standard)}
+.check-item:hover{border-color:var(--border-default)}
+.check-item[data-checked="true"]{border-color:var(--primary);background:var(--primary-soft)}
+.check-box{width:18px;height:18px;border-radius:var(--r-sm);border:1.5px solid var(--border-strong);background:var(--bg-surface);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;transition:all var(--duration-fast) var(--easing-standard)}
+.check-item[data-checked="true"] .check-box{background:var(--primary);border-color:var(--primary)}
+.check-item[data-checked="true"] .check-box::after{content:"✓";color:var(--text-inverse);font-size:11px;font-weight:700}
+.check-label{font-size:var(--fs-sm);font-weight:600;color:var(--text-default);line-height:1.3}
+.check-label small{display:block;font-weight:400;color:var(--text-muted);font-size:var(--fs-xs);margin-top:1px}
+/* Painel condicional (canal-specific) */
+.conditional{display:none}
+.conditional[data-show="true"]{display:block}
+
+/* Adicional Step 5 */
+:root{
+  --gray-0:#FFFFFF; --gray-50:#FAFBFC; --gray-100:#F4F5F7;
+  --gray-150:#ECEEF1; --gray-200:#E2E5EA; --gray-300:#CBD0D9;
+  --gray-400:#9AA2AE; --gray-500:#6C7480; --gray-600:#4A5160;
+  --gray-700:#333A47; --gray-800:#1F242E; --gray-900:#10131A; --gray-950:#0B0E14;
+
+  --trouw-50:#F0F4FF; --trouw-100:#E6ECFF; --trouw-400:#5A7DFF;
+  --trouw-500:#2E5BFF; --trouw-600:#1E45D9;
+
+  --ok-500:#1F9E5C; --ok-100:#DEF3E7;
+  --warn-500:#E89A1A; --warn-100:#FCF1DD; --warn-700:#92400E;
+  --danger-500:#D9342B; --danger-100:#FCE7E5; --danger-600:#B82820;
+  --info-500:#2E7DC1; --info-100:#DEEBF6;
+  --ai-600:#7C3AED;
+
+  --sev-info:#6C7480;  --sev-info-soft:#ECEEF1;
+  --sev-low:#2E7DC1;   --sev-low-soft:#DEEBF6;
+  --sev-med:#E89A1A;   --sev-med-soft:#FCF1DD;
+  --sev-high:#E85D1A;  --sev-high-soft:#FCE2D5;
+  --sev-crit:#D9342B;  --sev-crit-soft:#FCE7E5;
+
+  --op-kellux:#7C3AED; --op-bombril:#0891B2; --op-fenza:#65A30D;
+
+  --s-1:2px; --s-2h:4px; --s-2:6px; --s-3:8px; --s-4:12px;
+  --s-5:16px; --s-6:20px; --s-8:24px; --s-9:28px; --s-10:32px; --s-12:48px;
+
+  --r-sm:4px; --r-md:6px; --r-base:8px; --r-lg:10px; --r-xl:14px; --r-2xl:20px; --r-pill:999px;
+
+  --sh-1:0 1px 2px rgba(15,20,30,.04), 0 1px 1px rgba(15,20,30,.03);
+  --sh-2:0 4px 12px rgba(15,20,30,.06), 0 2px 4px rgba(15,20,30,.04);
+  --sh-3:0 12px 32px rgba(15,20,30,.10), 0 4px 8px rgba(15,20,30,.05);
+
+  --font-sans:'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --fs-xs:11px; --fs-sm:12px; --fs-base:13px; --fs-md:14px;
+  --fs-lg:15px; --fs-xl:17px; --fs-2xl:20px; --fs-3xl:24px;
+
+  --duration-fast:120ms; --duration-base:160ms; --duration-slow:260ms;
+  --easing-standard:cubic-bezier(.4,0,.2,1);
+
+  --bg-app:var(--gray-100);
+  --bg-surface:var(--gray-0);
+  --bg-subtle:var(--gray-50);
+  --bg-sunken:var(--gray-100);
+  --bg-emphasis:var(--gray-150);
+  --bg-hover:var(--gray-100);
+
+  --text-default:var(--gray-900);
+  --text-muted:var(--gray-500);
+  --text-subtle:var(--gray-400);
+  --text-inverse:var(--gray-0);
+  --text-brand:var(--trouw-600);
+
+  --border-default:var(--gray-200);
+  --border-strong:var(--gray-300);
+  --border-subtle:var(--gray-150);
+  --border-focus:var(--trouw-500);
+
+  --primary:var(--trouw-500);
+  --primary-hover:var(--trouw-600);
+  --primary-soft:var(--trouw-100);
+
+  --feedback-danger:var(--danger-500);  --feedback-danger-soft:var(--danger-100);
+  --feedback-warn:var(--warn-500);      --feedback-warn-soft:var(--warn-100);
+  --feedback-ok:var(--ok-500);          --feedback-ok-soft:var(--ok-100);
+  --feedback-info:var(--info-500);      --feedback-info-soft:var(--info-100);
+}
+.num,.tnum,table td,table th{font-variant-numeric:tabular-nums;font-feature-settings:'tnum' 1}
+.input-sm,.select-sm{height:30px;font-size:var(--fs-xs);padding:0 var(--s-3)}
+.select-sm{padding-right:24px;background-position:right 8px center}
+/* ============================================================
+   NOVOS COMPONENTES DO STEP 5
+   ============================================================ */
+
+/* KPI target grid — 4 metas lado a lado */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-3);margin-top:var(--s-2)}
+.kpi-card{padding:var(--s-4);background:var(--bg-subtle);border:1px solid var(--border-subtle);border-radius:var(--r-md)}
+.kpi-label{font-size:var(--fs-xs);color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em;font-weight:600;margin:0 0 var(--s-2)}
+.kpi-value{font-size:var(--fs-2xl);font-weight:700;color:var(--text-default);line-height:1;display:flex;align-items:baseline;gap:var(--s-1);font-variant-numeric:tabular-nums}
+.kpi-value .kpi-unit{font-size:var(--fs-sm);color:var(--text-muted);font-weight:600}
+.kpi-hint{font-size:var(--fs-xs);color:var(--text-subtle);margin:var(--s-2) 0 0;line-height:1.3}
+/* Penalty table — editável (promove perm-matrix para edit) */
+.penalty-table-wrap{background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--r-md);overflow:hidden;margin-top:var(--s-3)}
+.penalty-table{width:100%;border-collapse:separate;border-spacing:0;font-size:var(--fs-sm)}
+.penalty-table th{padding:var(--s-3) var(--s-4);text-align:left;background:var(--bg-subtle);color:var(--text-muted);font-size:10px;text-transform:uppercase;letter-spacing:.05em;font-weight:700;border-bottom:1px solid var(--border-default);white-space:nowrap}
+.penalty-table td{padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--border-subtle);vertical-align:middle}
+.penalty-table tbody tr:last-child td{border-bottom:none}
+.penalty-table tbody tr:hover{background:var(--bg-subtle)}
+.penalty-table .input-sm,.penalty-table .select-sm{height:28px;font-size:var(--fs-xs);padding:0 var(--s-2)}
+.penalty-table .select-sm{padding-right:22px;background-position:right 6px center}
+.penalty-table .unit-input{border-radius:var(--r-sm)}
+.penalty-table .unit-input input{height:26px;font-size:var(--fs-xs)}
+.penalty-table .unit-input .unit{font-size:10px;padding:0 var(--s-2);height:16px}
+/* Severity tag */
+.sev-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:var(--r-pill);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+.sev-tag[data-sev="low"]{background:var(--sev-low-soft);color:var(--sev-low)}
+.sev-tag[data-sev="med"]{background:var(--sev-med-soft);color:var(--warn-700)}
+.sev-tag[data-sev="high"]{background:var(--sev-high-soft);color:var(--sev-high)}
+.sev-tag[data-sev="crit"]{background:var(--sev-crit-soft);color:var(--sev-crit)}
+/* Table footer */
+.table-footer{margin-top:var(--s-3);display:flex;justify-content:space-between;align-items:center}
+/* Action row (delete button pequeno) */
+.row-actions{display:flex;gap:4px;justify-content:flex-end}
+.row-action-btn{width:28px;height:28px;border-radius:var(--r-sm);display:inline-flex;align-items:center;justify-content:center;color:var(--text-muted);transition:background var(--duration-fast) var(--easing-standard),color var(--duration-fast) var(--easing-standard)}
+.row-action-btn[data-danger]:hover{background:var(--feedback-danger-soft);color:var(--feedback-danger)}
+/* Recipient list (tags de e-mail) */
+.tag-list{display:flex;flex-wrap:wrap;gap:var(--s-2);padding:var(--s-3);border:1px solid var(--border-default);border-radius:var(--r-md);background:var(--bg-surface);min-height:52px;align-items:center}
+.tag-item{display:inline-flex;align-items:center;gap:var(--s-2);padding:3px var(--s-2) 3px var(--s-3);background:var(--bg-subtle);border:1px solid var(--border-subtle);border-radius:var(--r-pill);font-size:var(--fs-xs);color:var(--text-default)}
+.tag-item button{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-muted)}
+.tag-item button:hover{background:var(--feedback-danger-soft);color:var(--feedback-danger)}
+
+/* Adicional Step 6 */
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{min-height:100%}
+body{
+    font-family:var(--font-sans);
+    background:var(--bg-app);
+    color:var(--text-default);
+    font-size:var(--fs-sm);
+    line-height:var(--lh-default);
+  }
+/* ---------- Shell ---------- */
+  .shell{display:grid;grid-template-columns:232px 1fr;min-height:100vh}
+.sidebar{
+    background:var(--bg-surface);
+    border-right:1px solid var(--border-default);
+    padding:var(--s-6) var(--s-4);
+    display:flex;flex-direction:column;gap:var(--s-6);
+    position:sticky;top:0;height:100vh;
+  }
+.sb-logo{display:flex;align-items:center;gap:var(--s-3);padding:0 var(--s-2)}
+.sb-logo img{width:28px;height:28px}
+.sb-logo b{font-size:var(--fs-base);font-weight:var(--fw-extrabold);letter-spacing:-.01em}
+.sb-logo small{
+    display:block;font-size:10px;color:var(--text-subtle);
+    text-transform:uppercase;letter-spacing:.08em;font-weight:var(--fw-semibold);
+    margin-top:2px;
+  }
+.sb-nav{display:flex;flex-direction:column;gap:2px}
+.sb-group{
+    font-size:var(--fs-xs);color:var(--text-subtle);
+    text-transform:uppercase;letter-spacing:.08em;font-weight:var(--fw-semibold);
+    padding:var(--s-3) var(--s-3) var(--s-2);
+  }
+.sb-item{
+    display:flex;align-items:center;gap:var(--s-3);
+    padding:var(--s-2h) var(--s-3);border-radius:var(--r-base);
+    color:var(--text-muted);font-size:var(--fs-sm);font-weight:var(--fw-medium);
+    text-decoration:none;cursor:pointer;
+  }
+.sb-item i{width:16px;text-align:center;color:var(--text-subtle)}
+.sb-item:hover{background:var(--bg-hover);color:var(--text-default)}
+.sb-item.active{background:var(--primary-soft);color:var(--primary);font-weight:var(--fw-semibold)}
+.sb-item.active i{color:var(--primary)}
+/* ---------- Main ---------- */
+  main{display:flex;flex-direction:column;min-width:0}
+.topbar{
+    background:var(--bg-surface);
+    border-bottom:1px solid var(--border-default);
+    padding:var(--s-4) var(--s-8);
+    display:flex;justify-content:space-between;align-items:center;
+    gap:var(--s-6);
+  }
+.crumbs{display:flex;align-items:center;gap:var(--s-2);font-size:var(--fs-xs);color:var(--text-subtle)}
+.crumbs a{color:var(--text-muted);text-decoration:none}
+.crumbs a:hover{color:var(--primary)}
+.crumbs i{font-size:8px}
+.crumbs span{color:var(--text-default);font-weight:var(--fw-semibold)}
+.client-pill{
+    display:inline-flex;align-items:center;gap:var(--s-3);
+    padding:var(--s-2) var(--s-4);
+    background:var(--bg-subtle);
+    border:1px solid var(--border-default);
     border-radius:var(--r-pill);
     font-size:var(--fs-xs);font-weight:var(--fw-semibold);
-    letter-spacing:.02em;text-transform:uppercase;
-    margin-bottom:var(--s-5);
+    color:var(--text-default);
   }
-  h1{
-    font-size:var(--fs-3xl);font-weight:var(--fw-extrabold);
+.client-pill .dot{width:8px;height:8px;border-radius:50%;background:var(--op-kellux)}
+.client-pill .id{color:var(--text-subtle);font-weight:var(--fw-regular)}
+/* ---------- Wizard ---------- */
+  .wizard{padding:var(--s-8);max-width:1080px;width:100%;margin:0 auto}
+.wiz-head{margin-bottom:var(--s-6)}
+.wiz-head .eyebrow{
+    font-size:var(--fs-xs);color:var(--primary);
+    text-transform:uppercase;letter-spacing:.08em;font-weight:var(--fw-bold);
+    margin-bottom:var(--s-2);
+  }
+.wiz-head h1{
+    font-size:var(--fs-2xl);font-weight:var(--fw-extrabold);
     letter-spacing:-.02em;line-height:var(--lh-tight);
-    margin-bottom:var(--s-4);
+    color:var(--text-default);
   }
-  h1 em{font-style:normal;color:var(--primary)}
-  .lede{
-    font-size:var(--fs-lg);color:var(--text-muted);
-    max-width:720px;line-height:var(--lh-default);
+.wiz-head .lede{
+    margin-top:var(--s-2);
+    font-size:var(--fs-base);color:var(--text-muted);
   }
-
-  .grid{
-    display:grid;grid-template-columns:repeat(3,1fr);
-    gap:var(--s-5);margin-top:var(--s-10);
-  }
-  @media (max-width:980px){ .grid{grid-template-columns:repeat(2,1fr)} }
-  @media (max-width:620px){ .grid{grid-template-columns:1fr} }
-
-  .section-title{
-    grid-column:1/-1;
-    font-size:var(--fs-xs);color:var(--text-subtle);
-    text-transform:uppercase;letter-spacing:.08em;
-    font-weight:var(--fw-bold);
-    margin-top:var(--s-3);
-    padding-bottom:var(--s-2);
-    border-bottom:1px solid var(--border-subtle);
-  }
-  .section-title:first-child{margin-top:0}
-
-  .card{
+/* Stepper */
+  .stepper{
+    display:flex;align-items:center;gap:0;
     background:var(--bg-surface);
     border:1px solid var(--border-default);
-    border-radius:var(--r-xl);
-    padding:var(--s-8);
-    box-shadow:var(--sh-1);
-    display:flex;flex-direction:column;gap:var(--s-4);
-    text-decoration:none;color:inherit;
-    transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+    border-radius:var(--r-lg);
+    padding:var(--s-3);
+    margin-bottom:var(--s-6);
+    overflow-x:auto;
   }
-  .card:hover{
-    transform:translateY(-2px);
-    border-color:var(--border-focus);
-    box-shadow:var(--sh-2);
+.step{
+    display:flex;align-items:center;gap:var(--s-3);
+    padding:var(--s-2) var(--s-3);
+    flex:1;min-width:0;
+    color:var(--text-subtle);font-size:var(--fs-xs);font-weight:var(--fw-semibold);
   }
-  .card:focus-visible{
-    outline:2px solid var(--border-focus);outline-offset:3px;
+.step + .step::before{
+    content:"";flex-shrink:0;
+    width:16px;height:1px;background:var(--border-default);
+    margin-right:var(--s-1);
   }
-  .card-ico{
-    width:44px;height:44px;border-radius:var(--r-base);
-    background:var(--primary-soft);color:var(--primary);
-    display:flex;align-items:center;justify-content:center;
-    font-size:18px;
+.step .n{
+    width:22px;height:22px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;
+    background:var(--bg-subtle);color:var(--text-subtle);
+    font-size:11px;font-weight:var(--fw-bold);
+    flex-shrink:0;
   }
-  .card-kind{
-    font-size:var(--fs-xs);color:var(--text-muted);
-    text-transform:uppercase;letter-spacing:.06em;font-weight:var(--fw-semibold);
+.step.complete .n{background:var(--feedback-success);color:#fff}
+.step.complete{color:var(--text-muted)}
+.step.complete .n::before{content:"\f00c";font-family:"Font Awesome 6 Free";font-weight:900;font-size:9px}
+.step.complete .n span{display:none}
+.step.active .n{background:var(--primary);color:#fff}
+.step.active{color:var(--text-default)}
+.step .lbl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Callout */
+  .callout{
+    display:flex;gap:var(--s-3);
+    padding:var(--s-4);
+    border:1px solid var(--border-default);
+    border-radius:var(--r-base);
+    background:var(--bg-subtle);
+    margin-bottom:var(--s-5);
   }
-  .card-title{
-    font-size:var(--fs-xl);font-weight:var(--fw-bold);
-    color:var(--text-default);letter-spacing:-.01em;
+.callout i{color:var(--primary);margin-top:2px}
+.callout.success{border-color:rgba(22,163,74,.30);background:rgba(22,163,74,.06)}
+.callout.success i{color:var(--feedback-success)}
+.callout .tt{font-weight:var(--fw-bold);color:var(--text-default);margin-bottom:2px}
+.callout .dd{font-size:var(--fs-xs);color:var(--text-muted);line-height:var(--lh-default)}
+/* Checklist (progresso) */
+  .checklist{
+    background:var(--bg-surface);
+    border:1px solid var(--border-default);
+    border-radius:var(--r-lg);
+    padding:var(--s-5);
+    margin-bottom:var(--s-6);
   }
-  .card-desc{
-    font-size:var(--fs-sm);color:var(--text-muted);line-height:var(--lh-default);
-  }
-  .card-cta{
-    margin-top:var(--s-3);display:inline-flex;align-items:center;gap:var(--s-2);
-    color:var(--primary);font-weight:var(--fw-semibold);font-size:var(--fs-sm);
-  }
-  .card-cta i{transition:transform .15s ease}
-  .card:hover .card-cta i{transform:translateX(4px)}
-
-  .card.variant-docs .card-ico{
-    background:rgba(124,58,237,.10);color:#7C3AED;
-  }
-  .card.variant-archive .card-ico{
-    background:var(--bg-subtle);color:var(--text-muted);
-  }
-  .card.variant-archive:hover{border-color:var(--border-strong)}
-  .card.variant-review .card-ico{
-    background:rgba(22,163,74,.10);color:var(--feedback-success);
-  }
-  .card-foot{
-    margin-top:auto;padding-top:var(--s-3);
+.checklist-head{
     display:flex;justify-content:space-between;align-items:center;
-    border-top:1px solid var(--border-subtle);
+    margin-bottom:var(--s-4);
   }
-  .card-kind-mini{
+.checklist-head h3{
+    font-size:var(--fs-base);font-weight:var(--fw-bold);
+    color:var(--text-default);
+  }
+.progress-mini{
+    display:inline-flex;align-items:center;gap:var(--s-2);
+    padding:var(--s-1) var(--s-3);
+    background:rgba(22,163,74,.10);
+    color:var(--feedback-success);
+    border-radius:var(--r-pill);
+    font-size:var(--fs-xs);font-weight:var(--fw-bold);
+    font-variant-numeric:tabular-nums;
+  }
+.progress-mini i{font-size:9px}
+.checklist-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:var(--s-3);
+  }
+@media (max-width:720px){ .checklist-grid{grid-template-columns:1fr}} }
+.chk-item{
+    display:flex;align-items:center;gap:var(--s-3);
+    padding:var(--s-3);
+    border:1px solid var(--border-default);
+    border-radius:var(--r-base);
+    background:var(--bg-app);
+  }
+.chk-badge{
+    width:28px;height:28px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;
+    background:var(--feedback-success);color:#fff;
+    font-size:11px;
+    flex-shrink:0;
+  }
+.chk-item.pending .chk-badge{background:var(--bg-subtle);color:var(--text-subtle)}
+.chk-item.pending{background:var(--bg-subtle);border-style:dashed}
+.chk-body{min-width:0;flex:1}
+.chk-ttl{font-size:var(--fs-xs);font-weight:var(--fw-bold);color:var(--text-default);letter-spacing:.02em;text-transform:uppercase}
+.chk-sub{font-size:var(--fs-xs);color:var(--text-muted);margin-top:2px}
+.chk-item.pending .chk-ttl{color:var(--text-muted)}
+/* Resumo cards (accordions) */
+  .sum-card{
+    background:var(--bg-surface);
+    border:1px solid var(--border-default);
+    border-radius:var(--r-lg);
+    margin-bottom:var(--s-3);
+    overflow:hidden;
+  }
+.sum-head{
+    display:flex;align-items:center;gap:var(--s-4);
+    padding:var(--s-4) var(--s-5);
+    cursor:pointer;
+    border-bottom:1px solid transparent;
+    transition:background-color .12s ease, border-color .12s ease;
+  }
+.sum-head:hover{background:var(--bg-hover)}
+.sum-card[data-open="true"] .sum-head{border-bottom-color:var(--border-subtle)}
+.sum-ico{
+    width:40px;height:40px;border-radius:var(--r-base);
+    background:var(--primary-soft);color:var(--primary);
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:16px;flex-shrink:0;
+  }
+.sum-meta{min-width:0;flex:1}
+.sum-meta .eye{
+    font-size:10px;color:var(--primary);font-weight:var(--fw-bold);
+    text-transform:uppercase;letter-spacing:.08em;
+  }
+.sum-meta .ttl{
+    font-size:var(--fs-base);font-weight:var(--fw-bold);color:var(--text-default);
+    margin-top:2px;letter-spacing:-.01em;
+  }
+.sum-preview{
+    display:flex;flex-wrap:wrap;gap:var(--s-2);
+    margin-top:var(--s-2);
+  }
+.sum-chip{
+    display:inline-flex;align-items:center;gap:4px;
+    padding:2px var(--s-2h);
+    background:var(--bg-subtle);
+    border:1px solid var(--border-default);
+    border-radius:var(--r-pill);
+    font-size:11px;color:var(--text-muted);font-weight:var(--fw-medium);
+  }
+.sum-chip b{color:var(--text-default);font-weight:var(--fw-semibold)}
+.sum-actions{display:flex;align-items:center;gap:var(--s-2);flex-shrink:0}
+.btn-edit{
+    display:inline-flex;align-items:center;gap:var(--s-2);
+    padding:var(--s-2) var(--s-3);
+    background:var(--bg-app);
+    border:1px solid var(--border-default);
+    border-radius:var(--r-base);
+    color:var(--text-muted);
+    font-size:var(--fs-xs);font-weight:var(--fw-semibold);
+    text-decoration:none;
+    cursor:pointer;
+  }
+.btn-edit:hover{
+    border-color:var(--border-focus);
+    color:var(--primary);
+    background:var(--primary-soft);
+  }
+.sum-toggle{
+    width:32px;height:32px;border:none;background:transparent;
+    color:var(--text-muted);cursor:pointer;border-radius:var(--r-base);
+    transition:transform .15s ease, background-color .12s ease;
+    display:inline-flex;align-items:center;justify-content:center;
+  }
+.sum-toggle:hover{background:var(--bg-subtle);color:var(--text-default)}
+.sum-card[data-open="true"] .sum-toggle{transform:rotate(180deg)}
+.sum-body{display:none;padding:var(--s-5) var(--s-5) var(--s-5) calc(var(--s-5) + 40px + var(--s-4))}
+.sum-card[data-open="true"] .sum-body{display:block}
+.kv-grid{
+    display:grid;grid-template-columns:repeat(2,1fr);
+    gap:var(--s-4) var(--s-6);
+  }
+@media (max-width:720px){ .kv-grid{grid-template-columns:1fr}} }
+.kv{min-width:0}
+.kv .k{
+    font-size:10px;color:var(--text-subtle);
+    text-transform:uppercase;letter-spacing:.08em;font-weight:var(--fw-semibold);
+    margin-bottom:2px;
+  }
+.kv .v{font-size:var(--fs-sm);color:var(--text-default);font-weight:var(--fw-medium);word-break:break-word}
+.kv .v b{font-weight:var(--fw-bold)}
+.kv .v.mono{font-family:var(--font-mono,ui-monospace,SFMono-Regular,Menlo,Consolas,monospace);font-size:var(--fs-xs)}
+.kv .v-list{display:flex;flex-wrap:wrap;gap:var(--s-1)}
+.kv .v-list span{
+    display:inline-flex;padding:2px var(--s-2);
+    background:var(--primary-soft);color:var(--primary);
+    border-radius:var(--r-sm);font-size:11px;font-weight:var(--fw-semibold);
+  }
+.sub-title{
     font-size:10px;color:var(--text-subtle);
     text-transform:uppercase;letter-spacing:.08em;font-weight:var(--fw-bold);
+    margin:var(--s-4) 0 var(--s-2);
+    padding-bottom:var(--s-1);
+    border-bottom:1px solid var(--border-subtle);
+  }
+.sub-title:first-child{margin-top:0}
+.mini-table{
+    width:100%;border-collapse:collapse;
+    background:var(--bg-app);
+    border:1px solid var(--border-default);
+    border-radius:var(--r-base);
+    overflow:hidden;
+    font-size:var(--fs-xs);
+    margin-top:var(--s-2);
+  }
+.mini-table th{
+    text-align:left;
+    padding:var(--s-2) var(--s-3);
+    background:var(--bg-subtle);
+    border-bottom:1px solid var(--border-default);
+    font-weight:var(--fw-semibold);
+    color:var(--text-muted);
+    font-size:10px;text-transform:uppercase;letter-spacing:.08em;
+  }
+.mini-table td{
+    padding:var(--s-2) var(--s-3);
+    border-bottom:1px solid var(--border-subtle);
+    color:var(--text-default);
+    font-variant-numeric:tabular-nums;
+  }
+.mini-table tr:last-child td{border-bottom:none}
+/* Observações (textarea) */
+  .notes-block{
+    background:var(--bg-surface);
+    border:1px solid var(--border-default);
+    border-radius:var(--r-lg);
+    padding:var(--s-5);
+    margin-top:var(--s-5);
+  }
+.notes-block h3{
+    font-size:var(--fs-base);font-weight:var(--fw-bold);
+    color:var(--text-default);
+    margin-bottom:var(--s-1);
+  }
+.notes-block p{
+    font-size:var(--fs-xs);color:var(--text-muted);
+    margin-bottom:var(--s-3);
+  }
+.textarea{
+    width:100%;min-height:96px;resize:vertical;
+    padding:var(--s-3);
+    border:1px solid var(--border-default);
+    border-radius:var(--r-base);
+    background:var(--bg-app);
+    color:var(--text-default);
+    font-family:var(--font-sans);
+    font-size:var(--fs-sm);
+    line-height:var(--lh-default);
+    transition:border-color .12s ease, box-shadow .12s ease;
+  }
+.textarea:focus{
+    outline:none;border-color:var(--border-focus);
+    box-shadow:0 0 0 3px rgba(46,91,255,.15);
+  }
+/* Aceite */
+  .accept-block{
+    background:var(--bg-surface);
+    border:1px solid var(--border-default);
+    border-radius:var(--r-lg);
+    padding:var(--s-5);
+    margin-top:var(--s-4);
+  }
+.accept-row{
+    display:flex;gap:var(--s-3);
+    align-items:flex-start;
+  }
+.accept-row input[type="checkbox"]{
+    width:18px;height:18px;margin-top:2px;
+    accent-color:var(--primary);
+    cursor:pointer;flex-shrink:0;
+  }
+.accept-row label{
+    font-size:var(--fs-sm);color:var(--text-default);
+    line-height:var(--lh-default);
+    cursor:pointer;user-select:none;
+  }
+.accept-row label a{color:var(--primary);text-decoration:underline;font-weight:var(--fw-semibold)}
+.accept-row label a:hover{color:var(--primary-hover)}
+.accept-row label .hint{
+    display:block;font-size:var(--fs-xs);color:var(--text-muted);
+    margin-top:var(--s-1);font-weight:var(--fw-regular);
+  }
+/* Footer nav */
+  .wiz-footer{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-top:var(--s-6);
+    padding-top:var(--s-5);
+    border-top:1px solid var(--border-subtle);
+    gap:var(--s-3);
+  }
+.btn{
+    display:inline-flex;align-items:center;gap:var(--s-2);
+    padding:var(--s-3) var(--s-5);
+    border-radius:var(--r-base);
+    font-family:var(--font-sans);
+    font-size:var(--fs-sm);font-weight:var(--fw-semibold);
+    border:1px solid transparent;cursor:pointer;
+    text-decoration:none;
+    transition:background-color .12s ease, border-color .12s ease, color .12s ease, transform .08s ease;
+  }
+.btn:active{transform:translateY(1px)}
+.btn-ghost{background:transparent;border-color:var(--border-default);color:var(--text-muted)}
+.btn-ghost:hover{border-color:var(--border-strong);color:var(--text-default);background:var(--bg-hover)}
+.btn-primary{
+    background:var(--primary);color:#fff;border-color:var(--primary);
+    padding:var(--s-3h) var(--s-6);font-size:var(--fs-base);
+  }
+.btn-primary i{font-size:14px}
+.btn-primary:disabled{
+    background:var(--bg-subtle);color:var(--text-subtle);
+    border-color:var(--border-default);cursor:not-allowed;
+  }
+.btn-primary:disabled:hover{background:var(--bg-subtle)}
+.save-draft{
+    display:inline-flex;align-items:center;gap:var(--s-2);
+    font-size:var(--fs-xs);color:var(--text-muted);
+    font-weight:var(--fw-semibold);
+    text-decoration:none;cursor:pointer;
+    padding:var(--s-2) var(--s-3);
+    border-radius:var(--r-base);
+  }
+.save-draft:hover{color:var(--primary);background:var(--primary-soft)}
+.save-draft i{font-size:11px}
+/* Focus visível global */
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline:2px solid var(--border-focus);outline-offset:2px;border-radius:var(--r-sm);
+  }
+@media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}}
   }
 
-  footer{
-    margin-top:64px;padding-top:var(--s-6);
-    border-top:1px solid var(--border-subtle);
-    font-size:var(--fs-xs);color:var(--text-subtle);
-    display:flex;justify-content:space-between;align-items:center;
-    flex-wrap:wrap;gap:var(--s-3);
-  }
-  footer a{color:var(--text-muted);text-decoration:none}
-  footer a:hover{color:var(--primary)}
-  .pill-tech{
-    display:inline-flex;align-items:center;gap:var(--s-2);
-    background:var(--bg-subtle);border:1px solid var(--border-default);
-    border-radius:var(--r-pill);padding:var(--s-1) var(--s-3);
-    font-size:var(--fs-xs);color:var(--text-muted);
-  }
-  .pill-tech i{color:var(--primary);font-size:10px}
+
+/* ===== WIZARD NAVIGATION ===== */
+.step-section { display: none; }
+.step-section.active { display: block; }
+.step-nav { display: flex; justify-content: space-between; align-items: center; padding: var(--s-6) 0; margin-top: var(--s-6); border-top: 1px solid var(--border-subtle); }
+.step-nav-btn { display: inline-flex; align-items: center; gap: var(--s-2); padding: var(--s-3) var(--s-6); border-radius: var(--r-base); font-weight: var(--fw-semibold); font-size: var(--fs-sm); cursor: pointer; border: none; font-family: inherit; }
+.step-nav-btn.primary { background: var(--primary); color: #fff; }
+.step-nav-btn.primary:hover { background: var(--primary-hover); }
+.step-nav-btn.secondary { background: var(--bg-subtle); color: var(--text-default); border: 1px solid var(--border-default); }
+.step-nav-btn.secondary:hover { background: var(--bg-surface); border-color: var(--border-strong); }
+.step-nav-btn:disabled { opacity: .4; cursor: not-allowed; }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <header>
-    <span class="eyebrow"><i class="fas fa-bolt"></i> Trouw DS v17 · Vitrine Técnica</span>
-    <h1>Torre de Controle — Cadastro de Cliente <em>+ Design System</em></h1>
-    <p class="lede">
-      Fluxo de onboarding de cliente e documentação viva do Trouw Design System v17.
-      Reconciliação DTCG-W3C dos tokens do DS v16 (Torre Operacional) com os
-      componentes do cadastro-cliente-v7. Dois modos de densidade (<code>form</code>/<code>ops</code>),
-      Plus Jakarta Sans canônica, WCAG 2.2 AA.
-    </p>
-  </header>
+<div class="shell">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="pin-trouw.png" alt="Trouw">
+    </div>
+    <button class="sidebar-btn" title="Dashboard"><i class="fas fa-gauge"></i></button>
+    <button class="sidebar-btn" title="SMs"><i class="fas fa-truck-fast"></i></button>
+    <button class="sidebar-btn" aria-current="page" title="Cadastros"><i class="fas fa-folder-plus"></i></button>
+    <button class="sidebar-btn" title="Relatorios"><i class="fas fa-chart-line"></i></button>
+  </aside>
 
-  <main class="grid">
+  <!-- MAIN -->
+  <main class="main">
 
-    <div class="section-title">Wizard de cadastro · 6 passos</div>
-
-    <a href="/cadastro/cliente/steps/step-1-identificacao" class="card">
-      <div class="card-ico"><i class="fas fa-id-card"></i></div>
-      <div class="card-kind">Passo 1 / 6</div>
-      <div class="card-title">Identificação</div>
-      <p class="card-desc">
-        Dados cadastrais, contrato, SLAs base, contato comercial e filiais.
-        Form Grid, Accordion, Radio Card, Unit Input, Callout.
-      </p>
-      <div class="card-foot">
-        <span class="card-kind-mini">Wizard</span>
-        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <nav class="breadcrumb">
+        <span>Cadastros</span>
+        <span class="breadcrumb-sep">/</span>
+        <span>Clientes</span>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Novo cliente</span>
+      </nav>
+      <div class="topbar-spacer"></div>
+      <div class="client-pill">
+        <span class="client-pill-dot"></span>
+        Novo cadastro &middot; rascunho
       </div>
-    </a>
+      <button class="btn btn-ghost btn-sm"><i class="fas fa-xmark"></i> Cancelar</button>
+    </div>
 
-    <a href="/cadastro/cliente/steps/step-2-usuarios" class="card">
-      <div class="card-ico"><i class="fas fa-users"></i></div>
-      <div class="card-kind">Passo 2 / 6</div>
-      <div class="card-title">Usuários</div>
-      <p class="card-desc">
-        Convite de usuários, funções, chips de filial e matriz de permissões.
-        Data Table, Role Badge, Modal, Perm Matrix, Chip Multi.
-      </p>
-      <div class="card-foot">
-        <span class="card-kind-mini">Wizard</span>
-        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+    <!-- STEPPER -->
+    <div class="stepper" id="wizard-stepper" role="tablist" aria-label="Etapas do cadastro">
+      <div class="step" id="stepper-1" data-state="active">
+        <div class="step-circle">1</div>
+        <div class="step-info">
+          <p class="step-label">Etapa 1</p>
+          <p class="step-name">Cliente</p>
+        </div>
       </div>
-    </a>
-
-    <a href="/cadastro/cliente/steps/step-3-operacao" class="card">
-      <div class="card-ico"><i class="fas fa-truck"></i></div>
-      <div class="card-kind">Passo 3 / 6</div>
-      <div class="card-title">Operação</div>
-      <p class="card-desc">
-        Modais, veículos, tipos de carga, restrições, cobertura geográfica e
-        janelas de coleta/entrega. Switch, Chips Multi, Radio Card.
-      </p>
-      <div class="card-foot">
-        <span class="card-kind-mini">Wizard</span>
-        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+      <div class="step-line"></div>
+      <div class="step" id="stepper-2" data-state="pending">
+        <div class="step-circle">2</div>
+        <div class="step-info">
+          <p class="step-label">Etapa 2</p>
+          <p class="step-name">Usuarios</p>
+        </div>
       </div>
-    </a>
-
-    <a href="/cadastro/cliente/steps/step-4-integracao" class="card">
-      <div class="card-ico"><i class="fas fa-plug"></i></div>
-      <div class="card-kind">Passo 4 / 6</div>
-      <div class="card-title">Integração</div>
-      <p class="card-desc">
-        Canal (API/EDI/Portal/Upload), webhooks, sincronização e teste
-        de conexão. Webhook Table, Check Grid, Conditional Panel, Mono Input.
-      </p>
-      <div class="card-foot">
-        <span class="card-kind-mini">Wizard</span>
-        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+      <div class="step-line"></div>
+      <div class="step" id="stepper-3" data-state="pending">
+        <div class="step-circle">3</div>
+        <div class="step-info">
+          <p class="step-label">Etapa 3</p>
+          <p class="step-name">Operacao</p>
+        </div>
       </div>
-    </a>
-
-    <a href="/cadastro/cliente/steps/step-5-slas" class="card">
-      <div class="card-ico"><i class="fas fa-gauge-high"></i></div>
-      <div class="card-kind">Passo 5 / 6</div>
-      <div class="card-title">SLAs</div>
-      <p class="card-desc">
-        Metas OTIF/OTD/OTP, penalidades editáveis por severidade, alertas
-        preventivos e relatórios. KPI Grid, Penalty Table, Severity Tag.
-      </p>
-      <div class="card-foot">
-        <span class="card-kind-mini">Wizard</span>
-        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+      <div class="step-line"></div>
+      <div class="step" id="stepper-4" data-state="pending">
+        <div class="step-circle">4</div>
+        <div class="step-info">
+          <p class="step-label">Etapa 4</p>
+          <p class="step-name">Integracao</p>
+        </div>
       </div>
-    </a>
-
-    <a href="/cadastro/cliente/steps/step-6-revisao" class="card variant-review">
-      <div class="card-ico"><i class="fas fa-clipboard-check"></i></div>
-      <div class="card-kind">Passo 6 / 6</div>
-      <div class="card-title">Revisão &amp; envio</div>
-      <p class="card-desc">
-        Checklist de completude, resumos expansíveis por etapa, observações
-        finais e aceite. Summary Card, Checklist Grid, KV Grid, Mini Table.
-      </p>
-      <div class="card-foot">
-        <span class="card-kind-mini">Wizard · Final</span>
-        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+      <div class="step-line"></div>
+      <div class="step" id="stepper-5" data-state="pending">
+        <div class="step-circle">5</div>
+        <div class="step-info">
+          <p class="step-label">Etapa 5</p>
+          <p class="step-name">SLAs</p>
+        </div>
       </div>
-    </a>
-
-    <div class="section-title">Documentação &amp; referência</div>
-
-    <a href="/cadastro/cliente/docs/showcase-v17" class="card variant-docs">
-      <div class="card-ico"><i class="fas fa-book-open"></i></div>
-      <div class="card-kind">Documentação · v17</div>
-      <div class="card-title">Showcase Form Patterns v17</div>
-      <p class="card-desc">
-        Componentes promovidos do cadastro: Stepper, Accordion, Form Field,
-        Data Table, Modal, Chip Multi, Role Badge, Status Dot, Callout, Avatar.
-      </p>
-      <div class="card-foot">
-        <span class="card-kind-mini">Docs</span>
-        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+      <div class="step-line"></div>
+      <div class="step" id="stepper-6" data-state="pending">
+        <div class="step-circle">6</div>
+        <div class="step-info">
+          <p class="step-label">Etapa 6</p>
+          <p class="step-name">Revisao</p>
+        </div>
       </div>
-    </a>
+    </div>
 
-    <a href="/cadastro/cliente/docs/showcase-v16" class="card variant-archive">
-      <div class="card-ico"><i class="fas fa-clock-rotate-left"></i></div>
-      <div class="card-kind">Arquivo · v16</div>
-      <div class="card-title">Showcase DS v16 (histórico)</div>
-      <p class="card-desc">
-        Versão anterior derivada da Torre Operacional v2_85. Mantido como
-        referência durante a migração. Tokens <code>--neutral-*</code>.
-      </p>
-      <div class="card-foot">
-        <span class="card-kind-mini">Arquivo</span>
-        <span class="card-cta">Abrir <i class="fas fa-arrow-right"></i></span>
+    <!-- CONTEUDO DO WIZARD -->
+    <div class="wizard-content">
+      <div class="wizard-inner">
+
+        <!-- ===== STEP 1 ===== -->
+        <section id="step-1" class="step-section active" data-step="1">
+<header class="step-header">
+          <h1 class="step-title">Cadastro do cliente</h1>
+          <p class="step-desc">
+            Dados cadastrais, contrato e contato comercial. O cadastro de
+            <strong>usuários com acesso ao sistema</strong> é feito na próxima etapa.
+            Campos obrigatórios estão marcados com <span class="req">*</span>.
+          </p>
+        </header>
+
+        <!-- ══════════ ACCORDION 1 · Identificação ══════════ -->
+        <div class="accordion" data-state="open">
+          <button class="accordion-header" type="button">
+            <div class="accordion-icon">🏢</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Identificação da empresa</h3>
+              <p class="accordion-meta">Kellux Indústrias S.A. · 12.345.678/0001-90</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+
+          <div class="accordion-body">
+            <div class="form-grid form-grid-2">
+              <div class="form-field col-span-2">
+                <label class="form-label">Razão Social <span class="req">*</span></label>
+                <input class="input" data-bind="razaoSocial" value="Kellux Indústrias S.A." placeholder="Kellux Indústrias S.A.">
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Nome Fantasia <span class="req">*</span></label>
+                <input class="input" data-bind="nomeFantasia" value="Kellux" placeholder="Kellux">
+                <span class="form-hint">Aparece nos cards e relatórios.</span>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">CNPJ <span class="req">*</span></label>
+                <input class="input" data-bind="cnpj" value="12.345.678/0001-90" placeholder="00.000.000/0001-00">
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Segmento <span class="req">*</span></label>
+                <select class="select" data-bind="segmento">
+                  <option value="">Selecione…</option>
+                  <option value="industria" selected>Indústria</option>
+                  <option value="fmcg">FMCG (bens de consumo)</option>
+                  <option value="agro">Agronegócio</option>
+                  <option value="varejo">Varejo / E-commerce</option>
+                  <option value="farma">Farmacêutico</option>
+                  <option value="outros">Outros</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Porte <span class="opt">opcional</span></label>
+                <select class="select" data-bind="porte">
+                  <option value="">—</option>
+                  <option value="pme">PME</option>
+                  <option value="medio">Médio</option>
+                  <option value="grande" selected>Grande</option>
+                  <option value="corporate">Corporate</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Cidade matriz</label>
+                <input class="input" data-bind="enderecoCidade" value="São Paulo" placeholder="São Paulo">
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">UF</label>
+                <select class="select" data-bind="enderecoUf">
+                  <option value="">—</option>
+                  <option value="SP" selected>SP</option>
+                  <option value="RJ">RJ</option>
+                  <option value="MG">MG</option>
+                  <option value="RS">RS</option>
+                  <option value="PR">PR</option>
+                  <option value="SC">SC</option>
+                  <option value="BA">BA</option>
+                  <option value="GO">GO</option>
+                  <option value="DF">DF</option>
+                  <option value="PE">PE</option>
+                  <option value="CE">CE</option>
+                  <option value="ES">ES</option>
+                  <option value="PA">PA</option>
+                  <option value="MT">MT</option>
+                  <option value="MS">MS</option>
+                </select>
+              </div>
+
+              <div class="form-field col-span-2">
+                <label class="form-label">CD/Hub principal</label>
+                <input class="input" data-bind="hub" value="CD São Paulo Sul" placeholder="Ex: CD São Paulo Sul">
+                <span class="form-hint">Centro de distribuição de origem padrão das viagens.</span>
+              </div>
+
+              <!-- ALT-02 · Estrutura societária -->
+              <div class="form-field col-span-2" style="padding-top:var(--s-4);border-top:1px solid var(--border-subtle);margin-top:var(--s-2)">
+                <label class="form-label">Estrutura societária</label>
+                <div class="radio-row">
+                  <label class="radio-card" data-selected="true">
+                    <input type="radio" name="estrSoc" value="matriz" checked>
+                    <span class="radio-card-title">Apenas Matriz</span>
+                    <span class="radio-card-desc">Um único CNPJ. Todas as SMs originam dele.</span>
+                  </label>
+                  <label class="radio-card" data-selected="false">
+                    <input type="radio" name="estrSoc" value="matriz_filiais">
+                    <span class="radio-card-title">Matriz + Filiais</span>
+                    <span class="radio-card-desc">Múltiplos CNPJs. Filiais viram filtro dimensional na torre.</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Bloco condicional: só aparece quando "Matriz + Filiais" selecionado -->
+              <div class="form-field col-span-2" id="filiaisBlock" style="margin-top:var(--s-1);display:none">
+                <label class="form-label">Filiais <span class="opt" id="filiaisCount">0 cadastrada(s)</span></label>
+                <div class="filial-list" id="filialList">
+                  <div class="filial-empty">Nenhuma filial cadastrada. Adicione pelo menos 1 abaixo.</div>
+                </div>
+                <button class="btn btn-secondary btn-sm" style="margin-top:var(--s-3);align-self:flex-start" type="button" onclick="addFilial()">
+                  <i class="fas fa-plus"></i> Adicionar filial
+                </button>
+                <span class="form-hint">Cada filial herda os dados da matriz por padrão. Disponíveis como filtro dimensional na torre (D-080).</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════ ACCORDION 2 · Contrato e SLAs ══════════ -->
+        <div class="accordion">
+          <button class="accordion-header" type="button" onclick="this.parentElement.dataset.state = this.parentElement.dataset.state === 'open' ? 'closed' : 'open'">
+            <div class="accordion-icon">📋</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Contrato e SLAs</h3>
+              <p class="accordion-meta">OTIF Target 90% · Faturamento mensal</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+            <div class="form-grid form-grid-3">
+              <div class="form-field">
+                <label class="form-label">Início do contrato <span class="req">*</span></label>
+                <input type="date" class="input" data-bind="contratoInicio" value="2025-01-01">
+              </div>
+              <div class="form-field">
+                <label class="form-label">Fim do contrato</label>
+                <input type="date" class="input" data-bind="contratoFim" value="">
+                <span class="form-hint">Vazio = indeterminado.</span>
+              </div>
+              <div class="form-field">
+                <label class="form-label">OTIF Target (%) <span class="req">*</span></label>
+                <div class="unit-input">
+                  <input type="number" data-bind="otifTarget" value="90" min="0" max="100">
+                  <span class="unit">%</span>
+                </div>
+                <span class="form-hint">Meta contratual. Alimenta o farol OTIF (D-070).</span>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Modelo de cobrança</label>
+                <select class="select" data-bind="faturamentoCobranca">
+                  <option value="mensal" selected>Mensal (assinatura)</option>
+                  <option value="por_sm">Por SM monitorada</option>
+                  <option value="hibrido">Híbrido (fixo + variável)</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Moeda</label>
+                <select class="select" data-bind="moeda">
+                  <option value="BRL" selected>BRL — Real</option>
+                  <option value="USD">USD — Dólar</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════════ ACCORDION 3 · Contato ══════════ -->
+        <div class="accordion">
+          <button class="accordion-header" type="button" onclick="this.parentElement.dataset.state = this.parentElement.dataset.state === 'open' ? 'closed' : 'open'">
+            <div class="accordion-icon">👤</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Contato comercial principal</h3>
+              <p class="accordion-meta">Ana Lima · ana@kellux.com.br</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+            <div class="callout-info">
+              <span class="callout-info-ico">💡</span>
+              <div>Este contato é <strong>apenas referência comercial</strong>. Para dar acesso ao sistema, cadastre a pessoa como usuário na <strong>Etapa 2</strong>.</div>
+            </div>
+            <div class="form-grid form-grid-2">
+              <div class="form-field">
+                <label class="form-label">Nome <span class="req">*</span></label>
+                <input class="input" data-bind="contatoNome" value="Ana Lima" placeholder="Maria Silva">
+              </div>
+              <div class="form-field">
+                <label class="form-label">Cargo</label>
+                <input class="input" data-bind="contatoCargo" value="Gerente de Logística" placeholder="Diretora Comercial">
+              </div>
+              <div class="form-field">
+                <label class="form-label">E-mail <span class="req">*</span></label>
+                <input type="email" class="input" data-bind="contatoEmail" value="ana@kellux.com.br" placeholder="maria@empresa.com">
+              </div>
+              <div class="form-field">
+                <label class="form-label">Telefone</label>
+                <input class="input" data-bind="contatoTelefone" value="(11) 98765-4321" placeholder="(11) 99999-9999">
+              </div>
+            </div>
+          </div>
+        </div>
+
+          <!-- NAV -->
+          <div class="step-nav">
+            <button class="step-nav-btn secondary" disabled onclick="goToStep(currentStep - 1)">
+              <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+            <button class="step-nav-btn primary" onclick="goToStep(currentStep + 1)">
+              Próximo <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </section>
+
+        <!-- ===== STEP 2 ===== -->
+        <section id="step-2" class="step-section" data-step="2">
+<header class="step-header">
+          <h1 class="step-title">Usuários do cliente</h1>
+          <p class="step-desc">
+            Pessoas que terão acesso ao sistema. Cada usuário recebe convite por e-mail e define sua senha no primeiro acesso.
+            Pelo menos um <strong>Administrador</strong> é obrigatório.
+          </p>
+        </header>
+
+        <!-- Callout admin obrigatório: só aparece se NÃO houver admin ativo.
+             No seed Ana é admin ativa, então fica oculto. Mantido no HTML comentado como referência do pattern:
+        <div class="callout-warn">
+          <span class="callout-ico">⚠️</span>
+          <div><strong>É obrigatório ter ao menos 1 Administrador.</strong> Marque um usuário existente como Admin ou adicione um novo.</div>
+        </div>
+        -->
+
+        <!-- USERS TABLE -->
+        <div class="users-table-wrap">
+          <table class="users-table">
+            <thead>
+              <tr>
+                <th>Usuário</th>
+                <th style="width:180px">Cargo</th>
+                <th style="width:140px">Função</th>
+                <th style="width:100px">Status</th>
+                <th style="width:140px;text-align:right">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="usersTbody">
+              <!-- rows renderizadas via JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- TABLE FOOTER -->
+        <div class="table-footer">
+          <span class="form-hint" id="usersCount">1 usuário(s) · 1 Admin(s)</span>
+          <button class="btn btn-primary" onclick="openUserModal(null)">
+            <i class="fas fa-plus"></i>
+            Adicionar usuário
+          </button>
+        </div>
+
+          <!-- NAV -->
+          <div class="step-nav">
+            <button class="step-nav-btn secondary" onclick="goToStep(currentStep - 1)">
+              <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+            <button class="step-nav-btn primary" onclick="goToStep(currentStep + 1)">
+              Próximo <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </section>
+
+        <!-- ===== STEP 3 ===== -->
+        <section id="step-3" class="step-section" data-step="3">
+<header class="step-header">
+          <h1 class="step-title">Perfil operacional</h1>
+          <p class="step-desc">
+            Modais de transporte, tipos de carga, cobertura geográfica e janelas operacionais.
+            Esses dados alimentam o matching de veículos, filtros de viagem e o <strong>cálculo de franquias</strong> em cada SM.
+          </p>
+        </header>
+
+        <!-- ══════════ ACCORDION 1 · Modais e veículos ══════════ -->
+        <div class="accordion" data-state="open">
+          <button class="accordion-header" type="button">
+            <div class="accordion-icon">🚛</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Modais e tipos de veículo</h3>
+              <p class="accordion-meta">Rodoviário · 5 tipos de veículo selecionados</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+
+            <p class="form-section-title">Modais de transporte</p>
+            <div class="form-field">
+              <label class="form-label">Modais atendidos <span class="req">*</span></label>
+              <div class="chips-multi" data-group="modais">
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)"><i class="fas fa-truck"></i> Rodoviário</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)"><i class="fas fa-train"></i> Ferroviário</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)"><i class="fas fa-ship"></i> Marítimo</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)"><i class="fas fa-anchor"></i> Cabotagem</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)"><i class="fas fa-plane"></i> Aéreo</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)"><i class="fas fa-shuffle"></i> Multimodal</button>
+              </div>
+              <span class="form-hint">Selecione todos os modais que a operação pode utilizar. Ao menos 1 é obrigatório.</span>
+            </div>
+
+            <p class="form-section-title">Tipos de veículo rodoviário</p>
+            <div class="form-field">
+              <label class="form-label">Veículos aceitos <span class="opt">multi</span></label>
+              <div class="chips-multi" data-group="veiculos">
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Carreta (25t)</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Truck (12t)</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Toco (6t)</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">3/4 (3,5t)</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">VUC (2,5t)</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">Van</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">Sprinter</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">Moto</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">Bitrem</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">Rodotrem</button>
+              </div>
+              <span class="form-hint">Usado para validar elegibilidade de motoristas/veículos no matching de SMs.</span>
+            </div>
+
+            <p class="form-section-title">Volumetria típica</p>
+            <div class="form-grid form-grid-3">
+              <div class="form-field">
+                <label class="form-label">Peso médio por SM</label>
+                <div class="unit-input">
+                  <input type="number" value="8500" min="0">
+                  <span class="unit">kg</span>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Volume médio por SM</label>
+                <div class="unit-input">
+                  <input type="number" value="24" min="0" step="0.1">
+                  <span class="unit">m³</span>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">SMs/mês estimado</label>
+                <div class="unit-input">
+                  <input type="number" value="1200" min="0">
+                  <span class="unit">SMs</span>
+                </div>
+                <span class="form-hint">Projeção usada para pricing.</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════ ACCORDION 2 · Tipos de carga e restrições ══════════ -->
+        <div class="accordion">
+          <button class="accordion-header" type="button" onclick="this.parentElement.dataset.state = this.parentElement.dataset.state === 'open' ? 'closed' : 'open'">
+            <div class="accordion-icon">📦</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Tipos de carga e restrições</h3>
+              <p class="accordion-meta">4 tipos de carga · 2 restrições ativas</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+
+            <p class="form-section-title">Classificação de carga</p>
+            <div class="form-field">
+              <label class="form-label">Tipos de carga transportados <span class="req">*</span></label>
+              <div class="chips-multi" data-group="cargas">
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Carga seca</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Paletizada</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Frágil</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Valores</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">Refrigerada</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">Congelada</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">Produtos perigosos</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">Granel sólido</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">Granel líquido</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">Viva</button>
+              </div>
+              <span class="form-hint">Tipos com classificação especial (refrigerada, PP, viva) ativam validações adicionais na SM.</span>
+            </div>
+
+            <p class="form-section-title">Restrições e exigências operacionais</p>
+            <div class="switch-list">
+              <div class="switch-row">
+                <div class="switch" data-on="true"  onclick="toggleSwitch(this)"></div>
+                <div class="switch-info">
+                  <p class="switch-title">Exige rastreamento em tempo real</p>
+                  <p class="switch-desc">SM só pode ser iniciada com tracker ativo (satelital ou celular).</p>
+                </div>
+              </div>
+              <div class="switch-row">
+                <div class="switch" data-on="true"  onclick="toggleSwitch(this)"></div>
+                <div class="switch-info">
+                  <p class="switch-title">Exige seguro de carga</p>
+                  <p class="switch-desc">Obrigatório apresentar apólice vigente antes da coleta.</p>
+                </div>
+              </div>
+              <div class="switch-row">
+                <div class="switch" data-on="false" onclick="toggleSwitch(this)"></div>
+                <div class="switch-info">
+                  <p class="switch-title">Exige escolta armada</p>
+                  <p class="switch-desc">Ativar apenas para cargas de alto valor (&gt; R$ 500k) ou rotas de risco.</p>
+                </div>
+              </div>
+              <div class="switch-row">
+                <div class="switch" data-on="false" onclick="toggleSwitch(this)"></div>
+                <div class="switch-info">
+                  <p class="switch-title">Não aceita produtos perigosos (PP)</p>
+                  <p class="switch-desc">Bloqueia SMs com carga classificada como perigosa pela ANTT.</p>
+                </div>
+              </div>
+              <div class="switch-row">
+                <div class="switch" data-on="false" onclick="toggleSwitch(this)"></div>
+                <div class="switch-info">
+                  <p class="switch-title">Exige MOPP para motorista</p>
+                  <p class="switch-desc">Motorista deve ter certificação MOPP vigente. Ativar apenas se opera com PP.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════ ACCORDION 3 · Regiões de atendimento ══════════ -->
+        <div class="accordion">
+          <button class="accordion-header" type="button" onclick="this.parentElement.dataset.state = this.parentElement.dataset.state === 'open' ? 'closed' : 'open'">
+            <div class="accordion-icon">🗺️</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Cobertura geográfica</h3>
+              <p class="accordion-meta">Regional · SP, RJ, MG, PR, SC, RS</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+
+            <p class="form-section-title">Escopo de cobertura</p>
+            <div class="form-field">
+              <label class="form-label">Modelo de atendimento <span class="req">*</span></label>
+              <div class="radio-row-3">
+                <label class="radio-card" data-selected="false" onclick="selectRadio(this,'cobertura')">
+                  <input type="radio" name="cobertura" value="nacional">
+                  <span class="radio-card-title">Nacional</span>
+                  <span class="radio-card-desc">Todas as UFs. Qualquer origem/destino do Brasil.</span>
+                </label>
+                <label class="radio-card" data-selected="true" onclick="selectRadio(this,'cobertura')">
+                  <input type="radio" name="cobertura" value="regional" checked>
+                  <span class="radio-card-title">Regional</span>
+                  <span class="radio-card-desc">UFs específicas. Comum para operações concentradas.</span>
+                </label>
+                <label class="radio-card" data-selected="false" onclick="selectRadio(this,'cobertura')">
+                  <input type="radio" name="cobertura" value="rotas">
+                  <span class="radio-card-title">Rotas fixas</span>
+                  <span class="radio-card-desc">Pares origem-destino definidos em contrato.</span>
+                </label>
+              </div>
+            </div>
+
+            <p class="form-section-title">UFs atendidas</p>
+            <div class="form-field">
+              <label class="form-label">Selecione as unidades federativas <span class="opt">multi</span></label>
+              <div class="chips-multi" data-group="ufs">
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">SP</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">RJ</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">MG</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">PR</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">SC</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">RS</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">ES</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">GO</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">DF</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">BA</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">PE</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">CE</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">MS</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">MT</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">PA</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">TO</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">MA</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">PI</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">RN</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">PB</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">AL</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">SE</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">RO</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">AC</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">AM</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">RR</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">AP</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════ ACCORDION 4 · Janelas e franquias ══════════ -->
+        <div class="accordion">
+          <button class="accordion-header" type="button" onclick="this.parentElement.dataset.state = this.parentElement.dataset.state === 'open' ? 'closed' : 'open'">
+            <div class="accordion-icon">⏱️</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Janelas operacionais e franquias</h3>
+              <p class="accordion-meta">Seg–Sáb · Coleta 06–20h · Franquia 30km/30min</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+
+            <div class="callout-info">
+              <span class="callout-info-ico">💡</span>
+              <div>As <strong>franquias</strong> definem o limite incluso no frete contratado. Quilometragem, tempo de permanência ou ociosidade <strong>além da franquia</strong> é cobrado como excedente em D-040.</div>
+            </div>
+
+            <p class="form-section-title">Dias operacionais</p>
+            <div class="form-field">
+              <label class="form-label">Dias com operação <span class="req">*</span></label>
+              <div class="chips-multi" data-group="dias">
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Segunda</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Terça</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Quarta</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Quinta</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Sexta</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Sábado</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">Domingo</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">Feriados</button>
+              </div>
+            </div>
+
+            <p class="form-section-title">Janelas de horário</p>
+            <div class="form-grid form-grid-2">
+              <div class="form-field">
+                <label class="form-label">Janela de coleta (início)</label>
+                <input type="time" class="input" value="06:00">
+              </div>
+              <div class="form-field">
+                <label class="form-label">Janela de coleta (fim)</label>
+                <input type="time" class="input" value="20:00">
+              </div>
+              <div class="form-field">
+                <label class="form-label">Janela de entrega (início)</label>
+                <input type="time" class="input" value="08:00">
+              </div>
+              <div class="form-field">
+                <label class="form-label">Janela de entrega (fim)</label>
+                <input type="time" class="input" value="18:00">
+              </div>
+            </div>
+
+            <p class="form-section-title">Franquias operacionais</p>
+            <div class="form-grid form-grid-3">
+              <div class="form-field">
+                <label class="form-label">Franquia de KM por SM</label>
+                <div class="unit-input">
+                  <input type="number" value="30" min="0">
+                  <span class="unit">km</span>
+                </div>
+                <span class="form-hint">KM adicionais cobrados como excedente.</span>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Franquia de permanência</label>
+                <div class="unit-input">
+                  <input type="number" value="30" min="0">
+                  <span class="unit">min</span>
+                </div>
+                <span class="form-hint">Na coleta e na entrega.</span>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Tempo máximo aguardando</label>
+                <div class="unit-input">
+                  <input type="number" value="240" min="0">
+                  <span class="unit">min</span>
+                </div>
+                <span class="form-hint">Dispara alerta D-051.</span>
+              </div>
+            </div>
+
+            <p class="form-section-title">Observações operacionais</p>
+            <div class="form-field">
+              <label class="form-label">Notas gerais <span class="opt">opcional</span></label>
+              <textarea class="textarea" placeholder="Restrições adicionais, exceções, acordos verbais relevantes…">CD origem (São Paulo Sul) não opera aos domingos. Feriados nacionais: consultar calendário anexo ao contrato.</textarea>
+            </div>
+
+          </div>
+        </div>
+
+          <!-- NAV -->
+          <div class="step-nav">
+            <button class="step-nav-btn secondary" onclick="goToStep(currentStep - 1)">
+              <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+            <button class="step-nav-btn primary" onclick="goToStep(currentStep + 1)">
+              Próximo <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </section>
+
+        <!-- ===== STEP 4 ===== -->
+        <section id="step-4" class="step-section" data-step="4">
+<header class="step-header">
+          <h1 class="step-title">Integração com sistemas do cliente</h1>
+          <p class="step-desc">
+            Canal pelo qual SMs, status e eventos são trocados entre a Trouw e os sistemas do cliente.
+            A escolha do canal define os dados de credencial e o comportamento de sincronização.
+          </p>
+        </header>
+
+        <!-- ══════════ ACCORDION 1 · Canal de integração ══════════ -->
+        <div class="accordion" data-state="open">
+          <button class="accordion-header" type="button">
+            <div class="accordion-icon">🔌</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Canal de integração principal</h3>
+              <p class="accordion-meta">API REST · ambiente produção</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+
+            <div class="callout-info">
+              <span class="callout-info-ico">💡</span>
+              <div>O canal define <strong>como</strong> as SMs chegam e <strong>como</strong> os status voltam. API REST é o padrão recomendado para operações &gt;500 SMs/mês.</div>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label">Tipo de canal <span class="req">*</span></label>
+              <div class="radio-row-4">
+                <label class="radio-card" data-selected="true" onclick="selectChannel(this,'api')">
+                  <input type="radio" name="canal" value="api" checked>
+                  <span class="radio-card-title"><i class="fas fa-code"></i> API REST</span>
+                  <span class="radio-card-desc">Tempo real via HTTPS. Ideal &gt;500 SMs/mês.</span>
+                </label>
+                <label class="radio-card" data-selected="false" onclick="selectChannel(this,'edi')">
+                  <input type="radio" name="canal" value="edi">
+                  <span class="radio-card-title"><i class="fas fa-server"></i> EDI / SFTP</span>
+                  <span class="radio-card-desc">Arquivos X12 ou EDIFACT em lote.</span>
+                </label>
+                <label class="radio-card" data-selected="false" onclick="selectChannel(this,'portal')">
+                  <input type="radio" name="canal" value="portal">
+                  <span class="radio-card-title"><i class="fas fa-browser"></i> Portal Web</span>
+                  <span class="radio-card-desc">Operação manual pelos usuários do cliente.</span>
+                </label>
+                <label class="radio-card" data-selected="false" onclick="selectChannel(this,'upload')">
+                  <input type="radio" name="canal" value="upload">
+                  <span class="radio-card-title"><i class="fas fa-file-arrow-up"></i> Upload manual</span>
+                  <span class="radio-card-desc">Planilhas CSV/XLSX via portal.</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- CANAL: API -->
+            <div class="conditional" id="cond-api" data-show="true">
+              <p class="form-section-title">Configuração API REST</p>
+              <div class="form-grid form-grid-2">
+                <div class="form-field col-span-2">
+                  <label class="form-label">URL base (endpoint) <span class="req">*</span></label>
+                  <input class="input input-mono" value="https://api.kellux.com.br/v2/logistica" placeholder="https://…">
+                  <span class="form-hint">Endpoint público do cliente onde a Trouw envia requisições.</span>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Método de autenticação <span class="req">*</span></label>
+                  <select class="select">
+                    <option value="bearer" selected>Bearer Token (OAuth-like)</option>
+                    <option value="apikey">API Key no header</option>
+                    <option value="oauth2">OAuth 2.0 (client credentials)</option>
+                    <option value="basic">Basic Auth</option>
+                    <option value="mtls">mTLS (certificado mútuo)</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Ambiente <span class="req">*</span></label>
+                  <select class="select">
+                    <option value="prod" selected>Produção</option>
+                    <option value="staging">Staging / Homologação</option>
+                    <option value="sandbox">Sandbox</option>
+                  </select>
+                </div>
+                <div class="form-field col-span-2">
+                  <label class="form-label">Token de acesso <span class="req">*</span></label>
+                  <input type="password" class="input input-mono" value="•••••••••••••••••••••••••••••••••••••••••••••••" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…">
+                  <span class="form-hint">Armazenado criptografado em vault Trouw. Rotação recomendada a cada 90 dias.</span>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Timeout por chamada</label>
+                  <div class="unit-input">
+                    <input type="number" value="30" min="1" max="300">
+                    <span class="unit">s</span>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Rate limit</label>
+                  <div class="unit-input">
+                    <input type="number" value="120" min="1">
+                    <span class="unit">req/min</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CANAL: EDI -->
+            <div class="conditional" id="cond-edi">
+              <p class="form-section-title">Configuração EDI / SFTP</p>
+              <div class="form-grid form-grid-2">
+                <div class="form-field">
+                  <label class="form-label">Servidor SFTP <span class="req">*</span></label>
+                  <input class="input input-mono" value="sftp://edi.kellux.com.br:22" placeholder="sftp://host:port">
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Usuário <span class="req">*</span></label>
+                  <input class="input input-mono" value="trouw_edi" placeholder="usuário">
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Diretório de entrada</label>
+                  <input class="input input-mono" value="/in/sm" placeholder="/in/…">
+                  <span class="form-hint">Onde o cliente deposita SMs novas.</span>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Diretório de saída</label>
+                  <input class="input input-mono" value="/out/status" placeholder="/out/…">
+                  <span class="form-hint">Onde a Trouw deposita status.</span>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Padrão de arquivo <span class="req">*</span></label>
+                  <select class="select">
+                    <option value="x12">ANSI X12 (EUA)</option>
+                    <option value="edifact">EDIFACT (UN/Europa)</option>
+                    <option value="custom" selected>Customizado (JSON/CSV)</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Frequência de coleta</label>
+                  <select class="select">
+                    <option value="5min">A cada 5 min</option>
+                    <option value="15min" selected>A cada 15 min</option>
+                    <option value="30min">A cada 30 min</option>
+                    <option value="1h">A cada 1 h</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- CANAL: Portal -->
+            <div class="conditional" id="cond-portal">
+              <p class="form-section-title">Configuração Portal Web</p>
+              <div class="callout-info">
+                <span class="callout-info-ico">ℹ️</span>
+                <div>Os usuários do cliente operam diretamente pelo portal Trouw. Não há integração automática — cada SM é lançada manualmente pelo cliente.</div>
+              </div>
+              <div class="form-grid form-grid-2">
+                <div class="form-field">
+                  <label class="form-label">Subdomínio do portal <span class="opt">opcional</span></label>
+                  <div class="unit-input">
+                    <input value="kellux" placeholder="nome-do-cliente">
+                    <span class="unit">.trouw.com.br</span>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Cor de marca</label>
+                  <input type="color" class="input" value="#7C3AED" style="height:36px;padding:2px">
+                  <span class="form-hint">Aparece na barra do portal branded.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CANAL: Upload -->
+            <div class="conditional" id="cond-upload">
+              <p class="form-section-title">Configuração Upload manual</p>
+              <div class="form-grid form-grid-2">
+                <div class="form-field col-span-2">
+                  <label class="form-label">Formato aceito <span class="req">*</span></label>
+                  <div class="chips-multi">
+                    <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">XLSX</button>
+                    <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">CSV</button>
+                    <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">XML</button>
+                    <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">JSON</button>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Template de planilha</label>
+                  <button type="button" class="btn btn-secondary btn-sm" style="align-self:flex-start"><i class="fas fa-download"></i> Baixar modelo</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════ ACCORDION 2 · Webhooks / eventos ══════════ -->
+        <div class="accordion">
+          <button class="accordion-header" type="button" onclick="this.parentElement.dataset.state = this.parentElement.dataset.state === 'open' ? 'closed' : 'open'">
+            <div class="accordion-icon">📡</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Webhooks e eventos</h3>
+              <p class="accordion-meta">3 webhooks ativos · 5 eventos inscritos</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+
+            <p class="form-section-title">URLs de callback cadastradas</p>
+            <div class="webhook-table-wrap">
+              <table class="webhook-table">
+                <thead>
+                  <tr>
+                    <th>URL</th>
+                    <th style="width:120px">Eventos</th>
+                    <th style="width:100px">Formato</th>
+                    <th style="width:90px">Status</th>
+                    <th style="width:70px;text-align:right">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="webhook-url">https://kellux.com.br/trouw/webhook/sm-status</span></td>
+                    <td style="color:var(--text-muted)">SM status</td>
+                    <td style="color:var(--text-muted)">JSON</td>
+                    <td><span class="int-tag" data-s="ativo">Ativo</span></td>
+                    <td>
+                      <div class="webhook-actions">
+                        <button class="webhook-action-btn" title="Editar"><i class="fas fa-pen"></i></button>
+                        <button class="webhook-action-btn" data-danger title="Remover"><i class="fas fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="webhook-url">https://kellux.com.br/trouw/webhook/eventos</span></td>
+                    <td style="color:var(--text-muted)">Eventos ops</td>
+                    <td style="color:var(--text-muted)">JSON</td>
+                    <td><span class="int-tag" data-s="ativo">Ativo</span></td>
+                    <td>
+                      <div class="webhook-actions">
+                        <button class="webhook-action-btn" title="Editar"><i class="fas fa-pen"></i></button>
+                        <button class="webhook-action-btn" data-danger title="Remover"><i class="fas fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><span class="webhook-url">https://erp.kellux.com.br/api/v1/trouw-callback</span></td>
+                    <td style="color:var(--text-muted)">Financeiro</td>
+                    <td style="color:var(--text-muted)">JSON</td>
+                    <td><span class="int-tag" data-s="pendente">Pendente</span></td>
+                    <td>
+                      <div class="webhook-actions">
+                        <button class="webhook-action-btn" title="Testar"><i class="fas fa-bolt"></i></button>
+                        <button class="webhook-action-btn" data-danger title="Remover"><i class="fas fa-trash"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-footer">
+              <span class="form-hint">3 webhook(s) cadastrado(s) · HMAC-SHA256 obrigatório</span>
+              <button class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Adicionar webhook</button>
+            </div>
+
+            <p class="form-section-title">Eventos inscritos</p>
+            <div class="form-field">
+              <label class="form-label">Selecione os eventos que a Trouw deve notificar <span class="req">*</span></label>
+              <div class="check-grid">
+                <div class="check-item" data-checked="true"  onclick="toggleCheck(this)">
+                  <div class="check-box"></div>
+                  <span class="check-label">SM criada <small>Novo registro recebido do cliente</small></span>
+                </div>
+                <div class="check-item" data-checked="true"  onclick="toggleCheck(this)">
+                  <div class="check-box"></div>
+                  <span class="check-label">SM aprovada <small>Elegível para matching</small></span>
+                </div>
+                <div class="check-item" data-checked="true"  onclick="toggleCheck(this)">
+                  <div class="check-box"></div>
+                  <span class="check-label">SM iniciada (coleta) <small>Motorista aceitou + chegou na origem</small></span>
+                </div>
+                <div class="check-item" data-checked="false" onclick="toggleCheck(this)">
+                  <div class="check-box"></div>
+                  <span class="check-label">SM em trânsito <small>Cada check-in de localização</small></span>
+                </div>
+                <div class="check-item" data-checked="true"  onclick="toggleCheck(this)">
+                  <div class="check-box"></div>
+                  <span class="check-label">SM entregue <small>Baixa + comprovante</small></span>
+                </div>
+                <div class="check-item" data-checked="true"  onclick="toggleCheck(this)">
+                  <div class="check-box"></div>
+                  <span class="check-label">Exceção operacional <small>Atraso, avaria, desvio de rota</small></span>
+                </div>
+                <div class="check-item" data-checked="false" onclick="toggleCheck(this)">
+                  <div class="check-box"></div>
+                  <span class="check-label">SM cancelada <small>Pelo cliente ou operação</small></span>
+                </div>
+                <div class="check-item" data-checked="false" onclick="toggleCheck(this)">
+                  <div class="check-box"></div>
+                  <span class="check-label">Violação de SLA <small>OTIF/OTD fora do target</small></span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════ ACCORDION 3 · Sincronização e retry ══════════ -->
+        <div class="accordion">
+          <button class="accordion-header" type="button" onclick="this.parentElement.dataset.state = this.parentElement.dataset.state === 'open' ? 'closed' : 'open'">
+            <div class="accordion-icon">🔄</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Sincronização e retry</h3>
+              <p class="accordion-meta">Retry exponencial 3x · Timeout 30s</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+
+            <p class="form-section-title">Política de retry</p>
+            <div class="form-grid form-grid-2">
+              <div class="form-field">
+                <label class="form-label">Estratégia de retry <span class="req">*</span></label>
+                <select class="select">
+                  <option value="linear">3x imediato (sem backoff)</option>
+                  <option value="exp" selected>3x com backoff exponencial (1s, 4s, 16s)</option>
+                  <option value="exp5">5x com backoff exponencial (1s, 2s, 4s, 8s, 16s)</option>
+                  <option value="custom">Customizado</option>
+                  <option value="none">Sem retry</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Após falhas consecutivas</label>
+                <select class="select">
+                  <option value="alert" selected>Alertar operação + marcar webhook "com erro"</option>
+                  <option value="disable">Desativar webhook automaticamente</option>
+                  <option value="escalate">Escalar para suporte Trouw</option>
+                </select>
+              </div>
+            </div>
+
+            <p class="form-section-title">Formato de payload e segurança</p>
+            <div class="form-grid form-grid-3">
+              <div class="form-field">
+                <label class="form-label">Formato padrão</label>
+                <select class="select">
+                  <option value="json" selected>JSON (application/json)</option>
+                  <option value="xml">XML (application/xml)</option>
+                  <option value="form">Form-encoded</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Assinatura</label>
+                <select class="select">
+                  <option value="hmac256" selected>HMAC-SHA256</option>
+                  <option value="hmac512">HMAC-SHA512</option>
+                  <option value="jwt">JWT assinado</option>
+                  <option value="none">Sem assinatura</option>
+                </select>
+                <span class="form-hint">Garante origem do webhook.</span>
+              </div>
+              <div class="form-field">
+                <label class="form-label">TLS mínimo</label>
+                <select class="select">
+                  <option value="tls12" selected>TLS 1.2+</option>
+                  <option value="tls13">TLS 1.3 obrigatório</option>
+                </select>
+              </div>
+            </div>
+
+            <p class="form-section-title">Janela de manutenção</p>
+            <div class="form-grid form-grid-3">
+              <div class="form-field">
+                <label class="form-label">Dia da semana</label>
+                <select class="select">
+                  <option value="dom" selected>Domingo</option>
+                  <option value="sab">Sábado</option>
+                  <option value="seg">Segunda (madrugada)</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Janela (início)</label>
+                <input type="time" class="input" value="02:00">
+              </div>
+              <div class="form-field">
+                <label class="form-label">Janela (fim)</label>
+                <input type="time" class="input" value="04:00">
+              </div>
+              <div class="form-field col-span-full">
+                <span class="form-hint">Durante a janela, retries são adiados e alertas consolidados. Comunicação prévia via e-mail dos administradores.</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════ ACCORDION 4 · Teste de conexão ══════════ -->
+        <div class="accordion">
+          <button class="accordion-header" type="button" onclick="this.parentElement.dataset.state = this.parentElement.dataset.state === 'open' ? 'closed' : 'open'">
+            <div class="accordion-icon">✅</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Teste de conexão</h3>
+              <p class="accordion-meta">Último teste: 14/04/2026 16:42 · 200 OK · 142ms</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Healthy</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+
+            <div class="callout-info">
+              <span class="callout-info-ico">🧪</span>
+              <div>O teste envia uma SM <strong>sintética</strong> (prefixo <code>SM-TEST-</code>) pelo canal selecionado e aguarda o callback. Não afeta operação.</div>
+            </div>
+
+            <div class="form-grid form-grid-2">
+              <div class="form-field">
+                <label class="form-label">Último teste · resultado</label>
+                <div style="padding:var(--s-3);background:var(--feedback-ok-soft);border-radius:var(--r-md);font-size:var(--fs-sm);color:var(--ok-500);font-weight:600">
+                  <i class="fas fa-check-circle" style="margin-right:var(--s-2)"></i>
+                  200 OK · 142ms · payload válido
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Ação</label>
+                <button class="btn btn-primary" style="align-self:flex-start">
+                  <i class="fas fa-bolt"></i> Executar teste agora
+                </button>
+                <span class="form-hint">Executa ping + envio sintético + valida callback.</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+          <!-- NAV -->
+          <div class="step-nav">
+            <button class="step-nav-btn secondary" onclick="goToStep(currentStep - 1)">
+              <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+            <button class="step-nav-btn primary" onclick="goToStep(currentStep + 1)">
+              Próximo <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </section>
+
+        <!-- ===== STEP 5 ===== -->
+        <section id="step-5" class="step-section" data-step="5">
+<header class="step-header">
+          <h1 class="step-title">SLAs e indicadores</h1>
+          <p class="step-desc">
+            Metas de serviço, penalidades contratuais e alertas preventivos. Esses dados
+            alimentam os <strong>faróis operacionais</strong> (D-070) e geram os relatórios mensais
+            de performance enviados ao cliente.
+          </p>
+        </header>
+
+        <!-- ══════════ ACCORDION 1 · Metas de serviço ══════════ -->
+        <div class="accordion" data-state="open">
+          <button class="accordion-header" type="button">
+            <div class="accordion-icon">🎯</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Metas de serviço (targets)</h3>
+              <p class="accordion-meta">OTIF 90% · OTD 92% · OTP 95%</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+
+            <div class="callout-info">
+              <span class="callout-info-ico">📊</span>
+              <div>Metas contratuais medidas sobre base mensal. Cada KPI tem seu próprio farol na torre operacional (verde ≥ target, amarelo -5pp, vermelho abaixo).</div>
+            </div>
+
+            <div class="kpi-grid">
+              <div class="kpi-card">
+                <p class="kpi-label">OTIF target</p>
+                <div class="kpi-value">90<span class="kpi-unit">%</span></div>
+                <p class="kpi-hint">On-time in-full (entregas no prazo e completas)</p>
+              </div>
+              <div class="kpi-card">
+                <p class="kpi-label">OTD target</p>
+                <div class="kpi-value">92<span class="kpi-unit">%</span></div>
+                <p class="kpi-hint">On-time delivery (entrega no prazo)</p>
+              </div>
+              <div class="kpi-card">
+                <p class="kpi-label">OTP target</p>
+                <div class="kpi-value">95<span class="kpi-unit">%</span></div>
+                <p class="kpi-hint">On-time pickup (coleta no prazo)</p>
+              </div>
+              <div class="kpi-card">
+                <p class="kpi-label">Disponibilidade</p>
+                <div class="kpi-value">99,5<span class="kpi-unit">%</span></div>
+                <p class="kpi-hint">Uptime da plataforma Trouw</p>
+              </div>
+            </div>
+
+            <p class="form-section-title">Ajustar targets</p>
+            <div class="form-grid form-grid-4">
+              <div class="form-field">
+                <label class="form-label">OTIF <span class="req">*</span></label>
+                <div class="unit-input">
+                  <input type="number" value="90" min="0" max="100">
+                  <span class="unit">%</span>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">OTD <span class="req">*</span></label>
+                <div class="unit-input">
+                  <input type="number" value="92" min="0" max="100">
+                  <span class="unit">%</span>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">OTP <span class="req">*</span></label>
+                <div class="unit-input">
+                  <input type="number" value="95" min="0" max="100">
+                  <span class="unit">%</span>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Disponibilidade</label>
+                <div class="unit-input">
+                  <input type="number" value="99.5" step="0.1" min="0" max="100">
+                  <span class="unit">%</span>
+                </div>
+              </div>
+            </div>
+
+            <p class="form-section-title">Tolerâncias operacionais</p>
+            <div class="form-grid form-grid-3">
+              <div class="form-field">
+                <label class="form-label">Tolerância em atraso</label>
+                <div class="unit-input">
+                  <input type="number" value="15" min="0">
+                  <span class="unit">min</span>
+                </div>
+                <span class="form-hint">Atraso ≤ tolerância ainda conta como on-time.</span>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Tempo máximo de resposta</label>
+                <div class="unit-input">
+                  <input type="number" value="30" min="0">
+                  <span class="unit">min</span>
+                </div>
+                <span class="form-hint">Tempo para reagir a exceção operacional.</span>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Janela de medição</label>
+                <select class="select">
+                  <option value="mensal" selected>Mensal (calendário)</option>
+                  <option value="semanal">Semanal</option>
+                  <option value="rolling-30">Rolling 30 dias</option>
+                  <option value="rolling-90">Rolling 90 dias</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════ ACCORDION 2 · Penalidades ══════════ -->
+        <div class="accordion">
+          <button class="accordion-header" type="button" onclick="this.parentElement.dataset.state = this.parentElement.dataset.state === 'open' ? 'closed' : 'open'">
+            <div class="accordion-icon">⚖️</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Penalidades contratuais</h3>
+              <p class="accordion-meta">5 regras ativas · escalonamento por severidade</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+
+            <div class="callout-info">
+              <span class="callout-info-ico">⚖️</span>
+              <div>Percentuais aplicados <strong>sobre o faturamento do mês</strong> em que ocorreu o descumprimento. Valores acumulam até o cap contratual de 10%.</div>
+            </div>
+
+            <p class="form-section-title">Matriz de penalidades</p>
+            <div class="penalty-table-wrap">
+              <table class="penalty-table">
+                <thead>
+                  <tr>
+                    <th>Tipo de falha</th>
+                    <th style="width:100px">Severidade</th>
+                    <th style="width:120px">% faturamento</th>
+                    <th style="width:100px">Tolerância</th>
+                    <th style="width:60px;text-align:right"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Atraso na entrega</strong><br><span style="color:var(--text-muted);font-size:var(--fs-xs)">OTD abaixo do target mensal</span></td>
+                    <td><span class="sev-tag" data-sev="med">Média</span></td>
+                    <td>
+                      <div class="unit-input"><input type="number" class="input-sm" value="1.5" step="0.1"><span class="unit">%</span></div>
+                    </td>
+                    <td><div class="unit-input"><input type="number" class="input-sm" value="3"><span class="unit">dias</span></div></td>
+                    <td><div class="row-actions"><button class="row-action-btn" data-danger title="Remover"><i class="fas fa-trash"></i></button></div></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Atraso na coleta</strong><br><span style="color:var(--text-muted);font-size:var(--fs-xs)">OTP abaixo do target mensal</span></td>
+                    <td><span class="sev-tag" data-sev="low">Baixa</span></td>
+                    <td>
+                      <div class="unit-input"><input type="number" class="input-sm" value="1.0" step="0.1"><span class="unit">%</span></div>
+                    </td>
+                    <td><div class="unit-input"><input type="number" class="input-sm" value="5"><span class="unit">dias</span></div></td>
+                    <td><div class="row-actions"><button class="row-action-btn" data-danger title="Remover"><i class="fas fa-trash"></i></button></div></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Avaria de carga</strong><br><span style="color:var(--text-muted);font-size:var(--fs-xs)">&gt;0,5% do volume mensal</span></td>
+                    <td><span class="sev-tag" data-sev="high">Alta</span></td>
+                    <td>
+                      <div class="unit-input"><input type="number" class="input-sm" value="3.0" step="0.1"><span class="unit">%</span></div>
+                    </td>
+                    <td><div class="unit-input"><input type="number" class="input-sm" value="0"><span class="unit">dias</span></div></td>
+                    <td><div class="row-actions"><button class="row-action-btn" data-danger title="Remover"><i class="fas fa-trash"></i></button></div></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Extravio de carga</strong><br><span style="color:var(--text-muted);font-size:var(--fs-xs)">Perda total ou desvio permanente</span></td>
+                    <td><span class="sev-tag" data-sev="crit">Crítica</span></td>
+                    <td>
+                      <div class="unit-input"><input type="number" class="input-sm" value="5.0" step="0.1"><span class="unit">%</span></div>
+                    </td>
+                    <td><div class="unit-input"><input type="number" class="input-sm" value="0"><span class="unit">dias</span></div></td>
+                    <td><div class="row-actions"><button class="row-action-btn" data-danger title="Remover"><i class="fas fa-trash"></i></button></div></td>
+                  </tr>
+                  <tr>
+                    <td><strong>Não atendimento</strong><br><span style="color:var(--text-muted);font-size:var(--fs-xs)">SM aceita mas não executada</span></td>
+                    <td><span class="sev-tag" data-sev="crit">Crítica</span></td>
+                    <td>
+                      <div class="unit-input"><input type="number" class="input-sm" value="4.0" step="0.1"><span class="unit">%</span></div>
+                    </td>
+                    <td><div class="unit-input"><input type="number" class="input-sm" value="0"><span class="unit">dias</span></div></td>
+                    <td><div class="row-actions"><button class="row-action-btn" data-danger title="Remover"><i class="fas fa-trash"></i></button></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-footer">
+              <span class="form-hint">5 regra(s) ativa(s) · cap de 10% acumulado/mês</span>
+              <button class="btn btn-secondary btn-sm"><i class="fas fa-plus"></i> Adicionar regra</button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════ ACCORDION 3 · Alertas preventivos ══════════ -->
+        <div class="accordion">
+          <button class="accordion-header" type="button" onclick="this.parentElement.dataset.state = this.parentElement.dataset.state === 'open' ? 'closed' : 'open'">
+            <div class="accordion-icon">🔔</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Alertas preventivos</h3>
+              <p class="accordion-meta">Threshold OTIF 85% · E-mail + SMS</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+
+            <p class="form-section-title">Thresholds de risco</p>
+            <div class="form-grid form-grid-3">
+              <div class="form-field">
+                <label class="form-label">OTIF em risco abaixo de</label>
+                <div class="unit-input">
+                  <input type="number" value="85" min="0" max="100">
+                  <span class="unit">%</span>
+                </div>
+                <span class="form-hint">Dispara alerta preventivo.</span>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Violação crítica abaixo de</label>
+                <div class="unit-input">
+                  <input type="number" value="80" min="0" max="100">
+                  <span class="unit">%</span>
+                </div>
+                <span class="form-hint">Dispara escalonamento máximo.</span>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Janela de apuração</label>
+                <select class="select">
+                  <option value="rolling-7">Rolling 7 dias</option>
+                  <option value="rolling-14">Rolling 14 dias</option>
+                  <option value="rolling-30" selected>Rolling 30 dias</option>
+                  <option value="mtd">Mês corrente (MTD)</option>
+                </select>
+              </div>
+            </div>
+
+            <p class="form-section-title">Canais de notificação</p>
+            <div class="form-field">
+              <label class="form-label">Escalonamento <span class="req">*</span></label>
+              <div class="radio-row-3">
+                <label class="radio-card" data-selected="false" onclick="selectRadio(this,'esc')">
+                  <input type="radio" name="esc" value="email">
+                  <span class="radio-card-title">Apenas e-mail</span>
+                  <span class="radio-card-desc">Notificação silenciosa aos administradores.</span>
+                </label>
+                <label class="radio-card" data-selected="true" onclick="selectRadio(this,'esc')">
+                  <input type="radio" name="esc" value="email_sms" checked>
+                  <span class="radio-card-title">E-mail + SMS</span>
+                  <span class="radio-card-desc">Recomendado para operações B2B.</span>
+                </label>
+                <label class="radio-card" data-selected="false" onclick="selectRadio(this,'esc')">
+                  <input type="radio" name="esc" value="full">
+                  <span class="radio-card-title">E-mail + SMS + Call</span>
+                  <span class="radio-card-desc">Ativa call center Trouw em crítico.</span>
+                </label>
+              </div>
+            </div>
+
+            <p class="form-section-title">Destinatários de alerta</p>
+            <div class="form-field">
+              <label class="form-label">E-mails que recebem alerta <span class="req">*</span></label>
+              <div class="tag-list">
+                <span class="tag-item">ana@kellux.com.br <button type="button"><i class="fas fa-xmark"></i></button></span>
+                <span class="tag-item">ops@kellux.com.br <button type="button"><i class="fas fa-xmark"></i></button></span>
+                <span class="tag-item">diretoria@kellux.com.br <button type="button"><i class="fas fa-xmark"></i></button></span>
+                <input class="input input-sm" style="flex:1;min-width:200px;border:none;box-shadow:none;background:transparent;height:24px" placeholder="adicionar e-mail…">
+              </div>
+              <span class="form-hint">Separar múltiplos com Enter ou vírgula.</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════ ACCORDION 4 · Relatórios ══════════ -->
+        <div class="accordion">
+          <button class="accordion-header" type="button" onclick="this.parentElement.dataset.state = this.parentElement.dataset.state === 'open' ? 'closed' : 'open'">
+            <div class="accordion-icon">📄</div>
+            <div class="accordion-info">
+              <h3 class="accordion-title">Relatórios automáticos</h3>
+              <p class="accordion-meta">Mensal · PDF + Dashboard · Segunda 09:00</p>
+            </div>
+            <span class="accordion-status complete"><i class="fas fa-circle-check"></i> Completo</span>
+            <svg class="accordion-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+
+            <p class="form-section-title">Frequência</p>
+            <div class="form-grid form-grid-3">
+              <div class="form-field">
+                <label class="form-label">Relatório operacional</label>
+                <select class="select">
+                  <option value="diario">Diário</option>
+                  <option value="semanal" selected>Semanal</option>
+                  <option value="mensal">Mensal</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Relatório gerencial</label>
+                <select class="select">
+                  <option value="semanal">Semanal</option>
+                  <option value="mensal" selected>Mensal</option>
+                  <option value="trimestral">Trimestral</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Dashboard em tempo real</label>
+                <select class="select">
+                  <option value="habilitado" selected>Habilitado (24/7)</option>
+                  <option value="horario">Apenas em horário comercial</option>
+                  <option value="desabilitado">Desabilitado</option>
+                </select>
+              </div>
+            </div>
+
+            <p class="form-section-title">Formato e envio</p>
+            <div class="form-field">
+              <label class="form-label">Formatos de entrega <span class="opt">multi</span></label>
+              <div class="chips-multi">
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">PDF</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Excel</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">CSV</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">Dashboard online</button>
+                <button type="button" class="chip-multi" data-selected="false" onclick="toggleChip(this)">API (pull)</button>
+                <button type="button" class="chip-multi" data-selected="true"  onclick="toggleChip(this)">E-mail resumo</button>
+              </div>
+            </div>
+
+            <div class="form-grid form-grid-3">
+              <div class="form-field">
+                <label class="form-label">Dia preferencial</label>
+                <select class="select">
+                  <option value="seg" selected>Segunda-feira</option>
+                  <option value="ter">Terça-feira</option>
+                  <option value="qua">Quarta-feira</option>
+                  <option value="qui">Quinta-feira</option>
+                  <option value="sex">Sexta-feira</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label class="form-label">Horário de envio</label>
+                <input type="time" class="input" value="09:00">
+              </div>
+              <div class="form-field">
+                <label class="form-label">Fuso horário</label>
+                <select class="select">
+                  <option value="brt" selected>América/São_Paulo (BRT)</option>
+                  <option value="utc">UTC</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+          <!-- NAV -->
+          <div class="step-nav">
+            <button class="step-nav-btn secondary" onclick="goToStep(currentStep - 1)">
+              <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+            <button class="step-nav-btn primary" onclick="goToStep(currentStep + 1)">
+              Próximo <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </section>
+
+        <!-- ===== STEP 6 ===== -->
+        <section id="step-6" class="step-section" data-step="6">
+<header class="wiz-head">
+        <div class="eyebrow">Passo 6 de 6</div>
+        <h1>Revisão &amp; confirmação</h1>
+        <p class="lede">Confirme os dados cadastrados antes de finalizar. Ao enviar, o cadastro entra na fila de aprovação da Torre de Controle e o cliente recebe acesso inicial.</p>
+      </header>
+
+      <!-- Stepper -->
+      <nav class="stepper" aria-label="Progresso do cadastro">
+        <div class="step complete"><span class="n"><span>1</span></span><span class="lbl">Identificação</span></div>
+        <div class="step complete"><span class="n"><span>2</span></span><span class="lbl">Usuários</span></div>
+        <div class="step complete"><span class="n"><span>3</span></span><span class="lbl">Operação</span></div>
+        <div class="step complete"><span class="n"><span>4</span></span><span class="lbl">Integração</span></div>
+        <div class="step complete"><span class="n"><span>5</span></span><span class="lbl">SLAs</span></div>
+        <div class="step active"><span class="n">6</span><span class="lbl">Revisão</span></div>
+      </nav>
+
+      <!-- Callout -->
+      <div class="callout success">
+        <i class="fas fa-circle-check"></i>
+        <div>
+          <div class="tt">Tudo pronto para envio</div>
+          <div class="dd">As 5 etapas obrigatórias foram preenchidas. Após finalizar, o cadastro vai para aprovação interna em até 2 dias úteis e a Kellux recebe o e-mail de acesso.</div>
+        </div>
       </div>
-    </a>
+
+      <!-- Checklist de completude -->
+      <section class="checklist">
+        <div class="checklist-head">
+          <h3>Completude do cadastro</h3>
+          <span class="progress-mini"><i class="fas fa-circle-check"></i> 6 de 6 seções</span>
+        </div>
+        <div class="checklist-grid">
+          <div class="chk-item">
+            <span class="chk-badge"><i class="fas fa-check"></i></span>
+            <div class="chk-body">
+              <div class="chk-ttl">Identificação</div>
+              <div class="chk-sub">Dados cadastrais, 3 filiais</div>
+            </div>
+          </div>
+          <div class="chk-item">
+            <span class="chk-badge"><i class="fas fa-check"></i></span>
+            <div class="chk-body">
+              <div class="chk-ttl">Usuários</div>
+              <div class="chk-sub">4 usuários, permissões definidas</div>
+            </div>
+          </div>
+          <div class="chk-item">
+            <span class="chk-badge"><i class="fas fa-check"></i></span>
+            <div class="chk-body">
+              <div class="chk-ttl">Operação</div>
+              <div class="chk-sub">Modais, cobertura, janelas</div>
+            </div>
+          </div>
+          <div class="chk-item">
+            <span class="chk-badge"><i class="fas fa-check"></i></span>
+            <div class="chk-body">
+              <div class="chk-ttl">Integração</div>
+              <div class="chk-sub">API + 3 webhooks ativos</div>
+            </div>
+          </div>
+          <div class="chk-item">
+            <span class="chk-badge"><i class="fas fa-check"></i></span>
+            <div class="chk-body">
+              <div class="chk-ttl">SLAs</div>
+              <div class="chk-sub">Metas, penalidades, alertas</div>
+            </div>
+          </div>
+          <div class="chk-item">
+            <span class="chk-badge"><i class="fas fa-check"></i></span>
+            <div class="chk-body">
+              <div class="chk-ttl">Revisão</div>
+              <div class="chk-sub">Em andamento</div>
+            </div>
+          </div>
+        </div>
+
+          <!-- NAV -->
+          <div class="step-nav">
+            <button class="step-nav-btn secondary" onclick="goToStep(currentStep - 1)">
+              <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+            <button class="step-nav-btn primary" onclick="finalizarCadastro()">
+              <i class="fas fa-circle-check"></i> Finalizar
+            </button>
+          </div>
+        </section>
+      </div><!-- /wizard-inner -->
+    </div><!-- /wizard-content -->
 
   </main>
+</div><!-- /shell -->
 
-  <footer>
-    <div>
-      <span class="pill-tech"><i class="fas fa-circle"></i> v17.0.0 · 2026-04-14</span>
-    </div>
-    <div>
-      <a href="/ds/v17/tokens-v17.json" target="_blank">tokens-v17.json</a>
-      &nbsp;·&nbsp;
-      <a href="/ds/v17/styles/ds-v17-primitives.css" target="_blank">primitives.css</a>
-      &nbsp;·&nbsp;
-      <a href="/ds/v17/styles/ds-v17-legacy-aliases.css" target="_blank">legacy-aliases.css</a>
-    </div>
-  </footer>
-</div>
+<script>
+/* ===== WIZARD NAVIGATION ===== */
+let currentStep = 1;
+const TOTAL_STEPS = 6;
 
+function goToStep(n) {
+  if (n < 1 || n > TOTAL_STEPS) return;
+  document.getElementById('step-' + currentStep).classList.remove('active');
+  currentStep = n;
+  document.getElementById('step-' + currentStep).classList.add('active');
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    const el = document.getElementById('stepper-' + i);
+    if (!el) continue;
+    el.dataset.state = i < n ? 'done' : i === n ? 'active' : 'pending';
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* === STEP 1 === */
+/* Toggle accordion (os que não têm inline handler) */
+document.querySelectorAll('.accordion').forEach(acc => {
+  const header = acc.querySelector('.accordion-header');
+  if (!header.hasAttribute('onclick')) {
+    header.addEventListener('click', () => {
+      acc.dataset.state = acc.dataset.state === 'open' ? 'closed' : 'open';
+    });
+  }
+});
+
+/* Radio cards — estrutura societária */
+document.querySelectorAll('.radio-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.radio-card').forEach(c => c.dataset.selected = 'false');
+    card.dataset.selected = 'true';
+    const radio = card.querySelector('input[type="radio"]');
+    if (radio) radio.checked = true;
+    /* Mostra/esconde bloco de filiais conforme seleção */
+    const filiaisBlock = document.getElementById('filiaisBlock');
+    if (radio && radio.value === 'matriz_filiais') {
+      filiaisBlock.style.display = '';
+      /* Se lista vazia, já adiciona uma linha em branco (comportamento do v7) */
+      if (state.filiais.length === 0) addFilial();
+    } else {
+      filiaisBlock.style.display = 'none';
+    }
+  });
+});
+
+/* Estado leve das filiais (espelha state.data.cliente.filiais do v7) */
+const state = { filiais: [] };
+const UF_LIST = ['SP','RJ','MG','RS','PR','SC','BA','GO','DF','PE','CE','ES','PA','MT','MS'];
+
+function renderFiliais(){
+  const list = document.getElementById('filialList');
+  const count = document.getElementById('filiaisCount');
+  count.textContent = `${state.filiais.length} cadastrada(s)`;
+  if (state.filiais.length === 0){
+    list.innerHTML = `<div class="filial-empty">Nenhuma filial cadastrada. Adicione pelo menos 1 abaixo.</div>`;
+    return;
+  }
+  list.innerHTML = state.filiais.map((f, i) => `
+    <div class="filial-row">
+      <input class="input input-sm" value="${f.cnpj||''}" placeholder="CNPJ da filial" onchange="updateFilial(${i},'cnpj',this.value)" style="flex:2">
+      <input class="input input-sm" value="${f.cidade||''}" placeholder="Cidade" onchange="updateFilial(${i},'cidade',this.value)" style="flex:2">
+      <select class="select select-sm" onchange="updateFilial(${i},'uf',this.value)" style="width:70px">
+        <option value="">UF</option>
+        ${UF_LIST.map(uf => `<option ${f.uf===uf?'selected':''} value="${uf}">${uf}</option>`).join('')}
+      </select>
+      <button class="btn btn-ghost btn-xs btn-danger-text" type="button" onclick="removeFilial(${i})" title="Remover filial" style="padding:0;width:28px;height:28px">×</button>
+    </div>
+  `).join('');
+}
+function addFilial(){ state.filiais.push({cnpj:'', cidade:'', uf:''}); renderFiliais(); }
+function removeFilial(i){ state.filiais.splice(i, 1); renderFiliais(); }
+function updateFilial(i, key, val){ state.filiais[i][key] = val; }
+
+/* === STEP 2 === */
+/* ============================================================
+   STATE (paridade com state.data do v7)
+   ============================================================ */
+const SOLUCOES = [
+  {id:'m1', name:'M1 — Operacional', icon:'🎯'},
+  {id:'m3', name:'M3 — Gerencial', icon:'📊'},
+  {id:'m4', name:'M4 — Frota', icon:'🚛'},
+  {id:'m7', name:'M7 — Histórico', icon:'📜'},
+  {id:'m8', name:'M8 — Configurações Avançadas', icon:'⚙️'},
+  {id:'cabine', name:'Modo Cabine', icon:'🎮'},
+];
+
+const state = {
+  solucoesContratadas: ['m1','m7'],                /* seed do v7 */
+  filiaisCliente: [                                /* simulando estruturaSocietaria=matriz_filiais pra demo do chips-multi */
+    {cidade:'Campinas', uf:'SP'},
+    {cidade:'Guarulhos', uf:'SP'},
+    {cidade:'Rio de Janeiro', uf:'RJ'},
+  ],
+  usuarios: [
+    {id:'u1', nome:'Ana Lima', email:'ana@kellux.com.br', cargo:'Gerente de Logística',
+     telefone:'(11) 98765-4321', funcao:'admin', status:'ativo', filiais:[], conviteEnviado:true, permissions:{}},
+  ],
+  userModalEditing: null,
+  permissionsPanelOpen: null,
+};
+
+const FUNCAO_LABEL = {admin:'Administrador', gerente:'Gerente', operador:'Operador', visualizador:'Visualizador'};
+const STATUS_LABEL = {ativo:'Ativo', pendente:'Pendente', inativo:'Inativo'};
+
+/* ============================================================
+   RENDER USERS TABLE
+   ============================================================ */
+function renderUsers(){
+  const tbody = document.getElementById('usersTbody');
+  const users = state.usuarios;
+  if (users.length === 0){
+    tbody.innerHTML = `<tr><td colspan="5" style="padding:var(--s-8);text-align:center;color:var(--text-muted)">
+      Nenhum usuário cadastrado. Adicione o primeiro abaixo.
+    </td></tr>`;
+    updateUsersCount();
+    return;
+  }
+  tbody.innerHTML = users.map(u => {
+    const initials = (u.nome||'').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+    const funcaoLabel = FUNCAO_LABEL[u.funcao] || u.funcao;
+    const statusLabel = STATUS_LABEL[u.status] || u.status;
+    return `
+      <tr>
+        <td>
+          <div class="user-name-cell">
+            <span class="user-avatar">${initials}</span>
+            <span class="user-name-info">
+              <strong>${u.nome||'—'}</strong>
+              <span class="email">${u.email||''}</span>
+            </span>
+          </div>
+        </td>
+        <td style="color:var(--text-muted);font-size:var(--fs-xs)">${u.cargo||'—'}</td>
+        <td><span class="role-badge" data-r="${u.funcao}">${funcaoLabel}</span></td>
+        <td><span class="status-dot" data-s="${u.status}">${statusLabel}</span></td>
+        <td>
+          <div class="user-actions">
+            <button class="user-action-btn" onclick="openPermissionsPanel('${u.id}')" title="Permissões por solução">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            </button>
+            <button class="user-action-btn" onclick="sendInvite('${u.id}')" title="${u.conviteEnviado?'Reenviar convite':'Enviar convite'}">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 4l8 8 8-8"/></svg>
+            </button>
+            <button class="user-action-btn" onclick="openUserModal('${u.id}')" title="Editar">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button class="user-action-btn" data-danger onclick="removeUser('${u.id}')" title="Remover">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+  updateUsersCount();
+}
+function updateUsersCount(){
+  const users = state.usuarios;
+  const admins = users.filter(u => u.funcao==='admin').length;
+  document.getElementById('usersCount').textContent = `${users.length} usuário(s) · ${admins} Admin(s)`;
+}
+
+/* ============================================================
+   USER MODAL (adicionar/editar)
+   ============================================================ */
+function openUserModal(id){
+  state.userModalEditing = id;
+  const u = id ? state.usuarios.find(x=>x.id===id) : {nome:'',email:'',cargo:'',telefone:'',funcao:'operador',filiais:[]};
+  if (!u) return;
+  document.getElementById('userModalTitle').textContent = id ? 'Editar usuário' : 'Adicionar usuário';
+  document.getElementById('um_saveBtn').textContent = id ? 'Salvar' : 'Adicionar e enviar convite';
+  document.getElementById('um_nome').value = u.nome||'';
+  document.getElementById('um_email').value = u.email||'';
+  document.getElementById('um_telefone').value = u.telefone||'';
+  document.getElementById('um_cargo').value = u.cargo||'';
+  document.getElementById('um_funcao').value = u.funcao||'operador';
+  /* ativa chips conforme filiais já selecionadas */
+  document.querySelectorAll('#um_filiaisChips .chip-multi').forEach((chip, i) => {
+    chip.dataset.selected = (u.filiais||[]).includes(i) ? 'true' : 'false';
+  });
+  updateModalFiliaisVisibility();
+  document.getElementById('userModalOverlay').dataset.open = 'true';
+}
+function closeUserModal(){
+  document.getElementById('userModalOverlay').dataset.open = 'false';
+  state.userModalEditing = null;
+}
+function updateModalFiliaisVisibility(){
+  const funcao = document.getElementById('um_funcao').value;
+  const canLimit = (funcao==='operador' || funcao==='visualizador') && state.filiaisCliente.length>0;
+  document.getElementById('um_filiaisBlock').style.display = canLimit ? '' : 'none';
+}
+function toggleChip(el){
+  el.dataset.selected = el.dataset.selected === 'true' ? 'false' : 'true';
+}
+function saveUserModal(){
+  const nome = document.getElementById('um_nome').value.trim();
+  const email = document.getElementById('um_email').value.trim();
+  if (!nome || !email){ alert('Nome e E-mail são obrigatórios.'); return; }
+  const cargo = document.getElementById('um_cargo').value.trim();
+  const telefone = document.getElementById('um_telefone').value.trim();
+  const funcao = document.getElementById('um_funcao').value;
+  const filiais = Array.from(document.querySelectorAll('#um_filiaisChips .chip-multi'))
+    .map((chip, i) => chip.dataset.selected==='true' ? i : -1).filter(i=>i>=0);
+  const editing = state.userModalEditing;
+  if (editing){
+    const u = state.usuarios.find(x=>x.id===editing);
+    Object.assign(u, {nome, email, cargo, telefone, funcao, filiais});
+  } else {
+    state.usuarios.push({
+      id:'u'+Date.now(), nome, email, cargo, telefone, funcao,
+      status:'pendente', filiais, conviteEnviado:false, permissions:{}
+    });
+  }
+  closeUserModal();
+  renderUsers();
+}
+
+/* ============================================================
+   PERMISSIONS PANEL
+   ============================================================ */
+function defaultPerms(funcao){
+  if (funcao==='gerente')       return {visualizar:true, criar:true, editar:true, aprovar:true};
+  if (funcao==='operador')      return {visualizar:true, criar:true, editar:true, aprovar:false};
+  if (funcao==='visualizador')  return {visualizar:true, criar:false, editar:false, aprovar:false};
+  return {visualizar:true, criar:true, editar:true, aprovar:true};
+}
+function openPermissionsPanel(id){
+  state.permissionsPanelOpen = id;
+  renderPermsBody();
+  document.getElementById('permsModalOverlay').dataset.open = 'true';
+}
+function closePermissionsPanel(){
+  document.getElementById('permsModalOverlay').dataset.open = 'false';
+  state.permissionsPanelOpen = null;
+}
+function renderPermsBody(){
+  const u = state.usuarios.find(x=>x.id===state.permissionsPanelOpen);
+  if (!u) return;
+  document.getElementById('permsModalTitle').textContent = `Permissões · ${u.nome}`;
+  const body = document.getElementById('permsModalBody');
+  if (u.funcao === 'admin'){
+    body.innerHTML = `<div class="callout-info">
+      <strong>Administrador</strong> tem acesso total a todas as soluções e ações. Permissões granulares não se aplicam.
+    </div>`;
+    return;
+  }
+  const acoes = ['Visualizar','Criar','Editar','Aprovar'];
+  const solucoes = SOLUCOES.filter(s => state.solucoesContratadas.includes(s.id));
+  body.innerHTML = `
+    <p class="form-hint">Ajuste o que este usuário pode fazer em cada solução contratada. As marcações padrão seguem a função selecionada.</p>
+    <table class="perm-matrix">
+      <thead>
+        <tr>
+          <th>Solução</th>
+          ${acoes.map(a=>`<th>${a}</th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        ${solucoes.map(s => {
+          const sp = u.permissions[s.id] || defaultPerms(u.funcao);
+          return `
+            <tr>
+              <td>${s.icon} ${s.name}</td>
+              ${acoes.map(a => {
+                const key = a.toLowerCase();
+                const on = sp[key];
+                return `<td><span class="perm-check" data-on="${on}" onclick="togglePerm('${u.id}','${s.id}','${key}')"></span></td>`;
+              }).join('')}
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+    </table>
+  `;
+}
+function togglePerm(uid, sid, key){
+  const u = state.usuarios.find(x=>x.id===uid);
+  if (!u.permissions[sid]) u.permissions[sid] = defaultPerms(u.funcao);
+  u.permissions[sid][key] = !u.permissions[sid][key];
+  renderPermsBody();
+}
+
+/* ============================================================
+   Ações da tabela
+   ============================================================ */
+function sendInvite(id){
+  const u = state.usuarios.find(x=>x.id===id);
+  if (!u) return;
+  u.conviteEnviado = true;
+  renderUsers();
+  alert(`Convite enviado para ${u.email}`);
+}
+function removeUser(id){
+  const u = state.usuarios.find(x=>x.id===id);
+  if (!u) return;
+  if (!confirm(`Remover ${u.nome}?`)) return;
+  state.usuarios = state.usuarios.filter(x=>x.id!==id);
+  renderUsers();
+}
+
+/* ============================================================
+   Init
+   ============================================================ */
+renderUsers();
+
+/* === STEP 3 === */
+/* Toggle chip */
+function toggleChip(el){
+  el.dataset.selected = el.dataset.selected === 'true' ? 'false' : 'true';
+}
+
+/* Toggle switch */
+function toggleSwitch(el){
+  el.dataset.on = el.dataset.on === 'true' ? 'false' : 'true';
+}
+
+/* Radio card exclusivo por name */
+function selectRadio(card, group){
+  document.querySelectorAll(`.radio-card input[name="${group}"]`).forEach(r => {
+    const parent = r.closest('.radio-card');
+    parent.dataset.selected = 'false';
+    r.checked = false;
+  });
+  card.dataset.selected = 'true';
+  const radio = card.querySelector('input[type="radio"]');
+  if (radio) radio.checked = true;
+}
+
+/* Toggle accordion (os que não têm inline handler) */
+document.querySelectorAll('.accordion').forEach(acc => {
+  const header = acc.querySelector('.accordion-header');
+  if (!header.hasAttribute('onclick')) {
+    header.addEventListener('click', () => {
+      acc.dataset.state = acc.dataset.state === 'open' ? 'closed' : 'open';
+    });
+  }
+});
+
+/* === STEP 4 === */
+function toggleChip(el){ el.dataset.selected = el.dataset.selected === 'true' ? 'false' : 'true'; }
+function toggleCheck(el){ el.dataset.checked = el.dataset.checked === 'true' ? 'false' : 'true'; }
+
+function selectChannel(card, key){
+  document.querySelectorAll('.radio-card input[name="canal"]').forEach(r => {
+    r.closest('.radio-card').dataset.selected = 'false';
+    r.checked = false;
+  });
+  card.dataset.selected = 'true';
+  const radio = card.querySelector('input[type="radio"]');
+  if (radio) radio.checked = true;
+  /* mostra painel condicional correspondente */
+  document.querySelectorAll('.conditional').forEach(el => el.dataset.show = 'false');
+  const target = document.getElementById('cond-' + key);
+  if (target) target.dataset.show = 'true';
+}
+
+document.querySelectorAll('.accordion').forEach(acc => {
+  const header = acc.querySelector('.accordion-header');
+  if (!header.hasAttribute('onclick')) {
+    header.addEventListener('click', () => {
+      acc.dataset.state = acc.dataset.state === 'open' ? 'closed' : 'open';
+    });
+  }
+});
+
+/* === STEP 5 === */
+function toggleChip(el){ el.dataset.selected = el.dataset.selected === 'true' ? 'false' : 'true'; }
+function selectRadio(card, group){
+  document.querySelectorAll(`.radio-card input[name="${group}"]`).forEach(r => {
+    r.closest('.radio-card').dataset.selected = 'false';
+    r.checked = false;
+  });
+  card.dataset.selected = 'true';
+  const radio = card.querySelector('input[type="radio"]');
+  if (radio) radio.checked = true;
+}
+
+document.querySelectorAll('.accordion').forEach(acc => {
+  const header = acc.querySelector('.accordion-header');
+  if (!header.hasAttribute('onclick')) {
+    header.addEventListener('click', () => {
+      acc.dataset.state = acc.dataset.state === 'open' ? 'closed' : 'open';
+    });
+  }
+});
+
+/* === STEP 6 === */
+// Accordion dos resumos
+  function toggleSummary(headEl){
+    const card = headEl.closest('.sum-card');
+    const open = card.getAttribute('data-open') === 'true';
+    card.setAttribute('data-open', open ? 'false' : 'true');
+  }
+
+  // Aceite → habilita botão
+  function toggleAceite(el){
+    document.getElementById('btn-finish').disabled = !el.checked;
+  }
+
+  function saveDraft(){
+    console.info('[cadastro] rascunho salvo (stub)');
+  }
+
+  function finalizarCadastro(){
+    const btn = document.getElementById('btn-finish');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Enviando…';
+    setTimeout(() => {
+      alert('Cadastro enviado para aprovação! A Kellux receberá o e-mail de acesso em até 2 dias úteis.');
+      btn.innerHTML = '<i class="fas fa-circle-check"></i> Enviado';
+    }, 900);
+  }
+</script>
 </body>
 </html>

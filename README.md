@@ -8,29 +8,19 @@ Plataforma Trouw de logística B2B. Design System + módulos de produto, HTML es
 
 ```
 trouw/
-├── index.html                     ← hub do monorepo
 ├── ds/
 │   └── v17/
 │       ├── tokens-v17.json        ← fonte canônica DTCG W3C 1.0
+│       ├── showcase.html          ← guia de componentes DS v17
+│       ├── showcase-v16.html      ← histórico v16
 │       └── styles/
 │           ├── ds-v17-primitives.css
 │           └── ds-v17-legacy-aliases.css   ← bridge v16 → v17
 ├── cadastro/
-│   ├── README.md
 │   └── cliente/                   ← módulo ativo
-│       ├── index.html             ← hub do cadastro cliente
-│       ├── steps/
-│       │   ├── step-1-identificacao.html
-│       │   ├── step-2-usuarios.html
-│       │   ├── step-3-operacao.html
-│       │   ├── step-4-integracao.html
-│       │   ├── step-5-slas.html
-│       │   └── step-6-revisao.html
-│       └── docs/
-│           ├── showcase-v17.html  ← showcase dos componentes v17
-│           └── showcase-v16.html  ← showcase v16 histórico
-├── torre-de-controle/             ← placeholder (roadmap)
-│   └── README.md
+│       └── index.html             ← wizard 6 passos (single file)
+├── torre-de-controle/             ← módulo ativo
+│   └── index.html                 ← cockpit operacional
 ├── frota/                         ← placeholder (roadmap)
 │   └── README.md
 ├── vercel.json
@@ -43,16 +33,10 @@ trouw/
 
 | Rota | Descrição |
 |---|---|
-| `/` | Hub do monorepo — 4 cards de produtos Trouw |
-| `/cadastro/cliente/` | Hub do cadastro de cliente |
-| `/cadastro/cliente/steps/step-1-identificacao` | Wizard passo 1 — identificação, contrato, SLA, contato, filiais |
-| `/cadastro/cliente/steps/step-2-usuarios` | Wizard passo 2 — usuários, funções, permissões |
-| `/cadastro/cliente/steps/step-3-operacao` | Wizard passo 3 — modais, veículos, restrições, cobertura, janelas |
-| `/cadastro/cliente/steps/step-4-integracao` | Wizard passo 4 — canal, webhooks, sincronização, teste de conexão |
-| `/cadastro/cliente/steps/step-5-slas` | Wizard passo 5 — metas OTIF/OTD, penalidades, alertas, relatórios |
-| `/cadastro/cliente/steps/step-6-revisao` | Wizard passo 6 — checklist, resumos, aceite, finalizar |
-| `/cadastro/cliente/docs/showcase-v17` | Showcase dos componentes v17 (form patterns) |
-| `/cadastro/cliente/docs/showcase-v16` | Showcase v16 histórico (referência) |
+| `/cadastro/cliente/` | Wizard de cadastro — 6 passos num único arquivo |
+| `/torre-de-controle/` | Cockpit operacional — SMs, KPIs, mapa, painel de gestão |
+| `/ds/v17/showcase` | Guia de componentes DS v17 |
+| `/ds/v17/showcase-v16` | Showcase v16 histórico (referência) |
 | `/ds/v17/tokens-v17.json` | Fonte canônica DTCG W3C 1.0 |
 | `/ds/v17/styles/ds-v17-primitives.css` | CSS Custom Properties (primitivos + semânticos) |
 | `/ds/v17/styles/ds-v17-legacy-aliases.css` | Bridge v16 → v17 |
@@ -61,10 +45,10 @@ trouw/
 
 ## Módulos
 
-- **`/cadastro/cliente/`** — ativo. Wizard de onboarding + showcase DS v17.
+- **`/cadastro/cliente/`** — ativo. Wizard de onboarding 6 passos (single file).
 - **`/torre-de-controle/`** — ativo. Cockpit operacional — SMs em tempo real, KPIs, mapa, painel de gestão.
 - **`/frota/`** — placeholder. Gestão de veículos/motoristas. Não iniciado.
-- **`/ds/v17/`** — tokens e CSSs compartilhados por todos os módulos.
+- **`/ds/v17/`** — tokens, CSS e showcase compartilhados por todos os módulos.
 
 ---
 
@@ -91,7 +75,7 @@ npx serve . --listen 4317
 python -m http.server 3000
 ```
 
-Abra `http://localhost:4317` (ou a porta que escolher).
+Abra `http://localhost:4317/cadastro/cliente/` (ou a porta que escolher).
 
 ---
 
@@ -108,10 +92,6 @@ Abra `http://localhost:4317` (ou a porta que escolher).
 - `cleanUrls: true` → rotas sem `.html`
 - Cache de `/ds/v17/styles/` e `/ds/v17/tokens-v17.json` por 1h
 
-### GitHub Pages
-
-Funciona, mas as rotas usarão `.html` no fim (cleanUrls é feature do Vercel). Se migrar pra Pages, ajuste os `<a href>` adicionando `.html`.
-
 ---
 
 ## Backlog
@@ -120,9 +100,8 @@ Funciona, mas as rotas usarão `.html` no fim (cleanUrls é feature do Vercel). 
 - Início do módulo Frota
 - Auditoria de contraste automatizada em CI (`axe-core` ou Pa11y)
 - Pipeline Tokens Studio → Style Dictionary (quando houver codebase consumidor)
-- Promover componentes novos (Switch, KPI Grid, Penalty Table, Summary Card, Webhook Table) do cadastro para o showcase v17
 
 ---
 
 **Stack:** HTML/CSS/JS puro · Plus Jakarta Sans · Font Awesome 6 · Zero build-step  
-**DS:** v17.0.0 · 2026-04-14
+**DS:** v17.0.0 · 2026-04-15
