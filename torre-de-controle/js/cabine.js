@@ -165,11 +165,12 @@
     if(it.issue.includes('Temperatura'))return{name:'Alerta de temperatura',body:`Olá ${first}, urgente: temperatura da câmara fora do limite. Por favor, verifique o painel e confirme. — Torre de Controle`};
     return{name:'Contato padrão',body:`Olá ${first}, precisamos de uma atualização sobre a SM ${it.sm}. — Torre de Controle`};
   }
-  function toast(msg){
+  window.toast=function toast(msg){
     const t=document.getElementById('cb-toast');
+    if(!t) return;
     t.textContent=msg;t.classList.add('show');
     clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),2000);
-  }
+  };
   let cbMap=null,cbLayers=[];
   function next(){idx++;render()}
   function renderMap(it){
@@ -308,9 +309,9 @@
       <div class="cbf-ctx">${ctx}</div>
       <div class="cbf-sec"><span class="cbf-sec-label">Comunicação rápida</span></div>
       <div class="cbf-comm">
-        <button class="cbf-cbtn" onclick="cbComm('mot')" ${mOff}><i class="fa-solid fa-phone"></i><div><div class="cbf-clbl">Motorista</div><div class="cbf-csub">${fn}</div></div><span class="cbf-ckey">M</span></button>
-        <button class="cbf-cbtn" onclick="cbComm('dest')"><i class="fa-solid fa-phone"></i><div><div class="cbf-clbl">Destinatário</div><div class="cbf-csub">${dn}</div></div><span class="cbf-ckey">D</span></button>
-        <button class="cbf-cbtn wpp" onclick="cbComm('msg')"><i class="fa-brands fa-whatsapp"></i><div><div class="cbf-clbl">WhatsApp</div><div class="cbf-csub">Template</div></div><span class="cbf-ckey">W</span></button>
+        <button class="cbf-cbtn" onclick="cbComm('mot')" ${mOff}><i class="fa-solid fa-phone"></i><div class="cbf-clbl">Motorista</div><div class="cbf-csub">${fn}</div><span class="cbf-ckey">M</span></button>
+        <button class="cbf-cbtn" onclick="cbComm('dest')"><i class="fa-solid fa-phone"></i><div class="cbf-clbl">Destinatário</div><div class="cbf-csub">${dn}</div><span class="cbf-ckey">D</span></button>
+        <button class="cbf-cbtn wpp" onclick="cbComm('msg')"><i class="fa-brands fa-whatsapp"></i><div class="cbf-clbl">WhatsApp</div><div class="cbf-csub">Template</div><span class="cbf-ckey">W</span></button>
       </div>
       <div id="cbf-confirm"></div>
       <div class="cbf-sec"><span class="cbf-sec-label">Tratativa — escolha uma ação</span></div>

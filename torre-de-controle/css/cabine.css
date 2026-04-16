@@ -54,7 +54,7 @@
 .app[data-mode="cabine"] .chat-panel{display:none!important}
 .app[data-mode="cabine"] .map-legend{display:none!important}
 
-.cbf-scroll{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:2px;padding-bottom:12px}
+.cbf-scroll{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0;padding-bottom:16px}
 .cbf-scroll::-webkit-scrollbar{width:4px}.cbf-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
 
 .cbf-head{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;background:var(--s1);border-bottom:1px solid var(--border)}
@@ -80,16 +80,16 @@
 .cbf-sec{padding:4px 12px 4px;margin-top:4px}
 .cbf-sec-label{font-size:8px;font-weight:700;color:var(--t4);text-transform:uppercase;letter-spacing:.1em}
 
-.cbf-comm{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:4px 12px 8px}
-.cbf-cbtn{display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:var(--radius-md);background:var(--s1);border:1px solid var(--border);cursor:pointer;transition:all .12s;color:var(--t2);position:relative;min-width:0}
-.cbf-cbtn:hover{border-color:rgba(46,91,255,.2);background:rgba(46,91,255,.03);box-shadow:0 2px 6px rgba(0,0,0,.04)}
-.cbf-cbtn:active{transform:scale(.98)}
+.cbf-comm{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:6px 12px 10px}
+.cbf-cbtn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px 8px;border-radius:var(--radius-md);background:var(--s1);border:1.5px solid var(--border);cursor:pointer;transition:all .12s;color:var(--t2);position:relative;text-align:center}
+.cbf-cbtn:hover{border-color:rgba(46,91,255,.25);background:rgba(46,91,255,.03);box-shadow:0 2px 8px rgba(0,0,0,.06);transform:translateY(-1px)}
+.cbf-cbtn:active{transform:scale(.97)}
 .cbf-cbtn[disabled]{opacity:.25;pointer-events:none}
-.cbf-cbtn i{font-size:14px;color:#2E5BFF;flex-shrink:0}
-.cbf-cbtn.wpp i{color:var(--green)}
-.cbf-cbtn.wpp:hover{border-color:rgba(31,158,92,.2);background:rgba(31,158,92,.03)}
-.cbf-clbl{font-size:10px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cbf-csub{font-size:9px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cbf-cbtn i{font-size:16px;color:#2E5BFF;width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:rgba(46,91,255,.06);border-radius:var(--radius-sm)}
+.cbf-cbtn.wpp i{color:var(--green);background:rgba(48,209,88,.06)}
+.cbf-cbtn.wpp:hover{border-color:rgba(31,158,92,.25);background:rgba(31,158,92,.03)}
+.cbf-clbl{font-size:10px;font-weight:700;color:var(--t1);line-height:1.2}
+.cbf-csub{font-size:9px;color:var(--t3);line-height:1.1}
 .cbf-ckey{position:absolute;top:4px;right:5px;font-size:8px;font-weight:700;color:var(--t4);background:var(--s2);padding:1px 4px;border-radius:3px;border:1px solid var(--border)}
 
 .cbf-confirm{margin:0 12px 8px;padding:10px 14px;border-radius:var(--radius-lg);background:var(--s2);border:1px solid var(--border);animation:pop .12s ease-out}
@@ -103,20 +103,20 @@
 .cbf-btn-no{padding:5px 14px;border-radius:var(--radius-sm);background:var(--s1);color:var(--t3);font-size:11px;font-weight:600;border:1px solid var(--border);cursor:pointer;font-family:var(--f-u);transition:all .1s}
 .cbf-btn-no:hover{background:var(--s2)}
 
-.cbf-acts{padding:4px 12px 12px;display:flex;flex-direction:column;gap:6px}
-.cbf-act{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:var(--radius-lg);background:var(--s1);border:1.5px solid var(--border);cursor:pointer;transition:all .15s;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-.cbf-act:hover{background:var(--s1);border-color:var(--b3);box-shadow:0 3px 10px rgba(0,0,0,.08);transform:translateY(-1px)}
-.cbf-act.pri{background:#2E5BFF;color:#fff;border:1.5px solid #1E45D9;box-shadow:0 4px 14px rgba(46,91,255,.3)}
-.cbf-act.pri:hover{background:#1E45D9;transform:translateY(-1px)}
+.cbf-acts{padding:6px 12px 14px;display:flex;flex-direction:column;gap:8px}
+.cbf-act{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:var(--radius-lg);background:var(--s1);border:1.5px solid var(--border);cursor:pointer;transition:all .15s;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.cbf-act:hover{background:var(--s2);border-color:var(--b3);box-shadow:0 4px 12px rgba(0,0,0,.08);transform:translateY(-1px)}
+.cbf-act.pri{background:#2E5BFF;color:#fff;border:1.5px solid #1E45D9;box-shadow:0 4px 16px rgba(46,91,255,.35)}
+.cbf-act.pri:hover{background:#1E45D9;transform:translateY(-2px);box-shadow:0 6px 20px rgba(46,91,255,.4)}
 .cbf-act.pri .cbf-act-title{color:#fff}
 .cbf-act.pri .cbf-act-desc{color:rgba(255,255,255,.7)}
 .cbf-act.pri .cbf-act-key{background:rgba(255,255,255,.2);color:#fff;border-color:transparent}
 .cbf-act.pri .cbf-act-timer{background:rgba(255,255,255,.15);border-color:transparent;color:rgba(255,255,255,.9)}
 .cbf-act.done{opacity:.25;pointer-events:none}
-.cbf-act-key{width:28px;height:28px;border-radius:var(--radius-md);background:var(--s2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--t1);flex-shrink:0;font-family:var(--f-m);margin-top:1px}
+.cbf-act-key{width:32px;height:32px;border-radius:var(--radius-md);background:var(--s2);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--t1);flex-shrink:0;font-family:var(--f-m)}
 .cbf-act-body{flex:1}
-.cbf-act-title{font-size:12px;font-weight:700;color:var(--t1);display:block;line-height:1.35}
-.cbf-act-desc{font-size:10px;color:var(--t3);display:block;margin-top:1px;line-height:1.3}
+.cbf-act-title{font-size:13px;font-weight:700;color:var(--t1);display:block;line-height:1.3}
+.cbf-act-desc{font-size:10.5px;color:var(--t3);display:block;margin-top:2px;line-height:1.35}
 .cbf-act-timer{display:inline-flex;align-items:center;gap:3px;margin-top:3px;padding:2px 7px;border-radius:var(--radius-full);background:rgba(212,136,14,.06);border:1px solid rgba(212,136,14,.08);font-size:9px;color:#D4880E;font-weight:600}
 .cbf-act-timer.live{background:rgba(217,52,43,.06);border-color:rgba(217,52,43,.1);color:var(--red);animation:cb-pulse 2s infinite}
 @keyframes cb-pulse{0%,100%{opacity:1}50%{opacity:.5}}
