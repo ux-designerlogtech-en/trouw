@@ -1,0 +1,139 @@
+/* ╔══════════════════════════════════════════════════════════════════════╗
+   ║  TORRE DE CONTROLE — DESIGN RULES  (v85)                          ║
+   ║  Regras obrigatórias para devs. Ler antes de criar componentes.   ║
+   ╚══════════════════════════════════════════════════════════════════════╝
+
+   1. CORES
+      - NUNCA hardcode hex/rgba. Use var(--red), var(--green), etc.
+      - Para tint (fundo suave): use var(--red-s), var(--green-s), etc.
+      - Hierarquia de texto: --t1 (título), --t2 (corpo), --t3 (sutil), --t4 (disabled).
+      - Hierarquia de fundo: --s1 (card), --s2 (container/cinza), --s3 (borda interna).
+      - Regra de bg: blocos container usam --s2 (cinza), itens internos --s1 (branco).
+        NUNCA cinza sobre cinza.
+
+   2. BORDER-RADIUS
+      - Usar SEMPRE var(--radius-*). Escala:
+        sm=4  md=6  base=8  lg=10  xl=14  2xl=20  full=9999
+      - Componentes pequenos (chips, badges): --radius-sm ou --radius-md
+      - Cards, dropdowns, modals: --radius-base ou --radius-lg
+      - Pills/tags arredondados: --radius-full
+
+   3. ELEVAÇÃO (box-shadow)
+      - 3 níveis: var(--elev-1), var(--elev-2), var(--elev-3).
+      - Cards: --elev-1. Dropdowns: --elev-2. Modais: --elev-3.
+      - Sombras especiais (glow, ring, focus): hardcode permitido,
+        mas com comentário explicando.
+
+   4. TIPOGRAFIA
+      - Font-family: SEMPRE var(--f-d), var(--f-u) ou var(--f-m).
+      - Font-size scale: --text-2xs(8) --text-xs(9) --text-sm(10)
+        --text-base(11) --text-md(12) --text-lg(14) --text-xl(16)
+        --text-2xl(18) --text-3xl(21)
+      - Referência para novos componentes. CSS legado usa px direto.
+
+   5. STATUS / INDICADORES
+      - 4 estados: ok (--green), warn (--amber), danger (--red), info (--blue).
+      - Aplicar via classes: .ok / .warn / .danger / .info nos filhos.
+      - Fundo: usar o token -s (ex: --red-s). Borda: rgba do token, .25 alpha.
+      - Componentes de status existentes (chip-*, farol-*, status-chip, etc.)
+        seguem este padrão — não criar novos sistemas.
+
+   6. COMPONENTES
+      - Chips: .chip (genérico), .pf-chip (filtro), .af-chip (ativo).
+        Todos seguem mesmo padrão visual. Não criar novo chip.
+      - Botões: .pf-cta (primário), .am-btn (modal), .am-cancel (secundário).
+      - Cards: .sm-card (SM list), .dstat/.tis-item/.tia-item (stat box).
+      - Para novo componente: use tokens existentes, siga o padrão do
+        componente mais similar.
+
+   7. DARK MODE
+      - [data-theme="dark"] redefine todos os aliases (--t1..4, --s1..4,
+        cores, --border, etc.) e os primitivos neutral.
+      - Overrides de componente usam !important para garantir cascata.
+      - Se criar componente novo: testar em dark mode sempre.
+      - Se precisar de cor dark-specific: use rgba(255,255,255,.XX) para
+        bordas/sombras, ou referencie tokens dark que já invertem.
+
+   8. ACESSIBILIDADE
+      - html.cb-mode ativa paleta Wong (colorblind-safe).
+      - Sobrescreve TODOS os aliases + primitivos semânticos.
+      - Se criar cor nova: garantir que cb-mode a cobre.
+══════════════════════════════════════════════════════════════════════ */
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  /* ══ PRIMITIVOS ═════════════════════════════════════════════════════
+     Escala de cor neutral + cores semânticas. Single source of truth.
+     Paletas brand/accent/priority removidas na v85 (não consumidas).
+     ════════════════════════════════════════════════════════════════ */
+  --neutral-0:#ffffff;--neutral-50:#f8f9fb;--neutral-100:#f1f3f7;
+  --neutral-200:#e8ecf2;--neutral-300:#dde2ea;--neutral-400:#c4ccd8;
+  --neutral-500:#9aa3b0;--neutral-600:#6b7585;--neutral-700:#4d5666;
+  --neutral-800:#353e4e;--neutral-900:#222a38;--neutral-950:#141924;
+  --success-50:#f0fdf4;--success-200:#bbf7d0;--success-500:#16a34a;
+  --warning-50:#fffbeb;--warning-200:#fde68a;--warning-500:#d97706;--warning-700:#92400e;
+  --danger-50:#fff5f5;--danger-200:#fecaca;--danger-500:#dc2626;
+  --info-50:#eff6ff;--info-500:#2563eb;--info-700:#1d4ed8;
+  --ai-600:#7c3aed;
+
+  /* ══ ALIASES SEMÂNTICOS ═════════════════════════════════════════════
+     Use ESTES nos componentes — nunca hardcode hex.
+     ════════════════════════════════════════════════════════════════ */
+  /* Surfaces */
+  --bg:#EEF1F8;
+  --s1:var(--neutral-0);--s2:var(--neutral-50);--s3:var(--neutral-100);--s4:#DDE2F0;
+  --canvas:var(--neutral-50);
+  --sidebar-bg:#EAECF0;
+  /* Borders */
+  --border:var(--neutral-200);--b2:var(--neutral-300);--b3:var(--neutral-400);
+  /* Text hierarchy */
+  --t1:var(--neutral-900);--t2:var(--neutral-700);--t3:var(--neutral-500);--t4:var(--neutral-400);
+  /* Accent — mapeados para primitivos */
+  --blue:var(--info-500);    --blue-s:rgba(37,99,235,.10); --blue-m:rgba(37,99,235,.20);
+  --red:var(--danger-500);   --red-s:rgba(220,38,38,.09);
+  --amber:var(--warning-500);--amber-s:rgba(217,119,6,.10);
+  --green:var(--success-500);--green-s:rgba(22,163,74,.10);
+  --cyan:#0284C7;            --cyan-s:rgba(2,132,199,.10);
+  --purple:var(--ai-600);    --purple-s:rgba(124,58,237,.10);
+  --orange:#FF6B00;          --orange-s:rgba(255,107,0,.10); /* risco médio */
+  /* Typography */
+  --font-sans:'Plus Jakarta Sans',sans-serif;
+  --f-d:var(--font-sans);--f-u:var(--font-sans);--f-m:var(--font-sans);
+  /* Layout */
+  --sidebar-w:56px;
+  --panel-w:320px;
+  /* Device strip — desaturated palette for status icons */
+  --ds-ok:#6CA98A;--ds-warn:#C9A36B;--ds-crit:#C77B7B;
+
+  /* ══ RADIUS ═════════════════════════════════════════════════════════
+     Use SEMPRE var(--radius-*). Nunca hardcode px para border-radius.
+     ════════════════════════════════════════════════════════════════ */
+  --radius-sm:4px;--radius-md:6px;--radius-base:8px;--radius-lg:10px;--radius-xl:14px;--radius-2xl:20px;--radius-full:9999px;
+
+  /* ══ ELEVATION ══════════════════════════════════════════════════════
+     3 níveis. Use var(--elev-N) para box-shadow padrão.
+     ════════════════════════════════════════════════════════════════ */
+  --elev-1:0 1px 2px rgba(20,25,36,.05);
+  --elev-2:0 1px 3px rgba(20,25,36,.07),0 2px 8px rgba(20,25,36,.05);
+  --elev-3:0 4px 12px rgba(20,25,36,.10),0 2px 4px rgba(20,25,36,.06);
+
+  /* ══ TYPOGRAPHY SCALE ═══════════════════════════════════════════════
+     Escala fixa de font-size. Referência para novos componentes.
+     ════════════════════════════════════════════════════════════════ */
+  --text-2xs:8px;--text-xs:9px;--text-sm:10px;--text-base:11px;--text-md:12px;--text-lg:14px;--text-xl:16px;--text-2xl:18px;--text-3xl:21px;
+}
+
+/* Tabular numerals: any element that uses --f-m gets fixed-width digits.
+   Cheaper than tracking down 33 individual selectors. */
+[style*="--f-m"],
+.sm-id, .plate, .upd-time, .driver-score, .risk-num, .rrn,
+.epm-countdown, .epm-time, .sc-duration, .d-id,
+.dstat-val, .driver-plate-big, .driver-score-val,
+.behavior-val, .ms-time,
+.fleet-driver .driver-score, .saved-view-count,
+.dv-chip .dv-val,
+.route-next-line .rnl-meta, .route-next-line .rnl-seq{
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-family:var(--f-u);-webkit-font-smoothing:antialiased}
