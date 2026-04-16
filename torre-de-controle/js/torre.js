@@ -948,17 +948,20 @@ function applyFilters(){
   renderCards(filtered);
   document.getElementById('sm-count').textContent = `${filtered.length} de ${SMs.length}`;
 
-  // Sync map markers
-  const filteredIds = new Set(filtered.map(s=>s.id));
-  SMs.forEach(sm=>{
-    const mk = mapMarkers[sm.id];
-    if(!mk) return;
-    if(filteredIds.has(sm.id)){
-      if(!map.hasLayer(mk)) mk.addTo(map);
-    } else {
-      if(map.hasLayer(mk)) map.removeLayer(mk);
-    }
-  });
+  // Sync map markers (skip in cabine mode — cabine owns the map)
+  const inCabine = document.querySelector('.app')?.dataset?.mode === 'cabine';
+  if(!inCabine){
+    const filteredIds = new Set(filtered.map(s=>s.id));
+    SMs.forEach(sm=>{
+      const mk = mapMarkers[sm.id];
+      if(!mk) return;
+      if(filteredIds.has(sm.id)){
+        if(!map.hasLayer(mk)) mk.addTo(map);
+      } else {
+        if(map.hasLayer(mk)) map.removeLayer(mk);
+      }
+    });
+  }
 
   // Close detail if selected SM was filtered out
   if(selectedSM && !filteredIds.has(selectedSM)) closeDetail();
@@ -1581,6 +1584,7 @@ document.addEventListener('click',(e)=>{
 });
 
 function restoreFilteredMarkers(){
+  if(document.querySelector('.app')?.dataset?.mode==='cabine') return;
   const filtered = getFilteredSMs();
   const filteredIds = new Set(filtered.map(s=>s.id));
   SMs.forEach(sm=>{

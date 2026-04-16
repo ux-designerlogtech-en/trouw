@@ -271,6 +271,7 @@
     cbRenderPanel(it,qi,n);
     cbRenderDetail(it,qi);
     cbFocusMap(it);
+    cbUpdateTray();
   }
 
   function cbUpdPend(){
@@ -282,6 +283,31 @@
     if(pe) pe.innerHTML=ch;
   }
   window.cbGo=function(qi){cbIdx=parseInt(qi);cbTlF='all';cbRender()};
+
+  /* ── Update chat tray with cabine conversations ── */
+  function cbUpdateTray(){
+    const tray=document.getElementById('chat-tray');
+    if(!tray) return;
+    const chips=document.getElementById('tray-chips');
+    if(!chips) return;
+    let h='';
+    CBQ.forEach((q,i)=>{
+      if(q.msgs&&q.msgs.length>0){
+        const last=q.msgs[q.msgs.length-1];
+        const active=i===(cbIdx%CBQ.length);
+        h+=`<button class="tray-chip${active?' active':''}" onclick="cbGo(${i})">
+          <span class="tc-sm">${q.sm}</span>
+          <span class="tc-preview">${last.tx.substring(0,20)}${last.tx.length>20?'…':''}</span>
+          <span class="tc-count">${q.msgs.length}</span>
+        </button>`;
+      }
+    });
+    if(!h) h='<span style="font-size:10px;color:var(--t4);padding:0 4px">Nenhuma conversa ativa</span>';
+    chips.innerHTML=h;
+    // Update label
+    const lbl=tray.querySelector('.tray-label');
+    if(lbl) lbl.textContent='💬 Conversas';
+  }
 
   /* ── Cabine face (SM panel) ────────────────── */
   function cbRenderPanel(it,qi,n){
@@ -309,20 +335,6 @@
       <div class="cbf-act comm-act" onclick="cbComm('dest')"><span class="cbf-act-key comm-key phone"><i class="fa-solid fa-phone"></i></span><div class="cbf-act-body"><span class="cbf-act-title">Destinatário · ${dn}</span></div><span class="cbf-act-kbd">D</span></div>
       <div class="cbf-act comm-act wpp-act" onclick="cbComm('msg')"><span class="cbf-act-key comm-key wpp"><i class="fa-brands fa-whatsapp"></i></span><div class="cbf-act-body"><span class="cbf-act-title">WhatsApp · Template</span></div><span class="cbf-act-kbd">W</span></div>`;
 
-    // Footer: active SMs with pending timers or chats
-    let footerChips='';
-    CBQ.forEach((q,i)=>{
-      if(i===qi) return; // skip current
-      const hasTimer=cbTm[i]&&Object.values(cbTm[i]).some(t=>t.iv);
-      const hasChat=q.msgs&&q.msgs.length>0;
-      const hasDone=cbDa[i]&&cbDa[i].size>0;
-      if(hasTimer||hasChat||hasDone){
-        const icon=hasTimer?'<i class="fa-solid fa-clock"></i>':(hasChat?'<i class="fa-solid fa-comment"></i>':'<i class="fa-solid fa-check"></i>');
-        const cls=hasTimer?'timer':(hasChat?'chat':'done');
-        footerChips+=`<button class="cbf-foot-chip ${cls}" onclick="cbGo(${i})">${icon} ${q.sm}</button>`;
-      }
-    });
-
     const host=document.getElementById('cbf-content');
     if(!host) return;
     host.innerHTML=`
@@ -335,17 +347,6 @@
         <div class="cbf-act-divider"></div>
         ${commActs}
       </div>`;
-
-    // Footer strip for multi-occurrence
-    const footHost=document.getElementById('cbf-footer');
-    if(footHost){
-      if(footerChips){
-        footHost.innerHTML=`<span class="cbf-foot-label">Em andamento</span><div class="cbf-foot-chips">${footerChips}</div>`;
-        footHost.style.display='flex';
-      } else {
-        footHost.style.display='none';
-      }
-    }
   }
 
   /* ── Detail panel (reuses torre patterns) ──── */
@@ -641,16 +642,11 @@
     cbConfX(); cbCo[qi]=true;
     const now=new Date(), ts=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
     if(ty==='mot'){
-      toast('📞 Ligando '+it.mot.n+'...');
       it.tl.unshift({t:ts,e:'Chamada: '+it.mot.n,ty:'msg'});
-      // Open chat overlay on detail panel
-      cbOpenChat(it,qi);
-      setTimeout(()=>{it.msgs.push({fr:'out',tx:'Ligação — '+it.mot.n,t:ts},{fr:'in',tx:'Estou bem, parei pra descanso. Volto em 20 min.',t:ts});if(cbChatOpen)cbRenderChatMsgs(it)},1200);
+      cbShowCallPopup(it.mot.n, it.mot.ph);
     } else if(ty==='dest'){
-      toast('📞 Ligando '+it.dest.n+'...');
       it.tl.unshift({t:ts,e:'Chamada: '+it.dest.n,ty:'msg'});
-      cbOpenChat(it,qi);
-      setTimeout(()=>{it.msgs.push({fr:'out',tx:'Ligação para '+it.dest.n,t:ts});if(cbChatOpen)cbRenderChatMsgs(it)},800);
+      cbShowCallPopup(it.dest.n, it.dest.ph);
     } else if(ty==='msg'){
       toast('💬 WhatsApp enviado');
       it.msgs.push({fr:'out',tx:'[Template] Atualização solicitada',t:ts});
@@ -659,6 +655,42 @@
       setTimeout(()=>{it.msgs.push({fr:'in',tx:'Recebi. Tudo certo por aqui.',t:ts});if(cbChatOpen)cbRenderChatMsgs(it)},1200);
     }
     cbRender();
+  };
+
+  /* ── Call popup (phone) — NOT chat ──────────── */
+  function cbShowCallPopup(name, phone){
+    // Remove existing popup
+    const old=document.getElementById('cbf-call-popup');
+    if(old) old.remove();
+    const dp=document.querySelector('.detail-inner');
+    if(!dp) return;
+    const pop=document.createElement('div');
+    pop.className='cbf-call-popup';
+    pop.id='cbf-call-popup';
+    pop.innerHTML=`
+      <div class="cbf-call-icon"><i class="fa-solid fa-phone"></i></div>
+      <div class="cbf-call-name">${name}</div>
+      <div class="cbf-call-phone">${phone}</div>
+      <div class="cbf-call-status"><span class="cbf-call-pulse"></span> Chamando...</div>
+      <button class="cbf-call-end" onclick="cbEndCall()"><i class="fa-solid fa-phone-slash"></i> Encerrar</button>`;
+    dp.appendChild(pop);
+    // Simulate call progress
+    setTimeout(()=>{
+      const st=pop.querySelector('.cbf-call-status');
+      if(st) st.innerHTML='<span class="cbf-call-pulse on"></span> Em chamada · 0:00';
+      let sec=0;
+      const iv=setInterval(()=>{
+        sec++;
+        const m=Math.floor(sec/60), s=sec%60;
+        if(st) st.innerHTML=`<span class="cbf-call-pulse on"></span> Em chamada · ${m}:${String(s).padStart(2,'0')}`;
+        if(!document.getElementById('cbf-call-popup')){clearInterval(iv)}
+      },1000);
+    },2000);
+  }
+  window.cbEndCall=function(){
+    const pop=document.getElementById('cbf-call-popup');
+    if(pop){pop.classList.add('closing');setTimeout(()=>pop.remove(),280)}
+    toast('📞 Chamada encerrada');
   };
 
   /* ── Chat overlay on detail panel ──────────── */
