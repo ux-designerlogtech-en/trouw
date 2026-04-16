@@ -287,35 +287,65 @@
   function cbRenderPanel(it,qi,n){
     const ds=cbDa[qi]||(cbDa[qi]=new Set());
     const ctx=it.ctx.map(c=>`<div class="cbf-ctx-pill"><span class="cbf-ctx-k">${c[0]}</span><span class="cbf-ctx-v">${c[1]}</span></div>`).join('');
-    const mOff=it.conn.sinal[0]==='bad'?'disabled':'';
+    const mOff=it.conn.sinal[0]==='bad'?' disabled':'';
     const fn=it.mot.n.split(' ')[0], dn=it.dest.n.split(' ').slice(0,2).join(' ');
     const sL={crit:'CRÍTICA',high:'ALTA',med:'MÉDIA'};
+
+    // Treatment actions (1-3)
     const acts=it.acts.map((a,i)=>{
       const d=ds.has(i), p=a.ty==='pri'&&!d, cls=d?'done':(p?'pri':'');
       let tmr='';
       if(a.timer&&a.out==='snooze'){
         const lv=cbTm[qi]?.[i];
         tmr=lv?`<span class="cbf-act-timer live"><i class="fa-solid fa-clock"></i> <span id="cbt-${qi}-${i}">—</span></span>`
-             :(!d?`<span class="cbf-act-timer"><i class="fa-solid fa-clock"></i> retorna em ${a.timer} min</span>`:'');
+             :(!d?`<span class="cbf-act-timer"><i class="fa-solid fa-clock"></i> ${a.timer} min</span>`:'');
       }
-      return `<div class="cbf-act ${cls}" onclick="cbAct(${i})"><span class="cbf-act-key">${i+1}</span><div class="cbf-act-body"><span class="cbf-act-title">${a.title}</span><span class="cbf-act-desc">${a.desc}</span>${tmr}</div>${d?'<span class="cbf-act-done">✓</span>':''}</div>`;
+      return `<div class="cbf-act ${cls}" onclick="cbAct(${i})"><span class="cbf-act-key">${i+1}</span><div class="cbf-act-body"><span class="cbf-act-title">${a.title}</span>${tmr}</div>${d?'<span class="cbf-act-done">✓</span>':''}</div>`;
     }).join('');
+
+    // Comm actions (same list, same visual language)
+    const commActs=`
+      <div class="cbf-act comm-act" onclick="cbComm('mot')"${mOff}><span class="cbf-act-key comm-key phone"><i class="fa-solid fa-phone"></i></span><div class="cbf-act-body"><span class="cbf-act-title">Motorista · ${fn}</span></div><span class="cbf-act-kbd">M</span></div>
+      <div class="cbf-act comm-act" onclick="cbComm('dest')"><span class="cbf-act-key comm-key phone"><i class="fa-solid fa-phone"></i></span><div class="cbf-act-body"><span class="cbf-act-title">Destinatário · ${dn}</span></div><span class="cbf-act-kbd">D</span></div>
+      <div class="cbf-act comm-act wpp-act" onclick="cbComm('msg')"><span class="cbf-act-key comm-key wpp"><i class="fa-brands fa-whatsapp"></i></span><div class="cbf-act-body"><span class="cbf-act-title">WhatsApp · Template</span></div><span class="cbf-act-kbd">W</span></div>`;
+
+    // Footer: active SMs with pending timers or chats
+    let footerChips='';
+    CBQ.forEach((q,i)=>{
+      if(i===qi) return; // skip current
+      const hasTimer=cbTm[i]&&Object.values(cbTm[i]).some(t=>t.iv);
+      const hasChat=q.msgs&&q.msgs.length>0;
+      const hasDone=cbDa[i]&&cbDa[i].size>0;
+      if(hasTimer||hasChat||hasDone){
+        const icon=hasTimer?'<i class="fa-solid fa-clock"></i>':(hasChat?'<i class="fa-solid fa-comment"></i>':'<i class="fa-solid fa-check"></i>');
+        const cls=hasTimer?'timer':(hasChat?'chat':'done');
+        footerChips+=`<button class="cbf-foot-chip ${cls}" onclick="cbGo(${i})">${icon} ${q.sm}</button>`;
+      }
+    });
 
     const host=document.getElementById('cbf-content');
     if(!host) return;
     host.innerHTML=`
       <div class="cbf-head"><div class="cbf-id"><span class="cbf-sm">${it.sm}</span><span class="cbf-cli ${it.cc}">${it.cli}</span></div><span class="cbf-sev ${it.sev}">${sL[it.sev]}</span></div>
-      <div class="cbf-issue"><div class="cbf-issue-label">⚠ Problema</div><div class="cbf-issue-title">${it.issue}</div><div class="cbf-issue-detail">${it.det}</div></div>
+      <div class="cbf-issue"><div class="cbf-issue-label">⚠ PROBLEMA</div><div class="cbf-issue-title">${it.issue}</div><div class="cbf-issue-detail">${it.det}</div></div>
       <div class="cbf-ctx">${ctx}</div>
-      <div class="cbf-sec"><span class="cbf-sec-label">Comunicação rápida</span></div>
-      <div class="cbf-comm">
-        <button class="cbf-cbtn" onclick="cbComm('mot')" ${mOff}><i class="fa-solid fa-phone"></i><div class="cbf-clbl">Motorista</div><div class="cbf-csub">${fn}</div><span class="cbf-ckey">M</span></button>
-        <button class="cbf-cbtn" onclick="cbComm('dest')"><i class="fa-solid fa-phone"></i><div class="cbf-clbl">Destinatário</div><div class="cbf-csub">${dn}</div><span class="cbf-ckey">D</span></button>
-        <button class="cbf-cbtn wpp" onclick="cbComm('msg')"><i class="fa-brands fa-whatsapp"></i><div class="cbf-clbl">WhatsApp</div><div class="cbf-csub">Template</div><span class="cbf-ckey">W</span></button>
-      </div>
       <div id="cbf-confirm"></div>
-      <div class="cbf-sec"><span class="cbf-sec-label">Tratativa — escolha uma ação</span></div>
-      <div class="cbf-acts">${acts}</div>`;
+      <div class="cbf-sec"><span class="cbf-sec-label">Ações</span></div>
+      <div class="cbf-acts">${acts}
+        <div class="cbf-act-divider"></div>
+        ${commActs}
+      </div>`;
+
+    // Footer strip for multi-occurrence
+    const footHost=document.getElementById('cbf-footer');
+    if(footHost){
+      if(footerChips){
+        footHost.innerHTML=`<span class="cbf-foot-label">Em andamento</span><div class="cbf-foot-chips">${footerChips}</div>`;
+        footHost.style.display='flex';
+      } else {
+        footHost.style.display='none';
+      }
+    }
   }
 
   /* ── Detail panel (reuses torre patterns) ──── */
@@ -517,10 +547,14 @@
   function cbFocusMap(it){
     if(!window.map || !it.geo) return;
     try{
-      // Hide all existing truck markers
+      // Hide ALL existing truck markers
       if(window.mapMarkers){
         Object.values(window.mapMarkers).forEach(m=>{ if(map.hasLayer(m)) map.removeLayer(m) });
       }
+      // Clear torre route/stop layers that may linger from previous SM selection
+      if(typeof routeLayers!=='undefined') routeLayers.forEach(l=>{try{map.removeLayer(l)}catch(e){}});
+      if(typeof stopMarkers!=='undefined') stopMarkers.forEach(m=>{try{map.removeLayer(m)}catch(e){}});
+      if(typeof clearExtraMapLayers==='function') clearExtraMapLayers();
       // Clear previous cabine route layers
       cbMapLayers.forEach(l=>{ if(map.hasLayer(l)) map.removeLayer(l) });
       cbMapLayers=[];
@@ -672,7 +706,7 @@
   window.cbCloseChat=function(){
     cbChatOpen=false;
     const ov=document.getElementById('cbf-chat-overlay');
-    if(ov) ov.remove();
+    if(ov){ov.classList.add('closing');setTimeout(()=>ov.remove(),300)}
   };
   window.cbChatQ=function(tx){
     const qi=cbIdx%CBQ.length, it=CBQ[qi];
