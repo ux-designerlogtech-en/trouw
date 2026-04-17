@@ -31,6 +31,14 @@
   --green:var(--success-500);--green-s:rgba(22,163,74,.10);
   --font:'Plus Jakarta Sans',sans-serif;
   --text-xs:9px;--text-sm:10px;--text-md:12px;--text-lg:14px;--text-xl:16px;
+}
+[data-fontscale="md"]{
+  --text-xs:10px;--text-sm:12px;--text-md:14px;--text-lg:16px;--text-xl:18px;
+}
+[data-fontscale="lg"]{
+  --text-xs:12px;--text-sm:13px;--text-md:16px;--text-lg:18px;--text-xl:21px;
+}
+:root{
   --radius-sm:4px;--radius-md:6px;--radius-base:8px;--radius-lg:10px;--radius-xl:14px;--radius-full:9999px;
   --elev-1:0 1px 2px rgba(20,25,36,.05);
   --elev-2:0 1px 3px rgba(20,25,36,.07),0 2px 8px rgba(20,25,36,.05);
@@ -120,8 +128,15 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-
 /* Screens list inside flow */
 .screen-list{display:none;padding:2px 0}
 .flow-group.open>.screen-list{display:block}
-.screen-item{display:flex;align-items:center;gap:7px;padding:5px 11px 5px 36px;cursor:pointer;transition:background var(--dur-fast) var(--ease);border-left:2px solid transparent}
+.screen-item{display:flex;align-items:center;gap:7px;padding:5px 11px 5px 36px;cursor:pointer;transition:background var(--dur-fast) var(--ease);border-left:2px solid transparent;position:relative}
 .screen-item:hover{background:var(--s2)}
+.screen-del{display:none;position:absolute;right:8px;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--t3);cursor:pointer;align-items:center;justify-content:center;font-size:10px;transition:all var(--dur-fast) var(--ease)}
+.screen-item:hover .screen-del{display:flex}
+.screen-del:hover{background:var(--red-s);color:var(--red)}
+.stab{position:relative}
+.stab-del{display:none;width:14px;height:14px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--t3);cursor:pointer;align-items:center;justify-content:center;font-size:9px;padding:0;margin-left:4px;transition:all var(--dur-fast) var(--ease)}
+.stab:hover .stab-del{display:inline-flex}
+.stab-del:hover{background:var(--red-s);color:var(--red)}
 .screen-item.active-screen{background:var(--blue-s);border-left-color:var(--blue)}
 .screen-thumb{width:28px;height:20px;border-radius:3px;background:var(--s3);border:1px solid var(--b2);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .screen-thumb img{width:100%;height:100%;object-fit:cover}
@@ -232,8 +247,9 @@ textarea.mi{height:42px;padding:5px 8px;resize:none;line-height:1.4}
 .play-title{font-size:var(--text-lg);font-weight:700;color:#fff}
 .play-prog{font-size:var(--text-md);color:rgba(255,255,255,.4);font-weight:500}
 .play-stage{width:100%;max-width:960px;display:flex;align-items:flex-start;gap:16px}
-.play-canvas-wrap{flex:1;position:relative;border-radius:var(--radius-lg);overflow:hidden;background:var(--neutral-950);box-shadow:var(--elev-3);min-height:200px}
-.play-canvas-wrap img{display:block;width:100%;border-radius:var(--radius-lg)}
+.play-canvas-wrap{flex:1;position:relative;border-radius:var(--radius-lg);overflow:hidden;background:var(--neutral-950);box-shadow:var(--elev-3);height:70vh;display:flex;align-items:center;justify-content:center}
+.play-canvas-inner{position:relative;max-width:100%;max-height:100%;display:inline-flex}
+.play-canvas-inner img{display:block;max-width:100%;max-height:70vh;width:auto;height:auto;border-radius:var(--radius-lg)}
 .play-pin{position:absolute;width:26px;height:26px;border-radius:var(--radius-full);background:rgba(31,35,40,.85);color:#fff;font-size:var(--text-sm);font-weight:800;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-50%);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.5);transition:all var(--dur-base) var(--ease);border:1.5px solid rgba(255,255,255,.15)}
 .play-pin.done{background:var(--green);border-color:var(--green)}
 .play-pin.current{background:var(--blue);border-color:var(--blue);box-shadow:0 0 0 6px var(--blue-m);transform:translate(-50%,-50%) scale(1.12)}
@@ -257,6 +273,27 @@ textarea.mi{height:42px;padding:5px 8px;resize:none;line-height:1.4}
 .psn-sep{color:rgba(255,255,255,.2);font-size:10px}
 
 .play-dots{display:flex;gap:5px;align-items:center}
+.play-mode-row{display:flex;gap:3px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-md);padding:2px}
+.play-mode-btn{height:24px;padding:0 10px;border:none;background:transparent;color:rgba(255,255,255,.55);border-radius:var(--radius-sm);font-family:var(--font);font-size:var(--text-xs);font-weight:600;cursor:pointer;transition:all var(--dur-fast) var(--ease);display:flex;align-items:center;gap:5px}
+.play-mode-btn:hover{color:#fff}
+.play-mode-btn.active{background:rgba(255,255,255,.15);color:#fff}
+.play-all-wrap{width:100%;max-width:960px;max-height:calc(100vh - 180px);overflow-y:auto;display:flex;flex-direction:column;gap:24px;padding:4px 8px 8px}
+.play-all-scr{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--elev-3)}
+.play-all-scr-hd{background:var(--blue);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:9px;font-size:var(--text-md);font-weight:700}
+.play-all-scr-num{width:22px;height:22px;border-radius:var(--radius-full);background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:var(--text-sm);font-weight:800}
+.play-all-scr-body{display:flex;gap:14px;padding:14px}
+.play-all-canvas{flex:1;position:relative;background:var(--neutral-950);border-radius:var(--radius-lg);overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:240px}
+.play-all-canvas-inner{position:relative;max-width:100%;max-height:60vh;display:inline-flex}
+.play-all-canvas-inner img{display:block;max-width:100%;max-height:60vh;width:auto;height:auto;border-radius:var(--radius-lg)}
+.play-all-steps{width:300px;flex-shrink:0;display:flex;flex-direction:column;gap:9px;max-height:60vh;overflow-y:auto;padding-right:4px}
+.play-all-step{background:var(--s2);border:1px solid var(--border);border-radius:var(--radius-md);padding:9px 11px}
+.play-all-step-hd{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.play-all-step-num{width:20px;height:20px;border-radius:var(--radius-full);background:var(--blue);color:#fff;font-size:var(--text-xs);font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.play-all-step-title{font-size:var(--text-md);font-weight:700;color:var(--t1);line-height:1.3}
+.play-all-step-desc{font-size:var(--text-sm);color:var(--t2);line-height:1.55}
+.play-all-step-rule{margin-top:7px;background:var(--warning-50);border:1px solid var(--warning-200);border-radius:var(--radius-sm);padding:6px 9px;font-size:var(--text-xs);color:var(--amber);font-weight:500;line-height:1.4}
+[data-theme="dark"] .play-all-step-rule{background:var(--amber-s);border-color:rgba(255,159,10,.25)}
+.play-all-empty{font-size:var(--text-sm);color:var(--t3);font-style:italic;padding:11px}
 .pdot{width:6px;height:6px;border-radius:var(--radius-full);background:rgba(255,255,255,.2);cursor:pointer;transition:all var(--dur-base) var(--ease)}
 .pdot.on{background:#fff;width:16px;border-radius:3px}
 .pdot.done{background:var(--green)}
@@ -301,6 +338,11 @@ textarea.mi{height:42px;padding:5px 8px;resize:none;line-height:1.4}
     </div>
     <div class="breadcrumb" id="bc"><span style="color:var(--t4)">Selecione um fluxo</span></div>
     <div class="topbar-right">
+      <div class="theme-row" role="group" aria-label="Tamanho da fonte">
+        <button class="theme-btn active" data-fontscale-btn="sm" title="Fonte padrão (100%)"><i class="fa-solid fa-a" style="font-size:8px"></i></button>
+        <button class="theme-btn" data-fontscale-btn="md" title="Fonte maior (115%)"><i class="fa-solid fa-a" style="font-size:10px"></i></button>
+        <button class="theme-btn" data-fontscale-btn="lg" title="Fonte ainda maior (130%)"><i class="fa-solid fa-a" style="font-size:12px"></i></button>
+      </div>
       <div class="theme-row">
         <button class="theme-btn active" data-theme-btn="light"><i class="fa-regular fa-sun"></i> Light</button>
         <button class="theme-btn" data-theme-btn="dark"><i class="fa-regular fa-moon"></i> Dark</button>
@@ -401,7 +443,13 @@ textarea.mi{height:42px;padding:5px 8px;resize:none;line-height:1.4}
       <span class="play-title" id="play-title-txt"></span>
       <span class="play-prog" id="play-prog"></span>
     </div>
-    <button class="btn ghost sm" style="border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6)" onclick="closePlay()"><i class="fa-solid fa-xmark"></i> Fechar</button>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div class="play-mode-row" role="group" aria-label="Modo de visualização">
+        <button class="play-mode-btn active" data-playmode-btn="step" onclick="setPlayMode('step')"><i class="fa-solid fa-shoe-prints" style="font-size:9px"></i> Passo a passo</button>
+        <button class="play-mode-btn" data-playmode-btn="all" onclick="setPlayMode('all')"><i class="fa-solid fa-layer-group" style="font-size:9px"></i> Ver tudo</button>
+      </div>
+      <button class="btn ghost sm" style="border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.6)" onclick="closePlay()"><i class="fa-solid fa-xmark"></i> Fechar</button>
+    </div>
   </div>
   <div class="play-screen-nav" id="play-screen-nav"></div>
   <div class="play-stage" id="play-stage"></div>
@@ -477,7 +525,7 @@ let db = {
 let activeSolId='s1', activeFlowId=null, activeScreenId=null, activePin=null;
 let activeSolOpen={s1:true};
 let activeFlowOpen={};
-let dragging=false, dragId=null, newFlowSolId=null, playStep=0, playScreenIdx=0;
+let dragging=false, dragId=null, newFlowSolId=null, playStep=0, playScreenIdx=0, playMode='step';
 let pendingFiles=[];
 
 // ─── HELPERS ─────────────────────────────────────────────
@@ -512,8 +560,9 @@ function renderSidebar(){
       flow.screens.forEach((scr,i)=>{
         const si=document.createElement('div');
         si.className='screen-item'+(scr.id===activeScreenId?' active-screen':'');
-        si.innerHTML=`<div class="screen-thumb">${scr.img?`<img src="${scr.img}">`:'<span class="screen-thumb-empty"><i class="fa-regular fa-image"></i></span>'}</div><span class="screen-nm">Tela ${i+1}${scr.name?' — '+scr.name:''}</span><span class="screen-step-ct">${scr.steps.length}p</span>`;
+        si.innerHTML=`<div class="screen-thumb">${scr.img?`<img src="${scr.img}">`:'<span class="screen-thumb-empty"><i class="fa-regular fa-image"></i></span>'}</div><span class="screen-nm">Tela ${i+1}${scr.name?' — '+scr.name:''}</span><span class="screen-step-ct">${scr.steps.length}p</span><button class="screen-del" title="Excluir tela"><i class="fa-solid fa-trash"></i></button>`;
         si.addEventListener('click',e=>{e.stopPropagation();selectScreen(sol.id,flow.id,scr.id);});
+        si.querySelector('.screen-del').addEventListener('click',e=>{e.stopPropagation();deleteScreen(sol.id,flow.id,scr.id);});
         sl.appendChild(si);
       });
       fg.appendChild(sl);
@@ -596,6 +645,22 @@ function saveField(field,val){
   if(field==='nome'){renderSidebar();const flow2=getFlow();const sol=getSol(activeSolId);updateTopbar(sol,flow2);}
 }
 
+// ─── DELETE SCREEN ───────────────────────────────────────
+function deleteScreen(solId,flowId,screenId){
+  const sol=getSol(solId);if(!sol)return;
+  const flow=sol.flows.find(f=>f.id===flowId);if(!flow)return;
+  const idx=flow.screens.findIndex(s=>s.id===screenId);if(idx<0)return;
+  const scr=flow.screens[idx];
+  const label='Tela '+(idx+1)+(scr.name?' — '+scr.name:'')+(scr.steps.length?' ('+scr.steps.length+' passos)':'');
+  if(!confirm('Excluir '+label+'?\n\nEssa ação não pode ser desfeita.'))return;
+  flow.screens.splice(idx,1);
+  if(activeScreenId===screenId){
+    activeScreenId=flow.screens.length?flow.screens[Math.min(idx,flow.screens.length-1)].id:null;
+    activePin=null;
+  }
+  renderScreenTabs();renderCanvas();renderSteps();renderSidebar();
+}
+
 // ─── SCREEN TABS ─────────────────────────────────────────
 function renderScreenTabs(){
   const flow=getFlow();
@@ -609,7 +674,9 @@ function renderScreenTabs(){
     tab.className='stab'+(scr.id===activeScreenId?' on':'');
     tab.innerHTML=`<div class="stab-num">${i+1}</div><span>Tela ${i+1}</span>`;
     if(scr.steps.length>0)tab.innerHTML+=`<span style="font-size:8px;color:var(--t3);font-weight:600">${scr.steps.length}p</span>`;
+    tab.innerHTML+=`<button class="stab-del" title="Excluir tela"><i class="fa-solid fa-xmark"></i></button>`;
     tab.addEventListener('click',()=>{activeScreenId=scr.id;activePin=null;renderScreenTabs();renderCanvas();renderSteps();const sol=getSol(activeSolId);updateTopbar(sol,flow);});
+    tab.querySelector('.stab-del').addEventListener('click',e=>{e.stopPropagation();deleteScreen(activeSolId,flow.id,scr.id);});
     tabs.appendChild(tab);
   });
 }
@@ -860,7 +927,8 @@ function processImageFiles(files){
 // ─── PLAY ────────────────────────────────────────────────
 function startPlay(){
   const flow=getFlow();if(!flow)return;
-  playStep=0;playScreenIdx=0;
+  playStep=0;playScreenIdx=0;playMode='step';
+  document.querySelectorAll('[data-playmode-btn]').forEach(b=>b.classList.toggle('active',b.dataset.playmodeBtn==='step'));
   document.getElementById('play-title-txt').textContent=flow.nome;
   renderPlayStep();
   document.getElementById('play-ov').classList.add('open');
@@ -876,6 +944,11 @@ function renderPlayStep(){
   if(!flow||flow.screens.length===0){
     stage.innerHTML=`<div style="background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-xl);padding:40px 32px;text-align:center;color:var(--t3);max-width:360px"><i class="fa-regular fa-images" style="font-size:28px;display:block;margin-bottom:12px;color:var(--t4)"></i><div style="font-size:var(--text-lg);font-weight:700;color:var(--t2);margin-bottom:6px">Sem telas cadastradas</div><div style="font-size:var(--text-md);line-height:1.6">Adicione telas ao fluxo antes de simular.</div></div>`;
     dots.innerHTML='';prog.textContent='';scrNav.innerHTML='';return;
+  }
+
+  if(playMode==='all'){
+    renderPlayAll(flow);
+    return;
   }
 
   const scr=flow.screens[playScreenIdx];
@@ -904,7 +977,7 @@ function renderPlayStep(){
   if(steps.length===0){
     prog.textContent=`Tela ${playScreenIdx+1} de ${totalScreens}`;
     stage.innerHTML=`
-      <div class="play-canvas-wrap"><img src="${scr.img}" alt=""></div>
+      <div class="play-canvas-wrap"><div class="play-canvas-inner"><img src="${scr.img}" alt=""></div></div>
       <div class="play-card">
         <div class="play-card-hd"><div class="play-card-num"><i class="fa-regular fa-image" style="font-size:9px"></i></div><div class="play-card-step-title">Tela ${playScreenIdx+1}</div></div>
         <div class="play-card-body"><div class="play-card-desc" style="color:var(--t4);font-style:italic">Nenhum passo marcado nesta tela.</div></div>
@@ -929,7 +1002,9 @@ function renderPlayStep(){
 
   stage.innerHTML=`
     <div class="play-canvas-wrap">
-      <img src="${scr.img}" alt="">${pins}
+      <div class="play-canvas-inner">
+        <img src="${scr.img}" alt="">${pins}
+      </div>
     </div>
     <div class="play-card">
       <div class="play-card-hd">
@@ -957,6 +1032,65 @@ function renderPlayStep(){
 }
 
 window.goToStep=function(i){playStep=i;renderPlayStep();};
+
+function renderPlayAll(flow){
+  const stage=document.getElementById('play-stage');
+  const dots=document.getElementById('play-dots');
+  const prog=document.getElementById('play-prog');
+  const scrNav=document.getElementById('play-screen-nav');
+
+  scrNav.innerHTML='';
+  dots.innerHTML='';
+  const totalSteps=flow.screens.reduce((n,s)=>n+s.steps.length,0);
+  prog.textContent=flow.screens.length+' tela'+(flow.screens.length>1?'s':'')+' · '+totalSteps+' passo'+(totalSteps!==1?'s':'');
+
+  let html='<div class="play-all-wrap">';
+  flow.screens.forEach((scr,si)=>{
+    let pins='';
+    scr.steps.forEach((p,i)=>{pins+=`<div class="play-pin done" style="left:${p.x}%;top:${p.y}%">${i+1}</div>`;});
+
+    let stepsHtml='';
+    if(scr.steps.length===0){
+      stepsHtml='<div class="play-all-empty">Nenhum passo marcado nesta tela.</div>';
+    } else {
+      scr.steps.forEach((s,i)=>{
+        stepsHtml+=`<div class="play-all-step">
+          <div class="play-all-step-hd">
+            <div class="play-all-step-num">${i+1}</div>
+            <div class="play-all-step-title">${s.title||'Passo '+(i+1)}</div>
+          </div>
+          ${s.desc?`<div class="play-all-step-desc">${s.desc}</div>`:''}
+          ${s.rule?`<div class="play-all-step-rule"><strong style="display:block;font-size:var(--text-xs);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px"><i class="fa-solid fa-triangle-exclamation" style="font-size:8px"></i> Atenção</strong>${s.rule}</div>`:''}
+        </div>`;
+      });
+    }
+
+    html+=`<div class="play-all-scr">
+      <div class="play-all-scr-hd">
+        <div class="play-all-scr-num">${si+1}</div>
+        Tela ${si+1}${scr.name?' — '+scr.name:''}
+        <span style="margin-left:auto;font-size:var(--text-xs);opacity:.75;font-weight:500">${scr.steps.length} passo${scr.steps.length!==1?'s':''}</span>
+      </div>
+      <div class="play-all-scr-body">
+        <div class="play-all-canvas">
+          <div class="play-all-canvas-inner">
+            <img src="${scr.img}" alt="">${pins}
+          </div>
+        </div>
+        <div class="play-all-steps">${stepsHtml}</div>
+      </div>
+    </div>`;
+  });
+  html+='</div>';
+  stage.innerHTML=html;
+}
+
+window.setPlayMode=function(mode){
+  playMode=mode;
+  document.querySelectorAll('[data-playmode-btn]').forEach(b=>b.classList.toggle('active',b.dataset.playmodeBtn===mode));
+  if(mode==='step'){playStep=0;playScreenIdx=0;}
+  renderPlayStep();
+};
 function closePlay(){document.getElementById('play-ov').classList.remove('open');}
 function handlePlayBg(e){if(e.target===document.getElementById('play-ov'))closePlay();}
 
@@ -999,6 +1133,20 @@ function showToast(msg){const t=document.getElementById('toast');document.getEle
   function setTheme(mode){if(mode==='dark')root.setAttribute('data-theme','dark');else root.removeAttribute('data-theme');btns.forEach(b=>b.classList.toggle('active',b.dataset.themeBtn===mode));try{localStorage.setItem('tp-theme',mode);}catch(e){}}
   btns.forEach(b=>b.addEventListener('click',()=>setTheme(b.dataset.themeBtn)));
   try{const s=localStorage.getItem('tp-theme');if(s==='dark')setTheme('dark');}catch(e){}
+})();
+
+// ─── FONT SCALE (acessibilidade) ─────────────────────────
+(function(){
+  const root=document.documentElement;
+  const btns=document.querySelectorAll('[data-fontscale-btn]');
+  function setScale(scale){
+    if(scale==='sm')root.removeAttribute('data-fontscale');
+    else root.setAttribute('data-fontscale',scale);
+    btns.forEach(b=>b.classList.toggle('active',b.dataset.fontscaleBtn===scale));
+    try{localStorage.setItem('tp-fontscale',scale);}catch(e){}
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>setScale(b.dataset.fontscaleBtn)));
+  try{const s=localStorage.getItem('tp-fontscale');if(s==='md'||s==='lg')setScale(s);}catch(e){}
 })();
 
 // ─── SUPABASE SYNC ───────────────────────────────────────
