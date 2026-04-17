@@ -21,6 +21,8 @@ trouw/
 │       └── index.html             ← wizard 6 passos (single file)
 ├── torre-de-controle/             ← módulo ativo
 │   └── index.html                 ← cockpit operacional
+├── trouw-play/                    ← módulo ativo
+│   └── index.html                 ← manual interativo + editor de fluxos (Supabase)
 ├── frota/                         ← placeholder (roadmap)
 │   └── README.md
 ├── vercel.json
@@ -35,6 +37,7 @@ trouw/
 |---|---|
 | `/cadastro/cliente/` | Wizard de cadastro — 6 passos num único arquivo |
 | `/torre-de-controle/` | Cockpit operacional — SMs, KPIs, mapa, painel de gestão |
+| `/trouw-play/` | Manual interativo — editor e player de fluxos (persistido no Supabase) |
 | `/ds/v17/showcase` | Guia de componentes DS v17 |
 | `/ds/v17/showcase-v16` | Showcase v16 histórico (referência) |
 | `/ds/v17/tokens-v17.json` | Fonte canônica DTCG W3C 1.0 |
@@ -47,6 +50,7 @@ trouw/
 
 - **`/cadastro/cliente/`** — ativo. Wizard de onboarding 6 passos (single file).
 - **`/torre-de-controle/`** — ativo. Cockpit operacional — SMs em tempo real, KPIs, mapa, painel de gestão.
+- **`/trouw-play/`** — ativo. Editor de fluxos (telas + pins + passos) e player de replay. Estado persistido num Supabase (`app_state` jsonb) com autosave a cada 2s.
 - **`/frota/`** — placeholder. Gestão de veículos/motoristas. Não iniciado.
 - **`/ds/v17/`** — tokens, CSS e showcase compartilhados por todos os módulos.
 
