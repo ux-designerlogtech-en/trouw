@@ -138,7 +138,12 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--t1);font-
 /* Screens list inside flow */
 .screen-list{display:none;padding:2px 0}
 .flow-group.open>.screen-list{display:block}
-.screen-item{display:flex;align-items:center;gap:7px;padding:10px 11px 10px 36px;min-height:44px;cursor:pointer;transition:background var(--dur-fast) var(--ease);border-left:2px solid transparent;position:relative}
+.screen-item{display:flex;align-items:center;gap:7px;padding:10px 11px 10px 30px;min-height:44px;cursor:pointer;transition:background var(--dur-fast) var(--ease);border-left:2px solid transparent;position:relative}
+.screen-drag{color:var(--t4);font-size:10px;cursor:grab;flex-shrink:0;opacity:0;transition:opacity var(--dur-fast) var(--ease)}
+.screen-item:hover .screen-drag{opacity:1}
+.screen-item.dragging{opacity:.4}
+.screen-item.drop-before{box-shadow:inset 0 2px 0 0 var(--blue)}
+.screen-item.drop-after{box-shadow:inset 0 -2px 0 0 var(--blue)}
 .screen-item:hover{background:var(--s2)}
 .screen-del{display:none;position:absolute;right:8px;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--t3);cursor:pointer;align-items:center;justify-content:center;font-size:10px;transition:all var(--dur-fast) var(--ease)}
 .screen-item:hover .screen-del{display:flex}
@@ -257,7 +262,19 @@ textarea.mi{height:42px;padding:5px 8px;resize:none;line-height:1.4}
 .play-title-wrap{display:flex;align-items:center;gap:9px}
 .play-title{font-size:var(--text-lg);font-weight:700;color:#fff}
 .play-prog{font-size:var(--text-md);color:rgba(255,255,255,.4);font-weight:500}
-.play-stage{width:100%;max-width:960px;display:flex;align-items:flex-start;gap:16px}
+.play-stage{width:100%;max-width:1180px;display:flex;align-items:flex-start;gap:16px}
+.play-side{width:300px;flex-shrink:0;display:flex;flex-direction:column;gap:8px;max-height:70vh;overflow-y:auto;padding-right:4px}
+.play-side-item{background:var(--s1);border:1px solid var(--border);border-radius:var(--radius-lg);padding:11px 13px;cursor:pointer;transition:all var(--dur-fast) var(--ease);display:flex;align-items:flex-start;gap:10px}
+.play-side-item:hover{background:var(--s2);border-color:var(--b2)}
+.play-side-item.done{opacity:.7}
+.play-side-item.done .play-side-num{background:var(--green);color:#fff}
+.play-side-item.current{background:var(--blue);border-color:var(--blue);box-shadow:var(--elev-2)}
+.play-side-item.current .play-side-num{background:#fff;color:var(--blue)}
+.play-side-item.current .play-side-title,.play-side-item.current .play-side-desc{color:#fff}
+.play-side-num{width:22px;height:22px;border-radius:var(--radius-full);background:var(--s3);color:var(--t2);font-size:var(--text-sm);font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.play-side-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.play-side-title{font-size:var(--text-md);font-weight:700;color:var(--t1);line-height:1.3}
+.play-side-desc{font-size:var(--text-xs);color:var(--t3);line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .play-canvas-wrap{flex:1;position:relative;border-radius:var(--radius-lg);overflow:hidden;background:var(--neutral-950);box-shadow:var(--elev-3);height:70vh;display:flex;align-items:center;justify-content:center}
 .play-canvas-inner{position:relative;max-width:100%;max-height:100%;display:inline-flex}
 .play-canvas-inner img{display:block;max-width:100%;max-height:70vh;width:auto;height:auto;border-radius:var(--radius-lg)}
@@ -543,6 +560,7 @@ let db = {
 let activeSolId='s1', activeFlowId=null, activeScreenId=null, activePin=null;
 let activeSolOpen={s1:true};
 let activeFlowOpen={};
+let dragScreenCtx=null;
 let dragging=false, dragId=null, newFlowSolId=null, playStep=0, playScreenIdx=0, playMode='step';
 let pendingFiles=[];
 
@@ -571,7 +589,15 @@ function renderSidebar(){
       const fhd=document.createElement('div');
       fhd.className='flow-hd'+(flow.id===activeFlowId?' active-flow':'');
       fhd.innerHTML=`<i class="fa-solid fa-chevron-right chev"></i><div class="flow-ico"><i class="fa-solid fa-diagram-project"></i></div><div class="flow-dot ${flow.status==='publicado'?'dot-pub':'dot-draft'}" title="${flow.status==='publicado'?'Publicado':'Rascunho'}"></div><span class="flow-nm">${flow.nome}</span><span class="sc ${flow.status==='publicado'?'sc-pub':'sc-draft'}">${flow.status==='publicado'?'pub':'rascunho'}</span><button class="flow-del" title="Excluir fluxo"><i class="fa-solid fa-trash"></i></button>`;
-      fhd.addEventListener('click',e=>{e.stopPropagation();selectFlow(sol.id,flow.id);});
+      fhd.addEventListener('click',e=>{
+        e.stopPropagation();
+        if(flow.id===activeFlowId){
+          activeFlowOpen[flow.id]=!activeFlowOpen[flow.id];
+          renderSidebar();
+        } else {
+          selectFlow(sol.id,flow.id);
+        }
+      });
       fhd.querySelector('.flow-del').addEventListener('click',e=>{e.stopPropagation();deleteFlow(sol.id,flow.id);});
       fg.appendChild(fhd);
       // Screen list inside flow
@@ -579,9 +605,32 @@ function renderSidebar(){
       flow.screens.forEach((scr,i)=>{
         const si=document.createElement('div');
         si.className='screen-item'+(scr.id===activeScreenId?' active-screen':'');
-        si.innerHTML=`<div class="screen-thumb">${scr.img?`<img src="${scr.img}">`:'<span class="screen-thumb-empty"><i class="fa-solid fa-display"></i></span>'}</div><span class="screen-nm">Tela ${i+1}${scr.name?' — '+scr.name:''}</span><span class="screen-step-ct">${scr.steps.length}p</span><button class="screen-del" title="Excluir tela"><i class="fa-solid fa-trash"></i></button>`;
+        si.innerHTML=`<i class="fa-solid fa-grip-vertical screen-drag" title="Arraste para reordenar"></i><div class="screen-thumb">${scr.img?`<img src="${scr.img}">`:'<span class="screen-thumb-empty"><i class="fa-solid fa-display"></i></span>'}</div><span class="screen-nm">Tela ${i+1}${scr.name?' — '+scr.name:''}</span><span class="screen-step-ct">${scr.steps.length}p</span><button class="screen-del" title="Excluir tela"><i class="fa-solid fa-trash"></i></button>`;
+        si.draggable=true;
+        si.dataset.solId=sol.id;si.dataset.flowId=flow.id;si.dataset.screenId=scr.id;si.dataset.idx=i;
         si.addEventListener('click',e=>{e.stopPropagation();selectScreen(sol.id,flow.id,scr.id);});
         si.querySelector('.screen-del').addEventListener('click',e=>{e.stopPropagation();deleteScreen(sol.id,flow.id,scr.id);});
+        si.addEventListener('dragstart',e=>{
+          dragScreenCtx={solId:sol.id,flowId:flow.id,fromIdx:i};
+          si.classList.add('dragging');
+          e.dataTransfer.effectAllowed='move';
+          try{e.dataTransfer.setData('text/plain',scr.id);}catch(err){}
+        });
+        si.addEventListener('dragend',()=>{si.classList.remove('dragging');document.querySelectorAll('.screen-item.drop-over').forEach(el=>el.classList.remove('drop-over','drop-before','drop-after'));dragScreenCtx=null;});
+        si.addEventListener('dragover',e=>{
+          if(!dragScreenCtx||dragScreenCtx.flowId!==flow.id)return;
+          e.preventDefault();e.dataTransfer.dropEffect='move';
+          const rect=si.getBoundingClientRect();const before=(e.clientY-rect.top)<rect.height/2;
+          si.classList.add('drop-over');si.classList.toggle('drop-before',before);si.classList.toggle('drop-after',!before);
+        });
+        si.addEventListener('dragleave',()=>{si.classList.remove('drop-over','drop-before','drop-after');});
+        si.addEventListener('drop',e=>{
+          if(!dragScreenCtx||dragScreenCtx.flowId!==flow.id)return;
+          e.preventDefault();
+          const rect=si.getBoundingClientRect();const before=(e.clientY-rect.top)<rect.height/2;
+          reorderScreen(dragScreenCtx.solId,dragScreenCtx.flowId,dragScreenCtx.fromIdx,i+(before?0:1));
+          si.classList.remove('drop-over','drop-before','drop-after');
+        });
         sl.appendChild(si);
       });
       fg.appendChild(sl);
@@ -665,6 +714,16 @@ function saveField(field,val){
 }
 
 // ─── DELETE SCREEN ───────────────────────────────────────
+function reorderScreen(solId,flowId,fromIdx,toIdx){
+  const sol=getSol(solId);if(!sol)return;
+  const flow=sol.flows.find(f=>f.id===flowId);if(!flow)return;
+  if(fromIdx===toIdx||fromIdx===toIdx-1)return;
+  const [moved]=flow.screens.splice(fromIdx,1);
+  const adjusted=toIdx>fromIdx?toIdx-1:toIdx;
+  flow.screens.splice(adjusted,0,moved);
+  renderScreenTabs();renderCanvas();renderSteps();renderSidebar();
+}
+
 function deleteFlow(solId,flowId){
   const sol=getSol(solId);if(!sol)return;
   const idx=sol.flows.findIndex(f=>f.id===flowId);if(idx<0)return;
@@ -1041,7 +1100,21 @@ function renderPlayStep(){
   const isLastStep=playStep===steps.length-1;
   const isLastScreen=playScreenIdx===totalScreens-1;
 
+  let sideHtml='';
+  steps.forEach((p,i)=>{
+    const cls=i<playStep?'done':i===playStep?'current':'';
+    const desc=(p.desc||'').replace(/<[^>]+>/g,'').slice(0,110);
+    sideHtml+=`<div class="play-side-item ${cls}" onclick="goToStep(${i})">
+      <div class="play-side-num">${i+1}</div>
+      <div class="play-side-txt">
+        <div class="play-side-title">${p.title||'Passo '+(i+1)}</div>
+        ${desc?`<div class="play-side-desc">${desc}</div>`:''}
+      </div>
+    </div>`;
+  });
+
   stage.innerHTML=`
+    <div class="play-side">${sideHtml}</div>
     <div class="play-canvas-wrap">
       <div class="play-canvas-inner">
         <img src="${scr.img}" alt="">${pins}
